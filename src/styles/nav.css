@@ -1,0 +1,28 @@
+aside {
+    width: 400px;
+    height: 100vh;
+    background-color: #2f3640;
+    margin-top: 97px;
+    padding-top: 50px;
+    position: fixed;
+    box-shadow: 5px 0 10px rgba(0, 0, 0, 0.1);
+}
+nav ul a li {
+    color: #fff;
+    font-family: 'Source Sans Pro', sans-serif;
+    font-size: 22px;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    padding: 20px 60px;
+    margin: 10px 0;
+}
+nav ul a svg {
+    margin-right: 39px;
+}
+nav ul a.active li {
+    background-color: #e2394a;
+}
+nav ul a.active svg path {
+    fill: #fff;
+}

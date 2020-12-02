@@ -1,0 +1,17 @@
+.pagination {
+    display: flex;
+    justify-content: center;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.pagination li a {
+    color: #fff;
+    font-size: 14px;
+    margin: 0 5px;
+}
+.pagination li.active a {
+    font-size: 16px;
+    font-weight: 700;
+}

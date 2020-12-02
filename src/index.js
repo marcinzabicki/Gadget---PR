@@ -4,6 +4,8 @@ import './styles/reset.css';
 import './styles/global.css';
 import './styles/header.css';
 import './styles/nav.css';
+import './styles/services.css';
+import './styles/pagination.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 

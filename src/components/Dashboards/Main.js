@@ -38,10 +38,11 @@ const Dashboards = () => {
     const indexOfLastService = activePage * servicesPerPage;
     const indexOfFirstService = indexOfLastService - servicesPerPage;
     const currentServices = searchResults.slice(indexOfFirstService, indexOfLastService);
+    const moreResults = searchResults.length > servicesPerPage;
 
     return (
         <div>
-            <ServiceHeader setSearchTerm={setSearchTerm} searchTerm={searchTerm} />
+            <ServiceHeader setSearchTerm={setSearchTerm} searchTerm={searchTerm} setActivePage={setActivePage} />
 
             {currentServices && currentServices.length > 0 ? (
                 currentServices.map((service, index) => {
@@ -50,10 +51,10 @@ const Dashboards = () => {
                     )
                 })
             ) : (
-                    <p>No services detected</p>
+                    <p className="warning-text">No services detected</p>
                 )}
 
-            <Pagination
+            {moreResults && <Pagination
                 activePage={activePage}
                 itemsCountPerPage={servicesPerPage}
                 totalItemsCount={searchResults.length}
@@ -63,7 +64,7 @@ const Dashboards = () => {
                 nextPageText=">"
                 firstPageText=".."
                 lastPageText=".."
-            />
+            />}
         </div>
     );
 };

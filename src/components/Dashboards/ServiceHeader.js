@@ -1,9 +1,10 @@
 import React from 'react';
 
-const ServiceHeader = ({ searchTerm, setSearchTerm }) => {
+const ServiceHeader = ({ searchTerm, setSearchTerm, setActivePage }) => {
 
     const handleSearch = e => {
         setSearchTerm(e.target.value);
+        setActivePage(1)
     };
 
     return (

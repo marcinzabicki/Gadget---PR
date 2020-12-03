@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { API } from "../../utils/API";
-import { Link } from "react-router-dom";
-import Machine from "./Machine";
-import { machines } from "../../utils/data";
+import Pagination from "react-js-pagination";
+import { services } from "../../utils/data";
+import Service from './Service';
+import ServiceHeader from './ServiceHeader';
+
 const Dashboards = () => {
     // const [machines, setMachines] = useState();
 
@@ -12,27 +13,59 @@ const Dashboards = () => {
     //     });
     // }, []);
 
+
+    // pagination
+
+    const servicesPerPage = 5;
+    const [activePage, setActivePage] = useState(1);
+
+    const handlePageChange = (pageNumber) => {
+        setActivePage(pageNumber)
+    };
+
+    // search bar
+
+    const [searchTerm, setSearchTerm] = useState("");
+    const [searchResults, setSearchResults] = useState([]);
+
+    useEffect(() => {
+        const results = services.filter(service =>
+            service.name.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+        setSearchResults(results);
+    }, [searchTerm]);
+
+    const indexOfLastService = activePage * servicesPerPage;
+    const indexOfFirstService = indexOfLastService - servicesPerPage;
+    const currentServices = searchResults.slice(indexOfFirstService, indexOfLastService);
+    const moreResults = searchResults.length > servicesPerPage;
+
     return (
-        <>
-            <h1>Machines:</h1>
-            <div>
-                {machines && machines.length > 0 ? (
-                    machines.map((machine) => {
-                        return (
-                            <>
-                                {/* <Machine>
-                                    <Link to={`/machine/${machine.agent}`}>{machine.agent}</Link>
-                                </Machine> */}
-                                <p>{machine.name}</p>
-                                <p>{machine.status}</p>
-                            </>
-                        );
-                    })
-                ) : (
-                        <p>No machines detected :(</p>
-                    )}
-            </div>
-        </>
+        <div>
+            <ServiceHeader setSearchTerm={setSearchTerm} searchTerm={searchTerm} setActivePage={setActivePage} />
+
+            {currentServices && currentServices.length > 0 ? (
+                currentServices.map((service, index) => {
+                    return (
+                        <Service key={index} service={service} index={index} />
+                    )
+                })
+            ) : (
+                    <p className="warning-text">No services detected</p>
+                )}
+
+            {moreResults && <Pagination
+                activePage={activePage}
+                itemsCountPerPage={servicesPerPage}
+                totalItemsCount={searchResults.length}
+                pageRangeDisplayed={3}
+                onChange={handlePageChange}
+                prevPageText="<"
+                nextPageText=">"
+                firstPageText=".."
+                lastPageText=".."
+            />}
+        </div>
     );
 };
 

@@ -6,7 +6,6 @@ import Products from './components/Products/Main';
 import Invoices from './components/Invoices/Main';
 import Header from './components/Header';
 import Nav from './components/Nav';
-import Machine from "./components/Dashboards/Machine";
 const App = () => {
   return (
     <>
@@ -21,9 +20,6 @@ const App = () => {
               <Route exact path="/inbox" component={Inbox} />
               <Route path="/products" component={Products} />
               <Route exact path="/invoices" component={Invoices} />
-              <Route path="/dashboards/:machineId">
-                <Machine />
-              </Route>
             </Switch>
           </section>
         </div>

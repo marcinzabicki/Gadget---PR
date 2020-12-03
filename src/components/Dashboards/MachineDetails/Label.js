@@ -1,15 +1,15 @@
 import React from 'react';
+import './MachineDetails.css'
 
-const label = (props) =>{
-    const style = {
-        color:"white"
-    }
+const Label = (props) =>{
+
+    
     return (
-        <div style={style} className="Label">
-                <span>{props.machineName}</span>
-                <span>{props.machineAddress}</span>
+        <div className="Label">
+                <p>{props.machineName}</p>
+                <p>{props.machineAddress}</p>
             </div>
     )
 }
 
-export default label;
+export default Label;

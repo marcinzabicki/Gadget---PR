@@ -1,0 +1,86 @@
+
+    .MachineTile{
+        background-color: #313843;
+        border-radius: 3px;
+        width: 279px;
+        height: 279px;
+        color: white;
+        margin:10px;
+        padding: 14px 19px 27px 19px
+    }
+
+.metric-tile-container{
+    display:flex;
+    justify-content: space-between;
+}
+
+.Label{
+    color:white;
+    margin-bottom: 15px;
+}
+
+.Label p:first-of-type{
+font-weight: 500;
+font-size: 14px;
+text-align: center;
+}
+
+.Label p:last-of-type{
+    text-align: center;
+    font-size: 14px;
+}
+
+.machine-chart{
+    font-size: 30px;
+    font-weight: bold;
+
+}
+
+.machine-chart select{
+    background-color: transparent;
+    border: none;
+    color:white;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.machine-chart option{
+    color:white;
+    background-color: #313843;
+    border: none;
+}
+
+
+.MetricTile{
+    background-color: #384456;
+    border-radius: 3px;
+    width: 114px;
+    height: 52px;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    font-size: 12px;
+}
+
+.metric-name{
+    margin: 3px 20px 3px 30px;
+    font-size: 9px;
+}
+
+.icon-metric{
+    display: flex; /* ustawia oboks siebie  */
+    justify-content: center; /* center : w poziomie, space between odsuwa na maksa, spane around odsuwa ale nie na maksa */
+    align-items: center; /*  w pionie  */
+    font-size: 12px;
+}
+
+.MetricTile img{
+    margin-right:6px;
+}
+
+.machine-tiles-container{
+    display: flex;
+    flex-wrap: wrap; /* flex + wrap klocki będą się zwijać w dół strony a nie po za stronę   */
+  }

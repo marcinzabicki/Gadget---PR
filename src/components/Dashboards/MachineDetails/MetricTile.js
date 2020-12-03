@@ -1,8 +1,9 @@
 import React from 'react'
 import discIcon from './images/hard_disc.png';
 import serviceIcon from './images/service.png';
+import './MachineDetails.css'
 
-const metricTile = (props)=>{
+const MetricTile = (props)=>{
     const icons = {
         "service":serviceIcon,
         "disc":discIcon
@@ -18,4 +19,4 @@ const metricTile = (props)=>{
     )
 }
 
-export default metricTile;
+export default MetricTile;

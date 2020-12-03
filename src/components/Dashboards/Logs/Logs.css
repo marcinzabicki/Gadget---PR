@@ -1,0 +1,20 @@
+.Logs{
+    background-color: #313843;
+    color: #fff;
+    font-size: 14px;
+    width: 90%;
+}
+
+thead {
+color: #fff;
+font-size: 17px;
+font-weight: 600;
+text-align: left
+}
+
+tbody tr td {
+    padding-top: 4px;
+    background-color: #313843;
+    border-bottom: 1px solid #495971;
+    text-align: left
+}

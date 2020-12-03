@@ -3,6 +3,8 @@ import Pagination from "react-js-pagination";
 import { services } from "../../utils/data";
 import Service from './Service';
 import ServiceHeader from './ServiceHeader';
+import MachineBar from './MachineDetails/MachineBar/MachineBar'
+import '../Dashboards/MachineDetails/MachineDetails.css'
 
 const Dashboards = () => {
     // const [machines, setMachines] = useState();
@@ -42,6 +44,10 @@ const Dashboards = () => {
 
     return (
         <div>
+            <div>
+            <MachineBar machine="nmv3" address="127.0.01" cpu={70} ram={90} disc="47/210" services="23/98"></MachineBar>
+
+            </div>
             <ServiceHeader setSearchTerm={setSearchTerm} searchTerm={searchTerm} setActivePage={setActivePage} />
 
             {currentServices && currentServices.length > 0 ? (

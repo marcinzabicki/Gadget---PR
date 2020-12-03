@@ -5,7 +5,7 @@ const Label = (props) =>{
 
     
     return (
-        <div className="Label">
+        <div className="label">
                 <p>{props.machineName}</p>
                 <p>{props.machineAddress}</p>
             </div>

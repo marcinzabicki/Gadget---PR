@@ -9,7 +9,7 @@ const MetricTile = (props)=>{
         "disc":discIcon
     }
     return (
-        <div className="MetricTile">
+        <div className="metric-tile">
                 <span className="metric-name">{props.children}</span>
                 <div className="icon-metric">
                     <img width={22} src ={icons[props.type]}/>

@@ -3,7 +3,6 @@ import { PieChart, Pie, Cell, } from 'recharts';
 import './MachineDetails.css'
 
 const Chart = (props)=>{
-   
     return (
       <div className="machine-chart">
           {props.selectable? <select onChange={props.changed}>

@@ -3,10 +3,14 @@ import Pagination from "react-js-pagination";
 import { services } from "../../utils/data";
 import Service from './Service';
 import ServiceHeader from './ServiceHeader';
-import MachineBar from './MachineDetails/MachineBar/MachineBar'
-import '../Dashboards/MachineDetails/MachineDetails.css'
+import MachineBar from './MachineDetails/MachineBar/MachineBar';
+import '../Dashboards/MachineDetails/MachineDetails.css';
+import { useParams } from "react-router-dom";
 
 const Dashboards = () => {
+
+    const { machineName } = useParams();
+    console.log(machineName);
     // const [machines, setMachines] = useState();
 
     // useEffect(() => {
@@ -45,7 +49,7 @@ const Dashboards = () => {
     return (
         <div>
             <div>
-            <MachineBar machine="nmv3" address="127.0.01" cpu={30} ram={20} disc="47/210" services="23/98"></MachineBar>
+                <MachineBar machine="nmv3" address="127.0.01" cpu={30} ram={20} disc="47/210" services="23/98"></MachineBar>
 
             </div>
             <ServiceHeader setSearchTerm={setSearchTerm} searchTerm={searchTerm} setActivePage={setActivePage} />

@@ -9,12 +9,17 @@ const MachineBar = (props) =>{
     
     return  (
         <div className="machine-bar">
-            <Label machineName={props.machine} machineAddress={props.address}></Label>
-            <Chart selectable={false}>{props.cpu}</Chart>
-            <Chart selectable={false}>{props.ram}</Chart>
-            <MetricTile values= {props.services} type="service">Services</MetricTile>
-            <MetricTile values = {props.disc} type="disc">Disc space</MetricTile>
-            
+            <div className="machine-bar-label">
+                <Label machineName={props.machine} machineAddress={props.address}></Label>
+            </div>
+            <div className="machine-bar-charts">
+                <Chart label="CPU" selectable={false}>{props.cpu}</Chart>
+                <Chart label="MEMORY" selectable={false}>{props.ram}</Chart>
+            </div>
+            <div className="machine-bar-metrics">
+                <MetricTile values= {props.services} type="service">Services</MetricTile>
+                <MetricTile values = {props.disc} type="disc">Disc space</MetricTile>
+            </div>
         </div>
     )
 }

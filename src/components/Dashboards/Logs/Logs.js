@@ -1,9 +1,6 @@
 import React from 'react'
-import './Logs.css'
 
 const logs = (props) => {
-    
-    
     const headers =
         Object.keys(props.children[0]).map((k, i) => {
             return (
@@ -28,10 +25,9 @@ const logs = (props) => {
                 </tbody>
             )
         })
-    
 
     return (
-            <table className="Logs">
+            <table className="log-table">
                <thead>
                <tr key={0}>
                    {headers}
@@ -41,6 +37,5 @@ const logs = (props) => {
             </table>
     )
 }
-
 
 export default logs;

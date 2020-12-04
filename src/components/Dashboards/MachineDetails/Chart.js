@@ -8,7 +8,9 @@ const Chart = (props)=>{
           {props.selectable? <select onChange={props.changed}>
         <option>CPU</option>
         <option>RAM</option>
-      </select> : null}
+      </select> : 
+      <p className="machine-chart-label">{props.label}</p>
+      }
       
         <PieChart width={280} height={120}>
         <text x={145} y={90} dy={8} textAnchor="middle" fill={'white'}>{props.children + '%'}</text>
@@ -35,7 +37,7 @@ const Chart = (props)=>{
           innerRadius={50}
           outerRadius={80}
           dataKey="value"
-          fill="#313843"
+          fill="#384456"
         >
             <Cell key={`cell-1`} fill={parseInt(props.children)>60? '#E13849': '#38E18D' } />)
         </Pie>

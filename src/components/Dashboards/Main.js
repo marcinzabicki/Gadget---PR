@@ -45,7 +45,7 @@ const Dashboards = () => {
     return (
         <div>
             <div>
-            <MachineBar machine="nmv3" address="127.0.01" cpu={70} ram={90} disc="47/210" services="23/98"></MachineBar>
+            <MachineBar machine="nmv3" address="127.0.01" cpu={30} ram={20} disc="47/210" services="23/98"></MachineBar>
 
             </div>
             <ServiceHeader setSearchTerm={setSearchTerm} searchTerm={searchTerm} setActivePage={setActivePage} />

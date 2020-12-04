@@ -11,16 +11,17 @@ const changeMetricData = (event) => {
 
 const MachineTile = (props) => {
     return (
-        <Link to={`/${props.machine}`}>
-            <div className="machine-tile">
+        <div className="machine-tile">
+            <Link to={`/${props.machine}`}>
                 <Label machineName={props.machine} machineAddress={props.address}></Label>
-                <div className="metric-tile-container">
-                    <MetricTile values={props.services} type="service">Services</MetricTile>
-                    <MetricTile values={props.disc} type="disc">Disc space</MetricTile>
-                </div>
-                <Chart changed={(event) => changeMetricData(event)} selectable={true}>{props.cpu}</Chart>
+            </Link>
+            <div className="metric-tile-container">
+                <MetricTile values={props.services} type="service">Services</MetricTile>
+                <MetricTile values={props.disc} type="disc">Disc space</MetricTile>
             </div>
-        </Link>
+            <Chart changed={(event) => changeMetricData(event)} selectable={true}>{props.cpu}</Chart>
+        </div>
+
     )
 }
 

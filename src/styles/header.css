@@ -38,3 +38,16 @@ header .log-button p {
   padding: 10px 30px;
   cursor: pointer;
 }
+
+@media (max-width: 768px) {
+  header {
+    height: 59px;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.18);
+  }
+  header .log-button {
+    padding-right: 23px;
+  }
+  header .logo {
+    padding-left: 16px;
+  }
+}

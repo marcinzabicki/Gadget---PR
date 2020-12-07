@@ -89,3 +89,49 @@
     font-weight: 600;
     text-align: center;
 }
+
+.service-mobile {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #313843;
+    margin-bottom: 6px;
+    padding: 9px 12px 14px 24px;
+}
+.service-mobile .service-name-mobile {
+    color: #fff;
+    font-size: 14px;
+}
+.service-mobile .service-status-mobile {
+    width: 23px;
+    height: 23px;
+    border-radius: 50%;
+}
+.service-mobile .service-status-mobile.Stopped {
+    background-color: #e13849;
+}
+.service-mobile .service-status-mobile.Running {
+    background-color: #38e18d;
+}
+.service-mobile .buttons-wrapper-mobile div {
+    display: flex;
+    justify-content: flex-end;
+}
+.service-mobile .button {
+    color: #f9f9fa;
+    font-size: 11px;
+    font-weight: 600;
+    border-radius: 2px;
+    border: 1px solid #4b576a;
+    padding: 11px 15px;
+    background: transparent;
+    text-transform: uppercase;
+    margin-left: 9px;
+    cursor: pointer;
+}
+.service-mobile .button.special {
+    background-color: #3775e0;
+}
+.service-mobile .service-name-mobile {
+    margin: 0 0 11px 9px;
+}

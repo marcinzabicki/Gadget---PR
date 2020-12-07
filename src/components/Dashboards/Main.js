@@ -2,13 +2,15 @@ import React, { useState, useEffect } from "react";
 import Pagination from "react-js-pagination";
 import { services } from "../../utils/data";
 import Service from './Service';
+import ServiceMobile from './ServiceMobile';
 import ServiceHeader from './ServiceHeader';
 import MachineBar from './MachineDetails/MachineBar/MachineBar';
 import '../Dashboards/MachineDetails/MachineDetails.css';
 import { useParams } from "react-router-dom";
+import { useWindowSize } from "../../Hooks";
 
 const Dashboards = () => {
-
+    const windowSize = useWindowSize();
     const { machineName } = useParams();
     console.log(machineName);
     // const [machines, setMachines] = useState();
@@ -18,7 +20,6 @@ const Dashboards = () => {
     //         setMachines(response.data);
     //     });
     // }, []);
-
 
     // pagination
 
@@ -45,6 +46,35 @@ const Dashboards = () => {
     const indexOfFirstService = indexOfLastService - servicesPerPage;
     const currentServices = searchResults.slice(indexOfFirstService, indexOfLastService);
     const moreResults = searchResults.length > servicesPerPage;
+
+    if (windowSize <= 768) {
+        return (
+            <>
+                <div>
+                    {currentServices && currentServices.length > 0 ? (
+                        currentServices.map((service, index) => {
+                            return (
+                                <ServiceMobile key={index} service={service} index={index} />
+                            )
+                        })
+                    ) : (
+                            <p className="warning-text">No services detected</p>
+                        )}
+                </div>
+                {moreResults && <Pagination
+                    activePage={activePage}
+                    itemsCountPerPage={servicesPerPage}
+                    totalItemsCount={searchResults.length}
+                    pageRangeDisplayed={3}
+                    onChange={handlePageChange}
+                    prevPageText="<"
+                    nextPageText=">"
+                    firstPageText=".."
+                    lastPageText=".."
+                />}
+            </>
+        )
+    }
 
     return (
         <div>

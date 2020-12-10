@@ -1,25 +1,23 @@
 import React, { useState, useEffect } from "react";
 import Pagination from "react-js-pagination";
-import { services } from "../../utils/data";
 import Service from './Service';
 import ServiceMobile from './ServiceMobile';
 import ServiceHeader from './ServiceHeader';
 import MachineBar from './MachineDetails/MachineBar/MachineBar';
-import '../Dashboards/MachineDetails/MachineDetails.css';
+import { API } from "../../utils/API";
 import { useParams } from "react-router-dom";
 import { useWindowSize } from "../../Hooks";
 
 const Dashboards = () => {
     const windowSize = useWindowSize();
     const { machineName } = useParams();
-    console.log(machineName);
-    // const [machines, setMachines] = useState();
+    const [services, setServices] = useState();
 
-    // useEffect(() => {
-    //     API.fetchMachineList().then((response) => {
-    //         setMachines(response.data);
-    //     });
-    // }, []);
+    useEffect(() => {
+        API.fetchServicesList({ machineName }).then((response) =>
+            setServices(response.data)
+        );
+    }, [machineName]);
 
     // pagination
 
@@ -36,16 +34,16 @@ const Dashboards = () => {
     const [searchResults, setSearchResults] = useState([]);
 
     useEffect(() => {
-        const results = services.filter(service =>
+        const results = services && services.filter(service =>
             service.name.toLowerCase().includes(searchTerm.toLowerCase())
         );
         setSearchResults(results);
-    }, [searchTerm]);
+    }, [searchTerm, services]);
 
     const indexOfLastService = activePage * servicesPerPage;
     const indexOfFirstService = indexOfLastService - servicesPerPage;
-    const currentServices = searchResults.slice(indexOfFirstService, indexOfLastService);
-    const moreResults = searchResults.length > servicesPerPage;
+    const currentServices = searchResults && searchResults.slice(indexOfFirstService, indexOfLastService);
+    const moreResults = searchResults && searchResults.length > servicesPerPage;
 
     if (windowSize <= 768) {
         return (

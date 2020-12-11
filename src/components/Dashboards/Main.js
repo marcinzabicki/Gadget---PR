@@ -7,17 +7,69 @@ import MachineBar from './MachineDetails/MachineBar/MachineBar';
 import { API } from "../../utils/API";
 import { useParams } from "react-router-dom";
 import { useWindowSize } from "../../Hooks";
+import { SIGNALR_URL } from "../../config";
+import { HubConnectionBuilder, LogLevel } from "@microsoft/signalr";
 
 const Dashboards = () => {
     const windowSize = useWindowSize();
     const { machineName } = useParams();
     const [services, setServices] = useState();
+    const [hubConnection, setHubConnection] = useState(null);
+    const [connectionState, setConnectionState] = useState("");
 
     useEffect(() => {
         API.fetchServicesList({ machineName }).then((response) =>
             setServices(response.data)
         );
     }, [machineName]);
+
+    const updateService = (name, status) => {
+        const buffer = services && services;
+        const serviceIndex = buffer.findIndex((service) => service.name === name);
+        buffer[serviceIndex] = { name, status };
+        setServices([...buffer]);
+    };
+
+    useEffect(() => {
+        const connection = new HubConnectionBuilder()
+            .withUrl(SIGNALR_URL)
+            .configureLogging(LogLevel.Critical)
+            .withAutomaticReconnect()
+            .build();
+
+        setHubConnection(connection);
+    }, []);
+
+    useEffect(() => {
+        if (hubConnection !== null && services) {
+            hubConnection.on("ServiceStatusChanged", (response) => {
+                updateService(response.name, response.status);
+            });
+            hubConnection.onclose(() => {
+                setConnectionState("Disconnected");
+            });
+            hubConnection.onreconnecting(() => {
+                setConnectionState("Reconnecting");
+            });
+            hubConnection.onreconnected(() => {
+                setConnectionState("Reconnected");
+            });
+            const start = async () => {
+                if (hubConnection.state === "Disconnected")
+                    try {
+                        await hubConnection.start();
+                    } catch (err) {
+                        console.log(err);
+                        setTimeout(() => start(), 5000);
+                    }
+            };
+
+            start().then(() => {
+                hubConnection.invoke("RegisterDashboard", {});
+                setConnectionState("Connected");
+            });
+        }
+    }, [hubConnection, services]);
 
     // pagination
 
@@ -45,6 +97,7 @@ const Dashboards = () => {
     const currentServices = searchResults && searchResults.slice(indexOfFirstService, indexOfLastService);
     const moreResults = searchResults && searchResults.length > servicesPerPage;
 
+    // mobile 
     if (windowSize <= 768) {
         return (
             <>
@@ -74,6 +127,7 @@ const Dashboards = () => {
         )
     }
 
+    // desktop
     return (
         <div>
             <div>
@@ -85,7 +139,7 @@ const Dashboards = () => {
             {currentServices && currentServices.length > 0 ? (
                 currentServices.map((service, index) => {
                     return (
-                        <Service key={index} service={service} index={index} />
+                        <Service key={index} service={service} index={index} machineName={machineName} hubConnection={hubConnection} connectionState={connectionState} />
                     )
                 })
             ) : (

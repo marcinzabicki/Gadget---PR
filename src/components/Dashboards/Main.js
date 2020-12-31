@@ -24,22 +24,22 @@ import { HubConnectionBuilder, LogLevel } from "@microsoft/signalr";
   const { machineId } = useParams();
     
     
-    useEffect(() => {
-        API.fetchServicesList(machineName).then((response) =>{
-          setServices(response.data)}
-        );
-      }, [machineName]);
+    // useEffect(() => {
+    //     API.fetchServicesList(machineName).then((response) =>{
+    //       setServices(response.data)}
+    //     );
+    //   }, [machineName]);
     
-      useEffect(() => {
-        const connection = new HubConnectionBuilder()
-          .withUrl(SIGNALR_URL)
-          .configureLogging(LogLevel.Critical)
-          .withAutomaticReconnect()
-          .build();
+    //   useEffect(() => {
+    //     const connection = new HubConnectionBuilder()
+    //       .withUrl(SIGNALR_URL)
+    //       .configureLogging(LogLevel.Critical)
+    //       .withAutomaticReconnect()
+    //       .build();
     
-        setHubConnection(connection);
-      }, 
-    []);
+    //     setHubConnection(connection);
+    //   }, 
+    // []);
     
     const start = async () => {
       if (hubConnection?.state === "Disconnected")

@@ -1,4 +1,7 @@
-const Service = ({ service, index }) => {
+import {API} from '../../utils/API'
+
+
+const Service = ({ service, index, props }) => {
     return (
         <div key={service.name + index} className="service">
             <div className="service-wrapper">
@@ -10,8 +13,8 @@ const Service = ({ service, index }) => {
                 <p className="text service-more">Lorem ipsum sd</p>
             </div>
             <div className="button-wrapper">
-                <button className="button">Stop</button>
-                <button className="button">Restart</button>
+                <button className="button" onClick={()=>API.stopService(service.id)}>Stop</button>
+                <button className="button" onClick={()=>API.startService(service.id)} >Restart</button>
                 <button className="button special">Show logs</button>
             </div>
         </div>

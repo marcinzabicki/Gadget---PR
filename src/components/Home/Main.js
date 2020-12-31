@@ -34,7 +34,7 @@ const Home = () => {
 
     const machines = machineListState.machines.map((m, i) => {
         return (
-            <MachineTile machine = {m["agent"]} key={i}></MachineTile>
+            <MachineTile machine = {m["name"]} key={i}></MachineTile>
         )
     })
 

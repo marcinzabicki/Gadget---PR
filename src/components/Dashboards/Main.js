@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import Pagination from "react-js-pagination";
-import { services } from "../../utils/data";
 import Service from './Service';
 import ServiceMobile from './ServiceMobile';
 import ServiceHeader from './ServiceHeader';
@@ -8,20 +7,56 @@ import MachineBar from './MachineDetails/MachineBar/MachineBar';
 import '../Dashboards/MachineDetails/MachineDetails.css';
 import { useParams } from "react-router-dom";
 import { useWindowSize } from "../../Hooks";
+import {API} from '../../utils/API'
+import { SIGNALR_URL } from "../../config";
+import { HubConnectionBuilder, LogLevel } from "@microsoft/signalr";
 
-const Dashboards = () => {
+
+    const Dashboards = () => {
     const windowSize = useWindowSize();
     const { machineName } = useParams();
-    console.log(machineName);
-    // const [machines, setMachines] = useState();
 
-    // useEffect(() => {
-    //     API.fetchMachineList().then((response) => {
-    //         setMachines(response.data);
-    //     });
-    // }, []);
+   
+  const [services, setServices] = useState([]);
+  const [isButtonActive, setButtonActive] = useState(false);
+  const [hubConnection, setHubConnection] = useState({});
+  const [connectionState, setConnectionState] = useState("");
+  const { machineId } = useParams();
+    
+    
+    useEffect(() => {
+        API.fetchServicesList(machineName).then((response) =>{
+          setServices(response.data)}
+        );
+      }, [machineName]);
+    
+      useEffect(() => {
+        const connection = new HubConnectionBuilder()
+          .withUrl(SIGNALR_URL)
+          .configureLogging(LogLevel.Critical)
+          .withAutomaticReconnect()
+          .build();
+    
+        setHubConnection(connection);
+      }, 
+    []);
+    
+    const start = async () => {
+      if (hubConnection?.state === "Disconnected")
+        try {
+          await hubConnection.start();
+        } catch (err) {
+          console.log(err);
+          setTimeout(() => start(), 5000);
+        }
+    };
 
-    // pagination
+    start().then(() => {
+      setConnectionState("Connected");
+      console.log(hubConnection.state)
+      hubConnection.invoke("OnConnectedAsync", {});
+    });
+
 
     const servicesPerPage = 5;
     const [activePage, setActivePage] = useState(1);
@@ -79,7 +114,7 @@ const Dashboards = () => {
     return (
         <div>
             <div>
-                <MachineBar machine="nmv3" address="127.0.01" cpu={30} ram={20} disc="47/210" services="23/98"></MachineBar>
+                <MachineBar machine={machineName} address="127.0.01" cpu={30} ram={20} disc="47/210" services="23/98"></MachineBar>
 
             </div>
             <ServiceHeader setSearchTerm={setSearchTerm} searchTerm={searchTerm} setActivePage={setActivePage} />

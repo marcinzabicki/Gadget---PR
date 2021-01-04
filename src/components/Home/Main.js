@@ -13,6 +13,11 @@ const Home = () => {
         hubConnection:null
     })
 
+    const [machinesMetrics, setmachinesMetrics] = useState({
+        metrics: [],
+        
+    })
+
      useEffect(() => {
         API.fetchMachineList().then((response) => {
             const connection = new HubConnectionBuilder()
@@ -24,13 +29,35 @@ const Home = () => {
             connection.start()
             .then(() => console.log('Connection started!'))
             .catch(err => console.log('Error while establishing connection :('));
-
             setMachineListState({
                 machines: response.data,
                 hubConnection:connection
             });
         });
     }, []);
+
+    useEffect(() => {
+        if (machineListState.hubConnection !== null) {
+            machineListState.hubConnection.on("MachineHealthRecived", (response) => {
+          
+          });
+          
+          const start = async () => {
+            if (machineListState.hubConnection.state === "Disconnected")
+              try {
+                await machineListState.hubConnection.start();
+              } catch (err) {
+                console.log(err);
+                setTimeout(() => start(), 5000);
+              }
+          };
+    
+        //   start().then(() => {
+        //     machineListState.hubConnection.invoke("RegisterDashboard", {});
+        //     setConnectionState("Connected");
+        //   });
+        }
+      }, [machineListState.hubConnection]);
 
     const machines = machineListState.machines.map((m, i) => {
         return (

@@ -86,15 +86,33 @@ const Dashboards = () => {
     return (
       <>
         <div>
-          {currentServices && currentServices.length > 0 ? (
-            currentServices.map((service, index) => {
-              return (
-                <ServiceMobile key={index} service={service} index={index} />
-              );
-            })
-          ) : (
-            <p className="warning-text">No services detected</p>
-          )}
+            <div>
+                <MachineBar machine="nmv3" address="127.0.01" cpu={30} ram={20} disc="47/210" services="23/98"></MachineBar>
+
+            </div>
+            <ServiceHeader setSearchTerm={setSearchTerm} searchTerm={searchTerm} setActivePage={setActivePage} />
+
+            {currentServices && currentServices.length > 0 ? (
+                currentServices.map((service, index) => {
+                    return (
+                        <Service key={index} service={service} index={index} machineName={machineName} hubConnection={hubConnection} connectionState={connectionState} />
+                    )
+                })
+            ) : (
+                    <p className="warning-text">No services detected</p>
+                )}
+
+            {moreResults && <Pagination
+                activePage={activePage}
+                itemsCountPerPage={servicesPerPage}
+                totalItemsCount={searchResults.length}
+                pageRangeDisplayed={3}
+                onChange={handlePageChange}
+                prevPageText="<"
+                nextPageText=">"
+                firstPageText=".."
+                lastPageText=".."
+            />}
         </div>
         {moreResults && (
           <Pagination

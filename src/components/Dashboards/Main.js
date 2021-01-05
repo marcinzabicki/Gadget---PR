@@ -24,8 +24,9 @@ const Dashboards = () => {
   useEffect(() => {
     API.fetchServicesList(machineName).then((response) => {
       setServices(response.data);
+      console.log(response?.data)
     });
-  }, [machineName]);
+  }, [machineName, services]);
 
   useEffect(() => {
     const connection = new HubConnectionBuilder()
@@ -50,9 +51,9 @@ const Dashboards = () => {
   start().then(() => {
     setConnectionState("Connected");
     console.log(hubConnection);
-    hubConnection.on("ServiceStatusChanged", (response) => {
-      console.log("ddfsf");
-    });
+    // hubConnection.on("ServiceStatusChanged", (response) => {
+    //   console.log("ddfsf");
+    // });
   });
 
   const servicesPerPage = 5;
@@ -86,33 +87,33 @@ const Dashboards = () => {
     return (
       <>
         <div>
-            <div>
-                <MachineBar machine="nmv3" address="127.0.01" cpu={30} ram={20} disc="47/210" services="23/98"></MachineBar>
+          <div>
+            <MachineBar machine="nmv3" address="127.0.01" cpu={30} ram={20} disc="47/210" services="23/98"></MachineBar>
 
-            </div>
-            <ServiceHeader setSearchTerm={setSearchTerm} searchTerm={searchTerm} setActivePage={setActivePage} />
+          </div>
+          <ServiceHeader setSearchTerm={setSearchTerm} searchTerm={searchTerm} setActivePage={setActivePage} />
 
-            {currentServices && currentServices.length > 0 ? (
-                currentServices.map((service, index) => {
-                    return (
-                        <Service key={index} service={service} index={index} machineName={machineName} hubConnection={hubConnection} connectionState={connectionState} />
-                    )
-                })
-            ) : (
-                    <p className="warning-text">No services detected</p>
-                )}
+          {currentServices && currentServices.length > 0 ? (
+            currentServices.map((service, index) => {
+              return (
+                <Service key={index} service={service} index={index} machineName={machineName} hubConnection={hubConnection} connectionState={connectionState} />
+              )
+            })
+          ) : (
+              <p className="warning-text">No services detected</p>
+            )}
 
-            {moreResults && <Pagination
-                activePage={activePage}
-                itemsCountPerPage={servicesPerPage}
-                totalItemsCount={searchResults.length}
-                pageRangeDisplayed={3}
-                onChange={handlePageChange}
-                prevPageText="<"
-                nextPageText=">"
-                firstPageText=".."
-                lastPageText=".."
-            />}
+          {moreResults && <Pagination
+            activePage={activePage}
+            itemsCountPerPage={servicesPerPage}
+            totalItemsCount={searchResults.length}
+            pageRangeDisplayed={3}
+            onChange={handlePageChange}
+            prevPageText="<"
+            nextPageText=">"
+            firstPageText=".."
+            lastPageText=".."
+          />}
         </div>
         {moreResults && (
           <Pagination
@@ -154,8 +155,8 @@ const Dashboards = () => {
           return <Service key={index} service={service} index={index} />;
         })
       ) : (
-        <p className="warning-text">No services detected</p>
-      )}
+          <p className="warning-text">No services detected</p>
+        )}
 
       {moreResults && (
         <Pagination

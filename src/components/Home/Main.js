@@ -13,10 +13,7 @@ const Home = () => {
         hubConnection:null
     })
 
-    const [machinesMetrics, setmachinesMetrics] = useState({
-        metrics: [],
-        
-    })
+   
 
      useEffect(() => {
         API.fetchMachineList().then((response) => {
@@ -39,29 +36,26 @@ const Home = () => {
     useEffect(() => {
         if (machineListState.hubConnection !== null) {
             machineListState.hubConnection.on("MachineHealthRecived", (response) => {
-          
+                
+                let updated = [...machineListState.machines];
+                let index = updated.findIndex(x=>x.name==response.agent)
+                updated[index].cpu = response.cpuPercentUsage;
+
+                setMachineListState({
+                    machines: updated,
+                    hubConnection : machineListState.hubConnection
+                })
           });
           
-          const start = async () => {
-            if (machineListState.hubConnection.state === "Disconnected")
-              try {
-                await machineListState.hubConnection.start();
-              } catch (err) {
-                console.log(err);
-                setTimeout(() => start(), 5000);
-              }
-          };
-    
-        //   start().then(() => {
-        //     machineListState.hubConnection.invoke("RegisterDashboard", {});
-        //     setConnectionState("Connected");
-        //   });
+      
         }
       }, [machineListState.hubConnection]);
 
     const machines = machineListState.machines.map((m, i) => {
+        console.log(m);
         return (
-            <MachineTile machine = {m["name"]} key={i}></MachineTile>
+            
+            <MachineTile machine = {m["name"]} cpu={m["cpu"]}  ram = {30} key={i}></MachineTile>
         )
     })
 

@@ -50,9 +50,9 @@ const Dashboards = () => {
   start().then(() => {
     setConnectionState("Connected");
     console.log(hubConnection);
-    hubConnection.on("ServiceStatusChanged", (response) => {
-      console.log("ddfsf");
-    });
+    // hubConnection.on("ServiceStatusChanged", (response) => {
+    //   //console.log(response);
+    // });
   });
 
   const servicesPerPage = 5;
@@ -95,7 +95,7 @@ const Dashboards = () => {
             {currentServices && currentServices.length > 0 ? (
                 currentServices.map((service, index) => {
                     return (
-                        <Service key={index} service={service} index={index} machineName={machineName} hubConnection={hubConnection} connectionState={connectionState} />
+                        <ServiceMobile  key={index} service={service} index={index} machineName={machineName} hubConnection={hubConnection} connectionState={connectionState} />
                     )
                 })
             ) : (

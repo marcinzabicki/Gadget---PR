@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import Chart from '../Chart'
 import MetricTile from '../MetricTile'
 import Label from '../Label'
@@ -14,6 +14,14 @@ const MachineTile = (props) => {
         metrics: {"RAM":props.ram, "CPU": props.cpu},
         show:"CPU"
     })
+
+    useEffect(()=>{
+        setMachineTileState({
+            metrics: {"RAM":props.ram, "CPU": props.cpu},
+            show:machineTileState.show
+        })
+    },[props]);
+
     
     const changeMetricData = (event) => {
         setMachineTileState({

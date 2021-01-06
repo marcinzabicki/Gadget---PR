@@ -3,7 +3,6 @@ import MachineTile from '../Dashboards/MachineDetails/MachineTile/MachineTile'
 import '../Dashboards/MachineDetails/MachineDetails.css';
 //import Logs from '../Dashboards/Logs/Logs'
 import {API} from '../../utils/API'
-import { HubConnection } from 'signalr-client-react';
 import { HubConnectionBuilder, LogLevel } from "@microsoft/signalr";
 
 const Home = () => {
@@ -12,8 +11,6 @@ const Home = () => {
         machines: [],
         hubConnection:null
     })
-
-   
 
      useEffect(() => {
         API.fetchMachineList().then((response) => {
@@ -39,23 +36,23 @@ const Home = () => {
                 
                 let updated = [...machineListState.machines];
                 let index = updated.findIndex(x=>x.name==response.agent)
+               
                 updated[index].cpu = response.cpuPercentUsage;
-
+                updated[index].ram = 100*(1-(response.memoryFree/response.memoryTotal));
+                updated[index].disc = `${Math.floor(response.discOccupied)}/${Math.floor(response.discTotal)}`;
+                updated[index].services = "34/67";
                 setMachineListState({
                     machines: updated,
                     hubConnection : machineListState.hubConnection
                 })
           });
-          
-      
         }
       }, [machineListState.hubConnection]);
 
     const machines = machineListState.machines.map((m, i) => {
-        console.log(m);
+        
         return (
-            
-            <MachineTile machine = {m["name"]} cpu={m["cpu"]}  ram = {30} key={i}></MachineTile>
+            <MachineTile machine = {m["name"]} cpu={m["cpu"]}  ram={m["ram"]} disc = {m["disc"]} services={m["services"]} key={i}></MachineTile>
         )
     })
 

@@ -40,7 +40,7 @@ const Home = () => {
                 updated[index].cpu = response.cpuPercentUsage;
                 updated[index].ram = 100*(1-(response.memoryFree/response.memoryTotal));
                 updated[index].disc = `${Math.floor(response.discOccupied)}/${Math.floor(response.discTotal)}`;
-                updated[index].services = "34/67";
+                updated[index].services = `${response.servicesRunning}/${response.servicesCount}`
                 setMachineListState({
                     machines: updated,
                     hubConnection : machineListState.hubConnection

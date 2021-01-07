@@ -10,6 +10,7 @@ import { useWindowSize } from "../../Hooks";
 import { API } from "../../utils/API";
 import { SIGNALR_URL } from "../../config";
 import { HubConnectionBuilder, LogLevel } from "@microsoft/signalr";
+import userEvent from "@testing-library/user-event";
 
 const Dashboards = () => {
   const windowSize = useWindowSize();
@@ -22,7 +23,6 @@ const Dashboards = () => {
 
   useEffect(() => {
     API.fetchServicesList(machineName).then((response) => {
-      
         const connection = new HubConnectionBuilder()
         .withUrl(SIGNALR_URL)
         .configureLogging(LogLevel.Critical)
@@ -33,9 +33,8 @@ const Dashboards = () => {
         .then(() => console.log('Connection started!'))
         .catch(err => console.log('Error while establishing connection :('));
         setHubConnection(connection);
-        let tmp = [...response.data];
-        setServices(tmp);
-        console.log(services);
+        setServices(response.data);
+        console.log(response.data);
     });
   }, []);
 
@@ -43,7 +42,6 @@ const Dashboards = () => {
       if (hubConnection !== null) {
         hubConnection.on("ServiceStatusChanged", (response) => {
              if(response.agent ===machineName){
-              console.log(response);
                 let updated = [...services];
                 let indexOfChangedService = updated.findIndex(x=>x.name ===response.name);
                 updated[indexOfChangedService].status = response.status;
@@ -62,7 +60,7 @@ const Dashboards = () => {
               updated.cpu = response.cpuPercentUsage;
               updated.ram = Math.floor(100*(1-(response.memoryFree/response.memoryTotal)));
               updated.disc = `${Math.floor(response.discOccupied)}/${Math.floor(response.discTotal)}`;
-              updated.services = "34/67";
+              updated.services = `${response.servicesRunning}/${response.servicesCount}`;
               setMachineState(updated);
             }
         });
@@ -87,6 +85,8 @@ const Dashboards = () => {
     );
     setSearchResults(results);
   }, [searchTerm]);
+  
+
 
   const indexOfLastService = activePage * servicesPerPage;
   const indexOfFirstService = indexOfLastService - servicesPerPage;
@@ -95,15 +95,14 @@ const Dashboards = () => {
     indexOfLastService
   );
   const moreResults = searchResults.length > servicesPerPage;
-
   if (windowSize <= 768) {
     return (
       <>
         <div>
-            <div>
+            {/* <div>
                 <MachineBar machine="nmv3" address="127.0.01" cpu={30} ram={20} disc="47/210" services="23/98"></MachineBar>
 
-            </div>
+            </div> */}
             <ServiceHeader setSearchTerm={setSearchTerm} searchTerm={searchTerm} setActivePage={setActivePage} />
 
             {currentServices && currentServices.length > 0 ? (

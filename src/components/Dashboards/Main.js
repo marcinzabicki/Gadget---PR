@@ -14,48 +14,68 @@ import { HubConnectionBuilder, LogLevel } from "@microsoft/signalr";
 const Dashboards = () => {
   const windowSize = useWindowSize();
   const { machineName } = useParams();
-
+  const [machineState, setMachineState] = useState([]);
   const [services, setServices] = useState([]);
-  const [isButtonActive, setButtonActive] = useState(false);
-  const [hubConnection, setHubConnection] = useState({});
+  const [hubConnection, setHubConnection] = useState(null);
   const [connectionState, setConnectionState] = useState("");
-  const { machineId } = useParams();
+  const [machineAddress, setMachineAddress] = useState("");
 
   useEffect(() => {
     API.fetchServicesList(machineName).then((response) => {
-      setServices(response.data);
+        const connection = new HubConnectionBuilder()
+        .withUrl(SIGNALR_URL)
+        .configureLogging(LogLevel.Critical)
+        .withAutomaticReconnect()
+        .build();
+       
+        connection.start()
+        .then(() => console.log('Connection started!'))
+        .catch(err => console.log('Error while establishing connection :('));
+        setHubConnection(connection);
+        setServices(response.data);
+        console.log(response.data);
     });
-  }, [machineName]);
-
-  useEffect(() => {
-    const connection = new HubConnectionBuilder()
-      .withUrl(SIGNALR_URL)
-      .configureLogging(LogLevel.Critical)
-      .withAutomaticReconnect()
-      .build();
-
-    setHubConnection(connection);
   }, []);
 
-  const start = async () => {
-    if (hubConnection?.state === "Disconnected")
-      try {
-        await hubConnection.start();
-      } catch (err) {
-        console.log(err);
-        setTimeout(() => start(), 5000);
+    useEffect(() => {
+      if (hubConnection !== null) {
+        hubConnection.on("ServiceStatusChanged", (response) => {
+             if(response.agent ===machineName){
+                let updated = [...services];
+                let indexOfChangedService = updated.findIndex(x=>x.name ===response.name);
+                updated[indexOfChangedService].status = response.status;
+              setServices(updated);
+             }
+        });
       }
-  };
+    }, [hubConnection]);
 
-  start().then(() => {
-    setConnectionState("Connected");
-    console.log(hubConnection);
-    hubConnection.on("ServiceStatusChanged", (response) => {
-      console.log("ddfsf");
-    });
-  });
 
-  const servicesPerPage = 5;
+    useEffect(() => {
+      API.fetchMachineList().then((response) => {
+        let ipAddress = response.data.filter((ms)=>ms.name == machineName)[0];
+          setMachineAddress(ipAddress.address);
+      });
+  }, []);
+
+
+
+    useEffect(() => {
+      if (hubConnection !== null) {
+          hubConnection.on("MachineHealthRecived", (response) => {
+            if(response.agent ===machineName){
+              let updated = {};
+              updated.cpu = response.cpuPercentUsage;
+              updated.ram = Math.floor(100*(1-(response.memoryFree/response.memoryTotal)));
+              updated.disc = `${Math.floor(response.discOccupied)}/${Math.floor(response.discTotal)}`;
+              updated.services = `${response.servicesRunning}/${response.servicesCount}`;
+              setMachineState(updated);
+            }
+        });
+      }
+    }, [hubConnection]);
+
+  const servicesPerPage = 10;
   const [activePage, setActivePage] = useState(1);
 
   const handlePageChange = (pageNumber) => {
@@ -73,6 +93,8 @@ const Dashboards = () => {
     );
     setSearchResults(results);
   }, [searchTerm]);
+  
+
 
   const indexOfLastService = activePage * servicesPerPage;
   const indexOfFirstService = indexOfLastService - servicesPerPage;
@@ -81,21 +103,20 @@ const Dashboards = () => {
     indexOfLastService
   );
   const moreResults = searchResults.length > servicesPerPage;
-
   if (windowSize <= 768) {
     return (
       <>
         <div>
-            <div>
+            {/* <div>
                 <MachineBar machine="nmv3" address="127.0.01" cpu={30} ram={20} disc="47/210" services="23/98"></MachineBar>
 
-            </div>
+            </div> */}
             <ServiceHeader setSearchTerm={setSearchTerm} searchTerm={searchTerm} setActivePage={setActivePage} />
 
             {currentServices && currentServices.length > 0 ? (
                 currentServices.map((service, index) => {
                     return (
-                        <Service key={index} service={service} index={index} machineName={machineName} hubConnection={hubConnection} connectionState={connectionState} />
+                        <ServiceMobile  key={index} service={service} index={index} machineName={machineName} hubConnection={hubConnection} connectionState={connectionState} />
                     )
                 })
             ) : (
@@ -136,11 +157,11 @@ const Dashboards = () => {
       <div>
         <MachineBar
           machine={machineName}
-          address="127.0.01"
-          cpu={30}
-          ram={20}
-          disc="47/210"
-          services="23/98"
+          address={machineAddress}
+          cpu={machineState.cpu}
+          ram={machineState.ram}
+          disc={machineState.disc}
+          services={machineState.services}
         ></MachineBar>
       </div>
       <ServiceHeader

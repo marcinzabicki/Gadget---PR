@@ -9,11 +9,16 @@ const Service = ({ service, index, props }) => {
                 <div className={`service-status ${service.status}`}>
                     <p>{service.status}</p>
                 </div>
-                <p className="text service-more">Portal services</p>
-                <p className="text service-more">Lorem ipsum sd</p>
+                <p className="text service-more">{service.logOnAs}</p>
+                <p className="text service-more">{service.description}</p>
             </div>
             <div className="button-wrapper">
-                <button className="button" onClick={()=>API.stopService(service.id)}>Stop</button>
+                {service.status.toLowerCase()==="running" ? (
+                        <button className="button" onClick={()=>API.stopService(service.id)} >Stop</button>
+                ) : (
+                    <button className="button" onClick={()=>API.startService(service.id)} >Start</button>
+                ) }
+                
                 <button className="button" onClick={()=>API.startService(service.id)} >Restart</button>
                 <button className="button special">Show logs</button>
             </div>

@@ -1,12 +1,9 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import Chart from '../Chart'
 import MetricTile from '../MetricTile'
 import Label from '../Label'
 import '../MachineDetails.css'
 import { Link } from 'react-router-dom'
-
-
-
 
 const MachineTile = (props) => {
 
@@ -14,6 +11,14 @@ const MachineTile = (props) => {
         metrics: {"RAM":props.ram, "CPU": props.cpu},
         show:"CPU"
     })
+
+    useEffect(()=>{
+        setMachineTileState({
+            metrics: {"RAM":props.ram, "CPU": props.cpu},
+            show:machineTileState.show
+        })
+    },[props]);
+
     
     const changeMetricData = (event) => {
         setMachineTileState({
@@ -24,7 +29,7 @@ const MachineTile = (props) => {
     return (
         <div className="machine-tile">
             <Link to={`/${props.machine}`}>
-                <Label machineName={props.machine} machineAddress={props.address}></Label>
+                <Label machineName={props.machine} machineAddress={props.machineAddress}></Label>
             </Link>
             <div className="metric-tile-container">
                 <MetricTile values={props.services} type="service">Services</MetricTile>

@@ -5,9 +5,6 @@ import Label from '../Label'
 import '../MachineDetails.css'
 import { Link } from 'react-router-dom'
 
-
-
-
 const MachineTile = (props) => {
 
     const [machineTileState, setMachineTileState] = useState({
@@ -32,7 +29,7 @@ const MachineTile = (props) => {
     return (
         <div className="machine-tile">
             <Link to={`/${props.machine}`}>
-                <Label machineName={props.machine} machineAddress={props.address}></Label>
+                <Label machineName={props.machine} machineAddress={props.machineAddress}></Label>
             </Link>
             <div className="metric-tile-container">
                 <MetricTile values={props.services} type="service">Services</MetricTile>

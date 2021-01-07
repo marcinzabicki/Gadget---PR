@@ -10,16 +10,15 @@ import { useWindowSize } from "../../Hooks";
 import { API } from "../../utils/API";
 import { SIGNALR_URL } from "../../config";
 import { HubConnectionBuilder, LogLevel } from "@microsoft/signalr";
-import userEvent from "@testing-library/user-event";
 
 const Dashboards = () => {
   const windowSize = useWindowSize();
   const { machineName } = useParams();
   const [machineState, setMachineState] = useState([]);
   const [services, setServices] = useState([]);
-  const [isButtonActive, setButtonActive] = useState(false);
   const [hubConnection, setHubConnection] = useState(null);
   const [connectionState, setConnectionState] = useState("");
+  const [machineAddress, setMachineAddress] = useState("");
 
   useEffect(() => {
     API.fetchServicesList(machineName).then((response) => {
@@ -50,6 +49,15 @@ const Dashboards = () => {
         });
       }
     }, [hubConnection]);
+
+
+    useEffect(() => {
+      API.fetchMachineList().then((response) => {
+        let ipAddress = response.data.filter((ms)=>ms.name == machineName)[0];
+          setMachineAddress(ipAddress.address);
+      });
+  }, []);
+
 
 
     useEffect(() => {
@@ -149,7 +157,7 @@ const Dashboards = () => {
       <div>
         <MachineBar
           machine={machineName}
-          address="127.0.01"
+          address={machineAddress}
           cpu={machineState.cpu}
           ram={machineState.ram}
           disc={machineState.disc}

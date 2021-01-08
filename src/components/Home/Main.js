@@ -6,31 +6,36 @@ import { API } from '../../utils/API'
 import { SignalRContext } from '../../utils/signalr-context';
 const Home = () => {
 
-    const connection = useContext(SignalRContext);
-    
     const [machineListState, setMachineListState] = useState({
         machines: [],
         hubConnection: null
     })
 
+    const connection = useContext(SignalRContext);
+
+
     useEffect(() => {
         API.fetchMachineList().then((response) => {
+            console.log(connection)
+
             setMachineListState({
                 machines: response.data,
                 hubConnection: connection
             });
         });
-        console.log('eta maszina', machineListState.hubConnection)
-        return () => {
-            console.log(
-                'eta maszina stop', machineListState.hubConnection)
-        }
+        
     }, []);
+
+    useEffect(() => {
+        connection?.start()
+            .then(() => console.log('Connection started!'))
+            .catch(err => console.log('Error while establishing connection :('));
+    }, [connection])
 
     useEffect(() => {
         if (machineListState.hubConnection !== null) {
             machineListState.hubConnection.on("MachineHealthRecived", (response) => {
-                console.log(response);
+                
                 let updated = [...machineListState.machines];
                 let index = updated.findIndex(x=>x.name==response.agent)
                

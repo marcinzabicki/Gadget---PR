@@ -112,7 +112,7 @@ const Dashboards = () => {
             currentServices.map((service, index) => {
               return (
                 //tutaj zamienilem hubConnection na connection ale takie przekazywanie polaczenia przez propsy nie jest potrzebne, teraz mozna uzywac useContext w komponentach
-                <Service key={index} service={service} index={index} machineName={machineName} connection={connection} connectionState={connectionState} />
+                <ServiceMobile key={index} service={service} index={index} machineName={machineName} connection={connection} connectionState={connectionState} />
               )
             })
           ) : (

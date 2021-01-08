@@ -14,33 +14,59 @@ const Dashboards = () => {
   const windowSize = useWindowSize();
   const { machineName } = useParams();
   const [machineState, setMachineState] = useState([]);
-  const[hubConnection, setHubConnection] = useState(null);
+  const [hubConnection, setHubConnection] = useState(null);
   const [services, setServices] = useState([]);
   const [connectionState, setConnectionState] = useState("");
   const [machineAddress, setMachineAddress] = useState("");
   const [sortBy, setSortBy] = useState("");
   const connection = useContext(SignalRContext);
 
+//   useEffect(() => {
+//     connection?.start()
+//         .then(() => console.log('Connection started!'))
+//         .catch(err => console.log(err));
+// }, [connection]);
+
+
   useEffect(() => {
     API.fetchServicesList(machineName).then((response) => {
-        setHubConnection(connection);
+      setHubConnection(connection);
         setServices(response.data);
     });
   }, []);
 
-    useEffect(() => {
-      if (hubConnection !== null) {
-        hubConnection.on("ServiceStatusChanged", (response) => {
-             if(response.agent ===machineName){
-                let updated = [...services];
-                let indexOfChangedService = updated.findIndex(x=>x.name ===response.name);
-                updated[indexOfChangedService].status = response.status;
-              setServices(updated);
-             }
-        });
-      }
-    }, [hubConnection]);
+  
 
+useEffect(() => {
+  if (hubConnection !== null) {
+      hubConnection.on("MachineHealthRecived", (response) => {
+        if(response.agent ===machineName){
+          let updated = {};
+          updated.cpu = response.cpuPercentUsage;
+          updated.ram = Math.floor(100*(1-(response.memoryFree/response.memoryTotal)));
+          updated.disc = `${Math.floor(response.discOccupied)}/${Math.floor(response.discTotal)}`;
+          updated.services = `${response.servicesRunning}/${response.servicesCount}`;
+          setMachineState(updated);
+        }
+    });
+  }
+}, [hubConnection]);
+
+useEffect(() => {
+  if (hubConnection !== null) {
+    hubConnection.on("ServiceStatusChanged", (response) => {
+      if(response.agent ===machineName){
+            let updated = [...services];
+            console.log(updated);
+            console.log(services);
+            let indexOfChangedService = updated.findIndex(x=>x.name.toLowerCase()===response.name.toLowerCase());
+            console.log(indexOfChangedService);
+            updated[indexOfChangedService].status = response.status;
+          setServices(updated);
+         }
+    });
+  }
+}, [hubConnection]);
 
     useEffect(() => {
       API.fetchMachineList().then((response) => {
@@ -50,20 +76,7 @@ const Dashboards = () => {
   }, []);
 
 
-    useEffect(() => {
-      if (hubConnection !== null) {
-          hubConnection.on("MachineHealthRecived", (response) => {
-            if(response.agent ===machineName){
-              let updated = {};
-              updated.cpu = response.cpuPercentUsage;
-              updated.ram = Math.floor(100*(1-(response.memoryFree/response.memoryTotal)));
-              updated.disc = `${Math.floor(response.discOccupied)}/${Math.floor(response.discTotal)}`;
-              updated.services = `${response.servicesRunning}/${response.servicesCount}`;
-              setMachineState(updated);
-            }
-        });
-      }
-    }, [hubConnection]);
+    
 
   const servicesPerPage = 10;
   const [activePage, setActivePage] = useState(1);
@@ -102,10 +115,10 @@ const Dashboards = () => {
     return (
       <>
         <div>
-          <div>
+          {/* <div>
             <MachineBar machine="nmv3" address="127.0.01" cpu={30} ram={20} disc="47/210" services="23/98"></MachineBar>
 
-          </div>
+          </div> */}
           <ServiceHeader setSearchTerm={setSearchTerm} searchTerm={searchTerm} setActivePage={setActivePage} />
 
           {currentServices && currentServices.length > 0 ? (

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import Pagination from "react-js-pagination";
 import Service from "./Service";
 import ServiceMobile from "./ServiceMobile";
@@ -10,6 +10,7 @@ import { useWindowSize } from "../../Hooks";
 import { API } from "../../utils/API";
 import { SIGNALR_URL } from "../../config";
 import { HubConnectionBuilder, LogLevel } from "@microsoft/signalr";
+import { SignalRContext } from '../../utils/signalr-context'
 
 const Dashboards = () => {
   const windowSize = useWindowSize();
@@ -113,33 +114,34 @@ const Dashboards = () => {
     return (
       <>
         <div>
-            {/* <div>
-                <MachineBar machine="nmv3" address="127.0.01" cpu={30} ram={20} disc="47/210" services="23/98"></MachineBar>
+          <div>
+            <MachineBar machine="nmv3" address="127.0.01" cpu={30} ram={20} disc="47/210" services="23/98"></MachineBar>
 
-            </div> */}
-            <ServiceHeader setSearchTerm={setSearchTerm} searchTerm={searchTerm} setActivePage={setActivePage} />
+          </div>
+          <ServiceHeader setSearchTerm={setSearchTerm} searchTerm={searchTerm} setActivePage={setActivePage} />
 
-            {currentServices && currentServices.length > 0 ? (
-                currentServices.map((service, index) => {
-                    return (
-                        <ServiceMobile  key={index} service={service} index={index} machineName={machineName} hubConnection={hubConnection} connectionState={connectionState} />
-                    )
-                })
-            ) : (
-                    <p className="warning-text">No services detected</p>
-                )}
+          {currentServices && currentServices.length > 0 ? (
+            currentServices.map((service, index) => {
+              return (
+                //tutaj zamienilem hubConnection na connection ale takie przekazywanie polaczenia przez propsy nie jest potrzebne, teraz mozna uzywac useContext w komponentach
+                <Service key={index} service={service} index={index} machineName={machineName} connection={connection} connectionState={connectionState} />
+              )
+            })
+          ) : (
+              <p className="warning-text">No services detected</p>
+            )}
 
-            {moreResults && <Pagination
-                activePage={activePage}
-                itemsCountPerPage={servicesPerPage}
-                totalItemsCount={searchResults.length}
-                pageRangeDisplayed={3}
-                onChange={handlePageChange}
-                prevPageText="<"
-                nextPageText=">"
-                firstPageText=".."
-                lastPageText=".."
-            />}
+          {moreResults && <Pagination
+            activePage={activePage}
+            itemsCountPerPage={servicesPerPage}
+            totalItemsCount={searchResults.length}
+            pageRangeDisplayed={3}
+            onChange={handlePageChange}
+            prevPageText="<"
+            nextPageText=">"
+            firstPageText=".."
+            lastPageText=".."
+          />}
         </div>
         {moreResults && (
           <Pagination
@@ -181,8 +183,8 @@ const Dashboards = () => {
           return <Service key={index} service={service} index={index} />;
         })
       ) : (
-        <p className="warning-text">No services detected</p>
-      )}
+          <p className="warning-text">No services detected</p>
+        )}
 
       {moreResults && (
         <Pagination

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import Pagination from "react-js-pagination";
 import Service from "./Service";
 import ServiceMobile from "./ServiceMobile";
@@ -10,6 +10,7 @@ import { useWindowSize } from "../../Hooks";
 import { API } from "../../utils/API";
 import { SIGNALR_URL } from "../../config";
 import { HubConnectionBuilder, LogLevel } from "@microsoft/signalr";
+import { SignalRContext } from '../../utils/signalr-context'
 
 const Dashboards = () => {
   const windowSize = useWindowSize();
@@ -20,6 +21,7 @@ const Dashboards = () => {
   const [hubConnection, setHubConnection] = useState({});
   const [connectionState, setConnectionState] = useState("");
   const { machineId } = useParams();
+  const connection = useContext(SignalRContext);
 
   useEffect(() => {
     API.fetchServicesList(machineName).then((response) => {
@@ -28,20 +30,20 @@ const Dashboards = () => {
     });
   }, [machineName, services]);
 
-  useEffect(() => {
-    const connection = new HubConnectionBuilder()
-      .withUrl(SIGNALR_URL)
-      .configureLogging(LogLevel.Critical)
-      .withAutomaticReconnect()
-      .build();
+  // useEffect(() => {
+  //   const connection = new HubConnectionBuilder()
+  //     .withUrl(SIGNALR_URL)
+  //     .configureLogging(LogLevel.Critical)
+  //     .withAutomaticReconnect()
+  //     .build();
 
-    setHubConnection(connection);
-  }, []);
+  //   setHubConnection(connection);
+  // }, []);
 
   const start = async () => {
-    if (hubConnection?.state === "Disconnected")
+    if (connection?.state === "Disconnected")
       try {
-        await hubConnection.start();
+        await connection.start();
       } catch (err) {
         console.log(err);
         setTimeout(() => start(), 5000);
@@ -50,8 +52,8 @@ const Dashboards = () => {
 
   start().then(() => {
     setConnectionState("Connected");
-    console.log(hubConnection);
-    // hubConnection.on("ServiceStatusChanged", (response) => {
+    console.log(connection);
+    // connection.on("ServiceStatusChanged", (response) => {
     //   console.log("ddfsf");
     // });
   });
@@ -96,7 +98,8 @@ const Dashboards = () => {
           {currentServices && currentServices.length > 0 ? (
             currentServices.map((service, index) => {
               return (
-                <Service key={index} service={service} index={index} machineName={machineName} hubConnection={hubConnection} connectionState={connectionState} />
+                //tutaj zamienilem hubConnection na connection ale takie przekazywanie polaczenia przez propsy nie jest potrzebne, teraz mozna uzywac useContext w komponentach
+                <Service key={index} service={service} index={index} machineName={machineName} connection={connection} connectionState={connectionState} />
               )
             })
           ) : (

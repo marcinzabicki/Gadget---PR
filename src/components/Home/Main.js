@@ -1,12 +1,9 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import MachineTile from '../Dashboards/MachineDetails/MachineTile/MachineTile'
 import '../Dashboards/MachineDetails/MachineDetails.css';
 //import Logs from '../Dashboards/Logs/Logs'
 import { API } from '../../utils/API'
-import { useSignalRConnection } from '../../utils/hooks'
-import { HubConnection } from 'signalr-client-react';
-import { HubConnectionBuilder, LogLevel } from "@microsoft/signalr";
-
+import { SignalRContext } from '../../utils/signalr-context';
 const Home = () => {
 
     const [machineListState, setMachineListState] = useState({
@@ -18,7 +15,8 @@ const Home = () => {
         metrics: [],
 
     })
-    const connection = useSignalRConnection('https://localhost:5001/gadget')
+
+    const connection = useContext(SignalRContext);
 
 
     useEffect(() => {

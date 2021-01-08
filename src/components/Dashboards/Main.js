@@ -8,34 +8,23 @@ import "../Dashboards/MachineDetails/MachineDetails.css";
 import { useParams } from "react-router-dom";
 import { useWindowSize } from "../../Hooks";
 import { API } from "../../utils/API";
-import { SIGNALR_URL } from "../../config";
-import { HubConnectionBuilder, LogLevel } from "@microsoft/signalr";
 import { SignalRContext } from '../../utils/signalr-context'
 
 const Dashboards = () => {
   const windowSize = useWindowSize();
   const { machineName } = useParams();
   const [machineState, setMachineState] = useState([]);
+  const[hubConnection, setHubConnection] = useState(null);
   const [services, setServices] = useState([]);
-  const [hubConnection, setHubConnection] = useState(null);
   const [connectionState, setConnectionState] = useState("");
   const [machineAddress, setMachineAddress] = useState("");
   const [sortBy, setSortBy] = useState("");
+  const connection = useContext(SignalRContext);
 
   useEffect(() => {
     API.fetchServicesList(machineName).then((response) => {
-        const connection = new HubConnectionBuilder()
-        .withUrl(SIGNALR_URL)
-        .configureLogging(LogLevel.Critical)
-        .withAutomaticReconnect()
-        .build();
-       
-        connection.start()
-        .then(() => console.log('Connection started!'))
-        .catch(err => console.log('Error while establishing connection :('));
         setHubConnection(connection);
         setServices(response.data);
-        console.log(response.data);
     });
   }, []);
 
@@ -59,7 +48,6 @@ const Dashboards = () => {
           setMachineAddress(ipAddress.address);
       });
   }, []);
-
 
 
     useEffect(() => {

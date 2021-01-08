@@ -19,6 +19,7 @@ const Dashboards = () => {
   const [hubConnection, setHubConnection] = useState(null);
   const [connectionState, setConnectionState] = useState("");
   const [machineAddress, setMachineAddress] = useState("");
+  const [sortBy, setSortBy] = useState("");
 
   useEffect(() => {
     API.fetchServicesList(machineName).then((response) => {
@@ -81,6 +82,11 @@ const Dashboards = () => {
   const handlePageChange = (pageNumber) => {
     setActivePage(pageNumber);
   };
+
+  // sorting
+  const handleSortingBy = (sortBy)=>{
+    setSortBy(sortBy);
+  }
 
   // search bar
 

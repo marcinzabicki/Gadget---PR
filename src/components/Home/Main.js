@@ -3,6 +3,7 @@ import MachineTile from '../Dashboards/MachineDetails/MachineTile/MachineTile'
 import '../Dashboards/MachineDetails/MachineDetails.css';
 //import Logs from '../Dashboards/Logs/Logs'
 import {API} from '../../utils/API'
+import { SIGNALR_URL } from "../../config";
 import { HubConnectionBuilder, LogLevel } from "@microsoft/signalr";
 
 const Home = () => {
@@ -15,7 +16,7 @@ const Home = () => {
      useEffect(() => {
         API.fetchMachineList().then((response) => {
             const connection = new HubConnectionBuilder()
-                .withUrl('https://localhost:5001/gadget')
+                .withUrl(SIGNALR_URL)
                 .configureLogging(LogLevel.Critical)
                 .withAutomaticReconnect()
                 .build();

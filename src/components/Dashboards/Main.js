@@ -14,7 +14,7 @@ const Dashboards = () => {
   const windowSize = useWindowSize();
   const { machineName } = useParams();
   const [machineState, setMachineState] = useState([]);
-  const[hubConnection, setHubConnection] = useState(null);
+  const [hubConnection, setHubConnection] = useState(null);
   const [services, setServices] = useState([]);
   const [connectionState, setConnectionState] = useState("");
   const [machineAddress, setMachineAddress] = useState("");
@@ -23,47 +23,47 @@ const Dashboards = () => {
 
   useEffect(() => {
     API.fetchServicesList(machineName).then((response) => {
-        setHubConnection(connection);
-        setServices(response.data);
+      setHubConnection(connection);
+      setServices(response.data);
     });
   }, []);
 
-    useEffect(() => {
-      if (hubConnection !== null) {
-        hubConnection.on("ServiceStatusChanged", (response) => {
-             if(response.agent ===machineName){
-                let updated = [...services];
-                let indexOfChangedService = updated.findIndex(x=>x.name ===response.name);
-                updated[indexOfChangedService].status = response.status;
-              setServices(updated);
-             }
-        });
-      }
-    }, [hubConnection]);
-
-
-    useEffect(() => {
-      API.fetchMachineList().then((response) => {
-        let ipAddress = response.data.filter((ms)=>ms.name == machineName)[0];
-          setMachineAddress(ipAddress.address);
+  useEffect(() => {
+    if (connection !== null) {
+      connection.on("ServiceStatusChanged", (response) => {
+        if (response.agent === machineName) {
+          let updated = [...services];
+          let indexOfChangedService = updated.findIndex(x => x.name === response.name);
+          updated[indexOfChangedService].status = response.status;
+          setServices(updated);
+        }
       });
+    }
+  }, [connection]);
+
+
+  useEffect(() => {
+    API.fetchMachineList().then((response) => {
+      let ipAddress = response.data.filter((ms) => ms.name == machineName)[0];
+      setMachineAddress(ipAddress.address);
+    });
   }, []);
 
 
-    useEffect(() => {
-      if (hubConnection !== null) {
-          hubConnection.on("MachineHealthRecived", (response) => {
-            if(response.agent ===machineName){
-              let updated = {};
-              updated.cpu = response.cpuPercentUsage;
-              updated.ram = Math.floor(100*(1-(response.memoryFree/response.memoryTotal)));
-              updated.disc = `${Math.floor(response.discOccupied)}/${Math.floor(response.discTotal)}`;
-              updated.services = `${response.servicesRunning}/${response.servicesCount}`;
-              setMachineState(updated);
-            }
-        });
-      }
-    }, [hubConnection]);
+  useEffect(() => {
+    if (connection !== null) {
+      connection.on("MachineHealthRecived", (response) => {
+        if (response.agent === machineName) {
+          let updated = {};
+          updated.cpu = response.cpuPercentUsage;
+          updated.ram = Math.floor(100 * (1 - (response.memoryFree / response.memoryTotal)));
+          updated.disc = `${Math.floor(response.discOccupied)}/${Math.floor(response.discTotal)}`;
+          updated.services = `${response.servicesRunning}/${response.servicesCount}`;
+          setMachineState(updated);
+        }
+      });
+    }
+  }, [connection]);
 
   const servicesPerPage = 10;
   const [activePage, setActivePage] = useState(1);
@@ -73,7 +73,7 @@ const Dashboards = () => {
   };
 
   // sorting
-  const handleSortingBy = (sortBy)=>{
+  const handleSortingBy = (sortBy) => {
     setSortBy(sortBy);
   }
 
@@ -88,7 +88,7 @@ const Dashboards = () => {
     );
     setSearchResults(results);
   }, [searchTerm]);
-  
+
 
 
   const indexOfLastService = activePage * servicesPerPage;

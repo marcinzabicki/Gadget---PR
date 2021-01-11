@@ -18,3 +18,22 @@ export const useSignalRConnection = (connectionUrl) => {
     return connection.current;
 
 }
+
+export const cutText = (
+    text,
+    length,
+) => {
+    if (!text) {
+        return '';
+    }
+
+    if (typeof text !== 'string') return text
+
+    const wordsLength = text
+        .split(/(\s)/)
+        .filter(e => ![' ', '  '].includes(e));
+
+    if (wordsLength.length <= length) return text;
+
+    return `${wordsLength.slice(0, length).join(' ')}...`;
+};

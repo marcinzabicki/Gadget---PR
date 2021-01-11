@@ -8,62 +8,65 @@ import "../Dashboards/MachineDetails/MachineDetails.css";
 import { useParams } from "react-router-dom";
 import { useWindowSize } from "../../Hooks";
 import { API } from "../../utils/API";
-import { SignalRContext } from '../../utils/signalr-context'
+import { SignalRContext } from '../../utils/signalr-context';
 
 const Dashboards = () => {
   const windowSize = useWindowSize();
   const { machineName } = useParams();
   const [machineState, setMachineState] = useState([]);
-  const[hubConnection, setHubConnection] = useState(null);
+  const [hubConnection, setHubConnection] = useState(null);
   const [services, setServices] = useState([]);
   const [connectionState, setConnectionState] = useState("");
   const [machineAddress, setMachineAddress] = useState("");
   const [sortBy, setSortBy] = useState("");
   const connection = useContext(SignalRContext);
 
+  const [extendServiceDesc, setExtendServiceDesc] = useState("");
+  const [extendServiceName, setExtendServiceName] = useState("");
+
   useEffect(() => {
     API.fetchServicesList(machineName).then((response) => {
-        setHubConnection(connection);
-        setServices(response.data);
+      setHubConnection(connection);
+      setServices(response.data);
     });
   }, []);
 
-    useEffect(() => {
-      if (hubConnection !== null) {
-        hubConnection.on("ServiceStatusChanged", (response) => {
-             if(response.agent ===machineName){
-                let updated = [...services];
-                let indexOfChangedService = updated.findIndex(x=>x.name ===response.name);
-                updated[indexOfChangedService].status = response.status;
-              setServices(updated);
-             }
-        });
-      }
-    }, [hubConnection]);
-
-
-    useEffect(() => {
-      API.fetchMachineList().then((response) => {
-        let ipAddress = response.data.filter((ms)=>ms.name == machineName)[0];
-          setMachineAddress(ipAddress.address);
+  useEffect(() => {
+    if (hubConnection !== null) {
+      hubConnection.on("ServiceStatusChanged", (response) => {
+        if (response.agent === machineName) {
+          let updated = [...services];
+          let indexOfChangedService = updated.findIndex(x => x.name === response.name);
+          updated[indexOfChangedService].status = response.status;
+          setServices(updated);
+        }
       });
+    }
+  }, [hubConnection]);
+
+
+  useEffect(() => {
+    API.fetchMachineList().then((response) => {
+      let ipAddress = response.data.filter((ms) => ms.name == machineName)[0];
+      setMachineAddress(ipAddress.address);
+    });
   }, []);
 
 
-    useEffect(() => {
-      if (hubConnection !== null) {
-          hubConnection.on("MachineHealthRecived", (response) => {
-            if(response.agent ===machineName){
-              let updated = {};
-              updated.cpu = response.cpuPercentUsage;
-              updated.ram = Math.floor(100*(1-(response.memoryFree/response.memoryTotal)));
-              updated.disc = `${Math.floor(response.discOccupied)}/${Math.floor(response.discTotal)}`;
-              updated.services = `${response.servicesRunning}/${response.servicesCount}`;
-              setMachineState(updated);
-            }
-        });
-      }
-    }, [hubConnection]);
+  useEffect(() => {
+    if (hubConnection !== null) {
+      hubConnection.on("MachineHealthRecived", (response) => {
+        if (response.agent === machineName) {
+          let updated = {};
+          updated.cpu = response.cpuPercentUsage;
+          updated.ram = Math.floor(100 * (1 - (response.memoryFree / response.memoryTotal)));
+          updated.disc = `${Math.floor(response.discOccupied)}/${Math.floor(response.discTotal)}`;
+          updated.services = `${response.servicesRunning}/${response.servicesCount}`;
+          setMachineState(updated);
+        }
+      });
+    }
+  }, [hubConnection]);
 
   const servicesPerPage = 10;
   const [activePage, setActivePage] = useState(1);
@@ -73,7 +76,7 @@ const Dashboards = () => {
   };
 
   // sorting
-  const handleSortingBy = (sortBy)=>{
+  const handleSortingBy = (sortBy) => {
     setSortBy(sortBy);
   }
 
@@ -87,8 +90,8 @@ const Dashboards = () => {
       service.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
     setSearchResults(results);
-  }, [searchTerm]);
-  
+  }, [searchTerm, services]);
+
 
 
   const indexOfLastService = activePage * servicesPerPage;
@@ -111,7 +114,6 @@ const Dashboards = () => {
           {currentServices && currentServices.length > 0 ? (
             currentServices.map((service, index) => {
               return (
-                //tutaj zamienilem hubConnection na connection ale takie przekazywanie polaczenia przez propsy nie jest potrzebne, teraz mozna uzywac useContext w komponentach
                 <ServiceMobile key={index} service={service} index={index} machineName={machineName} connection={connection} connectionState={connectionState} />
               )
             })

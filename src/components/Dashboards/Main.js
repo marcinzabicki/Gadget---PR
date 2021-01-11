@@ -21,13 +21,13 @@ const Dashboards = () => {
   const [sortBy, setSortBy] = useState("");
   const connection = useContext(SignalRContext);
 
-//   useEffect(() => {
-//     connection?.start()
-//         .then(() => console.log('Connection started!'))
-//         .catch(err => console.log(err));
-// }, [connection]);
+  useEffect(() => {
+    connection?.start()
+        .then(() => console.log('Connection started!'))
+        .catch(err => console.log(err));
+}, [connection]);
 
-
+//fssdf
   useEffect(() => {
     API.fetchServicesList(machineName).then((response) => {
       setHubConnection(connection);
@@ -56,6 +56,7 @@ useEffect(() => {
   if (hubConnection !== null) {
     hubConnection.on("ServiceStatusChanged", (response) => {
       if(response.agent ===machineName){
+          console.log(services);
             let updated = [...services];
             console.log(updated);
             console.log(services);
@@ -63,6 +64,7 @@ useEffect(() => {
             console.log(indexOfChangedService);
             updated[indexOfChangedService].status = response.status;
           setServices(updated);
+          console.log(services);
          }
     });
   }

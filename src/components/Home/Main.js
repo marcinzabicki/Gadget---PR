@@ -1,34 +1,36 @@
-import React, {useState, useEffect} from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import MachineTile from '../Dashboards/MachineDetails/MachineTile/MachineTile'
 import '../Dashboards/MachineDetails/MachineDetails.css';
 //import Logs from '../Dashboards/Logs/Logs'
-import {API} from '../../utils/API'
-import { HubConnectionBuilder, LogLevel } from "@microsoft/signalr";
-
+import { API } from '../../utils/API'
+import { SignalRContext } from '../../utils/signalr-context';
 const Home = () => {
 
     const [machineListState, setMachineListState] = useState({
         machines: [],
-        hubConnection:null
+        hubConnection: null
     })
 
-     useEffect(() => {
-        API.fetchMachineList().then((response) => {
-            const connection = new HubConnectionBuilder()
-                .withUrl('https://localhost:5001/gadget')
-                .configureLogging(LogLevel.Critical)
-                .withAutomaticReconnect()
-                .build();
+    const connection = useContext(SignalRContext);
 
-            connection.start()
-            .then(() => console.log('Connection started!'))
-            .catch(err => console.log('Error while establishing connection :('));
+
+    useEffect(() => {
+        API.fetchMachineList().then((response) => {
+            console.log(connection)
+
             setMachineListState({
                 machines: response.data,
-                hubConnection:connection
+                hubConnection: connection
             });
         });
+        
     }, []);
+
+    useEffect(() => {
+        connection?.start()
+            .then(() => console.log('Connection started!'))
+            .catch(err => console.log('Error while establishing connection :('));
+    }, [connection])
 
     useEffect(() => {
         if (machineListState.hubConnection !== null) {
@@ -47,7 +49,7 @@ const Home = () => {
                 })
           });
         }
-      }, [machineListState.hubConnection]);
+    }, [machineListState.hubConnection]);
 
     const machines = machineListState.machines.map((m, i) => {
         return (

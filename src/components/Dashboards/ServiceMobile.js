@@ -1,3 +1,5 @@
+import {API} from '../../utils/API'
+
 const ServiceMobile = ({ service, index }) => {
     return (
         <div key={service.name + index} className="service-mobile">
@@ -6,9 +8,14 @@ const ServiceMobile = ({ service, index }) => {
             <div className="buttons-wrapper-mobile">
                 <p className="service-name-mobile">{service.name}</p>
                 <div>
-                    <button className="button">Stop</button>
-                    <button className="button">Restart</button>
-                    <button className="button special">Show logs</button>
+                {service.status.toLowerCase()==="running" ? (
+                        <button className="button" onClick={()=>API.stopService(service.id)} >Stop</button>
+                ) : (
+                    <button className="button" onClick={()=>API.startService(service.id)} >Start</button>
+                ) }
+                
+                <button className="button" onClick={()=>API.startService(service.id)} >Restart</button>
+                <button className="button special">Show logs</button>
                 </div>
             </div>
         </div>

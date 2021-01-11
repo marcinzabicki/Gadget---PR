@@ -13,7 +13,7 @@ const ServiceHeader = ({ searchTerm, setSearchTerm, setActivePage }) => {
                 <p className="title service-name">Service name</p>
                 <p className="title service-status">Status</p>
                 <p className="title service-more">Logon as</p>
-                <p className="title service-more">Logon as</p>
+                <p className="title service-more">Description</p>
             </div>
             <div className="button-wrapper">
                 <input

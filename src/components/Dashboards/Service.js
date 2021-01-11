@@ -1,11 +1,14 @@
-import {API} from '../../utils/API'
-
+import React, { useState } from 'react';
+import { API } from '../../utils/API'
 
 const Service = ({ service, index, props }) => {
+
+    const [extendText, setExtendText] = useState(false);
+
     return (
         <div key={service.name + index} className="service">
             <div className="service-wrapper">
-                <p className="text service-name">{service.name}</p>
+                <p onClick={() => setExtendText(!extendText)} className="text service-name" style={extendText == true ? { overflow: "visible", maxHeight: "none" } : { overflow: "hidden" }}> {service.name}</p>
                 <div className={`service-status ${service.status}`}>
                     <p>{service.status}</p>
                 </div>
@@ -13,16 +16,16 @@ const Service = ({ service, index, props }) => {
                 <p className="text service-more">{service.description}</p>
             </div>
             <div className="button-wrapper">
-                {service.status.toLowerCase()==="running" ? (
-                        <button className="button" onClick={()=>API.stopService(service.id)} >Stop</button>
+                {service.status.toLowerCase() === "running" ? (
+                    <button className="button" onClick={() => API.stopService(service.id)} >Stop</button>
                 ) : (
-                    <button className="button" onClick={()=>API.startService(service.id)} >Start</button>
-                ) }
-                
-                <button className="button" onClick={()=>API.startService(service.id)} >Restart</button>
+                        <button className="button" onClick={() => API.startService(service.id)} >Start</button>
+                    )}
+
+                <button className="button" onClick={() => API.startService(service.id)} >Restart</button>
                 <button className="button special">Show logs</button>
             </div>
-        </div>
+        </div >
     )
 }
 

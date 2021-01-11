@@ -56,15 +56,10 @@ useEffect(() => {
   if (hubConnection !== null) {
     hubConnection.on("ServiceStatusChanged", (response) => {
       if(response.agent ===machineName){
-          console.log(services);
             let updated = [...services];
-            console.log(updated);
-            console.log(services);
             let indexOfChangedService = updated.findIndex(x=>x.name.toLowerCase()===response.name.toLowerCase());
-            console.log(indexOfChangedService);
             updated[indexOfChangedService].status = response.status;
           setServices(updated);
-          console.log(services);
          }
     });
   }

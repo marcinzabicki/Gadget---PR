@@ -10,7 +10,8 @@ export default ({ children }) => {
     let connection;
 
     connection = new HubConnectionBuilder()
-        .withUrl('http://ec2-18-130-85-230.eu-west-2.compute.amazonaws.com:5000/gadget')
+        .withUrl('https://localhost:5001/gadget')
+        //.withUrl('http://ec2-18-130-85-230.eu-west-2.compute.amazonaws.com:5000/gadget')
         .configureLogging(LogLevel.Critical)
         .withAutomaticReconnect()
         .build()

@@ -14,9 +14,9 @@ const Service = ({ service, index, props }) => {
             </div>
             <div className="button-wrapper">
                 {service.status.toLowerCase()==="running" ? (
-                        <button className="button" onClick={()=>API.stopService(service.id)} >Stop</button>
+                        <button className="button" onClick={()=>API.stopService(service.name)} >Stop</button>
                 ) : (
-                    <button className="button" onClick={()=>API.startService(service.id)} >Start</button>
+                    <button className="button" onClick={()=>API.startService(service.name)} >Start</button>
                 ) }
                 
                 <button className="button" onClick={()=>API.startService(service.id)} >Restart</button>

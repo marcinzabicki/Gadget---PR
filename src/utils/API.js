@@ -26,7 +26,7 @@ export class API {
   static async stopService(serviceId) {
     try {
       return await axios({
-        method: "GET",
+        method: "POST",
         url: `${BASE_URL}/agents/${serviceId}/stop`,
       });
     } catch (e) {
@@ -37,7 +37,7 @@ export class API {
   static async startService(serviceId) {
     try {
       return await axios({
-        method: "GET",
+        method: "POST",
         url: `${BASE_URL}/agents/${serviceId}/start`,
       });
     } catch (e) {

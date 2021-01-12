@@ -1,5 +1,6 @@
 import {API} from '../../utils/API'
 import React, { useState } from 'react';
+import '../../styles/services.css'
 
 
 const Service = ({ service, index, agent,  props }) => {
@@ -11,8 +12,8 @@ const Service = ({ service, index, agent,  props }) => {
                 <div className={`service-status ${service.status}`}>
                     <p>{service.status}</p>
                 </div>
-                <p className="text service-more">{service.logOnAs}</p>
-                <p className="text service-more">{service.description}</p>
+                <p className="text service-more">{service.logOnAs.substring(0,20)}</p>
+                <p onClick={() => setExtendText(!extendText)} className="text service-more" style={extendText == true ? { overflow: "visible", maxHeight: "none" } : { overflow: "hidden" }}> {service.description}</p>
             </div>
             <div className="button-wrapper">
                 {service.status.toLowerCase()==="running" ? (

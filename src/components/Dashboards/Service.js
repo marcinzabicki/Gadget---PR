@@ -1,7 +1,7 @@
 import {API} from '../../utils/API'
 
 
-const Service = ({ service, index, props }) => {
+const Service = ({ service, index, agent,  props }) => {
     return (
         <div key={service.name + index} className="service">
             <div className="service-wrapper">
@@ -14,9 +14,9 @@ const Service = ({ service, index, props }) => {
             </div>
             <div className="button-wrapper">
                 {service.status.toLowerCase()==="running" ? (
-                        <button className="button" onClick={()=>API.stopService(service.name)} >Stop</button>
+                        <button className="button" onClick={()=>API.stopService(agent,service.name)} >Stop</button>
                 ) : (
-                    <button className="button" onClick={()=>API.startService(service.name)} >Start</button>
+                    <button className="button" onClick={()=>API.startService(agent,service.name)} >Start</button>
                 ) }
                 
                 <button className="button" onClick={()=>API.startService(service.id)} >Restart</button>

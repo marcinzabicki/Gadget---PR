@@ -48,15 +48,10 @@ const Dashboards = () => {
     if (connection !== null && services.length > 0) {
       connection.on("ServiceStatusChanged", (response) => {
         if (response.agent === machineName) {
-          console.log(services);
           let updated = [...services];
-          console.log(updated);
-          console.log(services);
           let indexOfChangedService = updated.findIndex(x => x.name.toLowerCase() === response.name.toLowerCase());
-          console.log(indexOfChangedService);
           updated[indexOfChangedService].status = response.status;
           setServices(updated);
-          console.log(services);
         }
       });
     }
@@ -176,7 +171,7 @@ const Dashboards = () => {
 
       {currentServices && currentServices.length > 0 ? (
         currentServices.map((service, index) => {
-          return <Service key={index} service={service} index={index} />;
+          return <Service key={index} service={service} index={index} agent={machineName} />;
         })
       ) : (
           <p className="warning-text">No services detected</p>

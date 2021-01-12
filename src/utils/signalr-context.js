@@ -7,6 +7,7 @@ const SignalRContext = createContext(null)
 export { SignalRContext }
 
 export default ({ children }) => {
+<<<<<<< HEAD
     const [hubConnection, setHubConnection] = useState(null)
 
 
@@ -29,6 +30,17 @@ export default ({ children }) => {
         connection?.onclose(start);
         start();
     }, [])
+=======
+    let connection;
+
+    connection = new HubConnectionBuilder()
+        .withUrl('https://localhost:5001/gadget')
+        //.withUrl('http://ec2-18-130-85-230.eu-west-2.compute.amazonaws.com:5000/gadget')
+        .configureLogging(LogLevel.Critical)
+        .withAutomaticReconnect()
+        .build()
+
+>>>>>>> c56e1aa7aa462aca985e328f35154af3eb7b453b
 
 
     return (

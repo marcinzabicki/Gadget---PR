@@ -1,11 +1,13 @@
 import {API} from '../../utils/API'
+import React, { useState } from 'react';
 
 
 const Service = ({ service, index, agent,  props }) => {
+    const [extendText, setExtendText] = useState(false);
     return (
         <div key={service.name + index} className="service">
             <div className="service-wrapper">
-                <p className="text service-name">{service.name}</p>
+                <p onClick={() => setExtendText(!extendText)} className="text service-name" style={extendText == true ? { overflow: "visible", maxHeight: "none" } : { overflow: "hidden" }}> {service.name}</p>
                 <div className={`service-status ${service.status}`}>
                     <p>{service.status}</p>
                 </div>

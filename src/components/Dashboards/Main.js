@@ -20,10 +20,6 @@ const Dashboards = () => {
   const [sortBy, setSortBy] = useState("");
   const connection = useContext(SignalRContext);
 
-  const [extendServiceDesc, setExtendServiceDesc] = useState("");
-  const [extendServiceName, setExtendServiceName] = useState("");
-
-
   useEffect(() => {
     API.fetchServicesList(machineName).then((response) => {
       setServices(response.data);
@@ -93,7 +89,7 @@ const Dashboards = () => {
       service.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
     setSearchResults(results);
-  }, [searchTerm]);
+  }, [searchTerm, services]);
 
 
 

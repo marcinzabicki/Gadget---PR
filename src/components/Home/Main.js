@@ -16,8 +16,6 @@ const Home = () => {
 
     useEffect(() => {
         API.fetchMachineList().then((response) => {
-            console.log(connection)
-
             setMachineListState({
                 machines: response.data,
                 hubConnection: connection

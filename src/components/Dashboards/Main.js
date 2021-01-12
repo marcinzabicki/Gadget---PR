@@ -14,40 +14,19 @@ const Dashboards = () => {
   const windowSize = useWindowSize();
   const { machineName } = useParams();
   const [machineState, setMachineState] = useState([]);
-  const [hubConnection, setHubConnection] = useState(null);
   const [services, setServices] = useState([]);
   const [connectionState, setConnectionState] = useState("");
   const [machineAddress, setMachineAddress] = useState("");
   const [sortBy, setSortBy] = useState("");
   const connection = useContext(SignalRContext);
 
+  //fssdf
   useEffect(() => {
     API.fetchServicesList(machineName).then((response) => {
-      setHubConnection(connection);
       setServices(response.data);
     });
   }, []);
 
-  useEffect(() => {
-    if (connection !== null) {
-      connection.on("ServiceStatusChanged", (response) => {
-        if (response.agent === machineName) {
-          let updated = [...services];
-          let indexOfChangedService = updated.findIndex(x => x.name === response.name);
-          updated[indexOfChangedService].status = response.status;
-          setServices(updated);
-        }
-      });
-    }
-  }, [connection]);
-
-
-  useEffect(() => {
-    API.fetchMachineList().then((response) => {
-      let ipAddress = response.data.filter((ms) => ms.name == machineName)[0];
-      setMachineAddress(ipAddress.address);
-    });
-  }, []);
 
 
   useEffect(() => {
@@ -64,6 +43,35 @@ const Dashboards = () => {
       });
     }
   }, [connection]);
+
+  useEffect(() => {
+    if (connection !== null && services.length > 0) {
+      connection.on("ServiceStatusChanged", (response) => {
+        if (response.agent === machineName) {
+          console.log(services);
+          let updated = [...services];
+          console.log(updated);
+          console.log(services);
+          let indexOfChangedService = updated.findIndex(x => x.name.toLowerCase() === response.name.toLowerCase());
+          console.log(indexOfChangedService);
+          updated[indexOfChangedService].status = response.status;
+          setServices(updated);
+          console.log(services);
+        }
+      });
+    }
+  }, [connection, services]);
+
+
+  useEffect(() => {
+    API.fetchMachineList().then((response) => {
+      let ipAddress = response.data.filter((ms) => ms.name == machineName)[0];
+      setMachineAddress(ipAddress.address);
+    });
+  }, []);
+
+
+
 
   const servicesPerPage = 10;
   const [activePage, setActivePage] = useState(1);
@@ -102,10 +110,10 @@ const Dashboards = () => {
     return (
       <>
         <div>
-          <div>
+          {/* <div>
             <MachineBar machine="nmv3" address="127.0.01" cpu={30} ram={20} disc="47/210" services="23/98"></MachineBar>
 
-          </div>
+          </div> */}
           <ServiceHeader setSearchTerm={setSearchTerm} searchTerm={searchTerm} setActivePage={setActivePage} />
 
           {currentServices && currentServices.length > 0 ? (

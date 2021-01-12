@@ -16,51 +16,49 @@ const Home = () => {
 
     useEffect(() => {
         API.fetchMachineList().then((response) => {
-            console.log(connection)
-
             setMachineListState({
                 machines: response.data,
                 hubConnection: connection
             });
         });
-        
-    }, []);
 
-    useEffect(() => {
-        connection?.start()
-            .then(() => console.log('Connection started!'))
-            .catch(err => console.log('Error while establishing connection :('));
-    }, [connection])
+    }, [connection]);
+
+    // useEffect(() => {
+    //     connection.start()
+    //         .then(() => console.log('Connection started!'))
+    //         .catch(err => console.log('Error while establishing connection :('));
+    // }, [])
 
     useEffect(() => {
         if (machineListState.hubConnection !== null) {
             machineListState.hubConnection.on("MachineHealthRecived", (response) => {
-                
+
                 let updated = [...machineListState.machines];
-                let index = updated.findIndex(x=>x.name==response.agent)
-               
+                let index = updated.findIndex(x => x.name == response.agent)
+
                 updated[index].cpu = response.cpuPercentUsage;
-                updated[index].ram = 100*(1-(response.memoryFree/response.memoryTotal));
+                updated[index].ram = 100 * (1 - (response.memoryFree / response.memoryTotal));
                 updated[index].disc = `${Math.floor(response.discOccupied)}/${Math.floor(response.discTotal)}`;
                 updated[index].services = `${response.servicesRunning}/${response.servicesCount}`
                 setMachineListState({
                     machines: updated,
-                    hubConnection : machineListState.hubConnection
+                    hubConnection: machineListState.hubConnection
                 })
-          });
+            });
         }
     }, [machineListState.hubConnection]);
 
     const machines = machineListState.machines.map((m, i) => {
         return (
-            <MachineTile 
-            machine = {m["name"]} 
-            cpu={m["cpu"]}  
-            ram={m["ram"]} 
-            disc={m["disc"]} 
-            services={m["services"]} 
-            key={i}
-            machineAddress={m["address"]}>
+            <MachineTile
+                machine={m["name"]}
+                cpu={m["cpu"]}
+                ram={m["ram"]}
+                disc={m["disc"]}
+                services={m["services"]}
+                key={i}
+                machineAddress={m["address"]}>
             </MachineTile>
         )
     })
@@ -73,9 +71,9 @@ const Home = () => {
     //   ]
     return (
         <div>
-        <div className="machine-tiles-container">
-            {machines}
-        </div>
+            <div className="machine-tiles-container">
+                {machines}
+            </div>
             {/* <Logs>{tmpLogs}</Logs> */}
         </div>
     );

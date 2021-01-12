@@ -8,54 +8,29 @@ import "../Dashboards/MachineDetails/MachineDetails.css";
 import { useParams } from "react-router-dom";
 import { useWindowSize } from "../../Hooks";
 import { API } from "../../utils/API";
-import { SignalRContext } from '../../utils/signalr-context';
+import { SignalRContext } from '../../utils/signalr-context'
 
 const Dashboards = () => {
   const windowSize = useWindowSize();
   const { machineName } = useParams();
   const [machineState, setMachineState] = useState([]);
-  const [hubConnection, setHubConnection] = useState(null);
   const [services, setServices] = useState([]);
   const [connectionState, setConnectionState] = useState("");
   const [machineAddress, setMachineAddress] = useState("");
   const [sortBy, setSortBy] = useState("");
   const connection = useContext(SignalRContext);
 
-  const [extendServiceDesc, setExtendServiceDesc] = useState("");
-  const [extendServiceName, setExtendServiceName] = useState("");
-
   useEffect(() => {
     API.fetchServicesList(machineName).then((response) => {
-      setHubConnection(connection);
       setServices(response.data);
     });
   }, []);
 
-  useEffect(() => {
-    if (hubConnection !== null) {
-      hubConnection.on("ServiceStatusChanged", (response) => {
-        if (response.agent === machineName) {
-          let updated = [...services];
-          let indexOfChangedService = updated.findIndex(x => x.name === response.name);
-          updated[indexOfChangedService].status = response.status;
-          setServices(updated);
-        }
-      });
-    }
-  }, [hubConnection]);
 
 
   useEffect(() => {
-    API.fetchMachineList().then((response) => {
-      let ipAddress = response.data.filter((ms) => ms.name == machineName)[0];
-      setMachineAddress(ipAddress.address);
-    });
-  }, []);
-
-
-  useEffect(() => {
-    if (hubConnection !== null) {
-      hubConnection.on("MachineHealthRecived", (response) => {
+    if (connection !== null) {
+      connection.on("MachineHealthRecived", (response) => {
         if (response.agent === machineName) {
           let updated = {};
           updated.cpu = response.cpuPercentUsage;
@@ -66,7 +41,31 @@ const Dashboards = () => {
         }
       });
     }
-  }, [hubConnection]);
+  }, [connection]);
+
+  useEffect(() => {
+    if (connection !== null && services.length > 0) {
+      connection.on("ServiceStatusChanged", (response) => {
+        if (response.agent === machineName) {
+          let updated = [...services];
+          let indexOfChangedService = updated.findIndex(x => x.name.toLowerCase() === response.name.toLowerCase());
+          updated[indexOfChangedService].status = response.status;
+          setServices(updated);
+        }
+      });
+    }
+  }, [connection, services]);
+
+
+  useEffect(() => {
+    API.fetchMachineList().then((response) => {
+      let ipAddress = response.data.filter((ms) => ms.name == machineName)[0];
+      setMachineAddress(ipAddress.address);
+    });
+  }, []);
+
+
+
 
   const servicesPerPage = 10;
   const [activePage, setActivePage] = useState(1);
@@ -105,15 +104,16 @@ const Dashboards = () => {
     return (
       <>
         <div>
-          <div>
+          {/* <div>
             <MachineBar machine="nmv3" address="127.0.01" cpu={30} ram={20} disc="47/210" services="23/98"></MachineBar>
 
-          </div>
+          </div> */}
           <ServiceHeader setSearchTerm={setSearchTerm} searchTerm={searchTerm} setActivePage={setActivePage} />
 
           {currentServices && currentServices.length > 0 ? (
             currentServices.map((service, index) => {
               return (
+                //tutaj zamienilem hubConnection na connection ale takie przekazywanie polaczenia przez propsy nie jest potrzebne, teraz mozna uzywac useContext w komponentach
                 <ServiceMobile key={index} service={service} index={index} machineName={machineName} connection={connection} connectionState={connectionState} />
               )
             })
@@ -170,7 +170,7 @@ const Dashboards = () => {
 
       {currentServices && currentServices.length > 0 ? (
         currentServices.map((service, index) => {
-          return <Service key={index} service={service} index={index} />;
+          return <Service key={index} service={service} index={index} agent={machineName} />;
         })
       ) : (
           <p className="warning-text">No services detected</p>

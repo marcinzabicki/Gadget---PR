@@ -20,7 +20,10 @@ const Dashboards = () => {
   const [sortBy, setSortBy] = useState("");
   const connection = useContext(SignalRContext);
 
-  //fssdf
+  const [extendServiceDesc, setExtendServiceDesc] = useState("");
+  const [extendServiceName, setExtendServiceName] = useState("");
+
+
   useEffect(() => {
     API.fetchServicesList(machineName).then((response) => {
       setServices(response.data);

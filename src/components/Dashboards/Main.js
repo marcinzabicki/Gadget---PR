@@ -44,7 +44,6 @@ const Dashboards = () => {
     }
   }, [connection]);
 
-<<<<<<< HEAD
   useEffect(() => {
     if (connection !== null && services.length > 0) {
       connection.on("ServiceStatusChanged", (response) => {
@@ -59,25 +58,6 @@ const Dashboards = () => {
           setServices(updated);
           console.log(services);
         }
-=======
-useEffect(() => {
-  if (hubConnection !== null) {
-    hubConnection.on("ServiceStatusChanged", (response) => {
-      if(response.agent ===machineName){
-            let updated = [...services];
-            let indexOfChangedService = updated.findIndex(x=>x.name.toLowerCase()===response.name.toLowerCase());
-            updated[indexOfChangedService].status = response.status;
-          setServices(updated);
-         }
-    });
-  }
-}, [hubConnection]);
-
-    useEffect(() => {
-      API.fetchMachineList().then((response) => {
-        let ipAddress = response.data.filter((ms)=>ms.name == machineName)[0];
-          setMachineAddress(ipAddress.address);
->>>>>>> c56e1aa7aa462aca985e328f35154af3eb7b453b
       });
     }
   }, [connection, services]);

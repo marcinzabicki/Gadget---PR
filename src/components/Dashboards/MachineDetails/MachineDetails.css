@@ -6,7 +6,8 @@
         /* height: 279px; */
         color: white;
         margin:10px 0 10px 0;
-        padding: 14px 19px 27px 19px
+        padding: 14px 19px 27px 19px;
+        margin:10px;
     }
 
 .metric-tile-container{
@@ -120,7 +121,7 @@ svg path {
 
 .machine-tiles-container{
     display: flex;
-    justify-content: space-between;
+    justify-content: start;
     flex-wrap: wrap; /* flex + wrap klocki będą się zwijać w dół strony a nie po za stronę   */
   }
 

@@ -6,50 +6,36 @@ import { API } from '../../utils/API'
 import { SignalRContext } from '../../utils/signalr-context';
 const Home = () => {
 
-    const [machineListState, setMachineListState] = useState({
-        machines: [],
-        hubConnection: null
-    })
+    const [machineListState, setMachineListState] = useState([])
 
     const connection = useContext(SignalRContext);
 
 
     useEffect(() => {
         API.fetchMachineList().then((response) => {
-            setMachineListState({
-                machines: response.data,
-                hubConnection: connection
-            });
+            console.log(response);
+            setMachineListState(response.data);
         });
+    }, []);
 
-    }, [connection]);
-
-    // useEffect(() => {
-    //     connection.start()
-    //         .then(() => console.log('Connection started!'))
-    //         .catch(err => console.log('Error while establishing connection :('));
-    // }, [])
 
     useEffect(() => {
-        if (machineListState.hubConnection !== null) {
-            machineListState.hubConnection.on("MachineHealthRecived", (response) => {
+        if (connection !== null) {
+            connection.on("MachineHealthRecived", (response) => {
 
-                let updated = [...machineListState.machines];
+                let updated = [...machineListState];
                 let index = updated.findIndex(x => x.name == response.agent)
 
                 updated[index].cpu = response.cpuPercentUsage;
                 updated[index].ram = 100 * (1 - (response.memoryFree / response.memoryTotal));
                 updated[index].disc = `${Math.floor(response.discOccupied)}/${Math.floor(response.discTotal)}`;
                 updated[index].services = `${response.servicesRunning}/${response.servicesCount}`
-                setMachineListState({
-                    machines: updated,
-                    hubConnection: machineListState.hubConnection
-                })
+                setMachineListState(updated)
             });
         }
-    }, [machineListState.hubConnection]);
+    }, [connection]);
 
-    const machines = machineListState.machines.map((m, i) => {
+    const machines = machineListState.map((m, i) => {
         return (
             <MachineTile
                 machine={m["name"]}

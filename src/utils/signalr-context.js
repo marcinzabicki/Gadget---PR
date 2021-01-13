@@ -1,5 +1,6 @@
 import React, { createContext, useState, useEffect } from 'react';
 import { HubConnectionBuilder, LogLevel, HubConnectionState } from "@microsoft/signalr";
+import {SIGNALR_URL} from "../config";
 
 
 const SignalRContext = createContext(null)
@@ -12,7 +13,7 @@ export default ({ children }) => {
 
     useEffect(() => {
         const connection = new HubConnectionBuilder()
-            .withUrl('https://localhost:5001/gadget')
+            .withUrl(SIGNALR_URL)
             .configureLogging(LogLevel.Critical)
             .withAutomaticReconnect()
             .build()

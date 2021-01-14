@@ -25,6 +25,10 @@
     margin-bottom: 30px;
 }
 
+/* .machine-bar-wrapper{
+    flex-direction: column;
+} */
+
 /* .machine-bar-label{
 
 } */
@@ -151,4 +155,36 @@ svg path {
     }
     .log-table tbody:last-of-type td{
         padding-bottom: 20px;
+    }
+
+    /* home mobile */
+    .label-mobile{
+        color:white;
+        justify-content: left;
+    }
+    .machine-tile-mobile-order{
+        width: 5%;
+        padding-top: 15px;
+    }
+    .machine-tile-mobile-name
+    {
+        width: 35%;
+        display: table-cell;
+        vertical-align: middle;
+    }
+    .machine-tile-mobile{
+        display: flex;
+        height: 47px;
+        background-color: #313843;
+        width: 100%;
+        border-radius: 3px;
+        margin:10px;
+        color:white;
+    }
+
+    .status-dot{
+        width: 23px;
+        height: 23px;
+        background-color:gray;
+      border-radius: 50%;
     }

@@ -26,8 +26,6 @@ const Dashboards = () => {
     });
   }, []);
 
-
-
   useEffect(() => {
     if (connection !== null) {
       connection.on("MachineHealthRecived", (response) => {
@@ -63,9 +61,6 @@ const Dashboards = () => {
       setMachineAddress(ipAddress.address);
     });
   }, []);
-
-
-
 
   const servicesPerPage = 10;
   const [activePage, setActivePage] = useState(1);

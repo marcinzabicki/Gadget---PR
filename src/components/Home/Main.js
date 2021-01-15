@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from 'react'
 import MachineTile from '../Dashboards/MachineDetails/MachineTile/MachineTile'
 import MachineTileMobile from '../Dashboards/MachineDetails/MachineTile/MachineTileMobile'
 import '../Dashboards/MachineDetails/MachineDetails.css';
-//import Logs from '../Dashboards/Logs/Logs'
+import Logs from '../Dashboards/Logs/Logs'
 import { API } from '../../utils/API'
 import { SignalRContext } from '../../utils/signalr-context';
 import { useWindowSize } from "../../Hooks";
@@ -13,11 +13,11 @@ const Home = () => {
     const [machineListState, setMachineListState] = useState([])
     const connection = useContext(SignalRContext);
     const windowSize = useWindowSize();
+    
 
 
     useEffect(() => {
         API.fetchMachineList().then((response) => {
-            console.log(response);
             setMachineListState(response.data);
         });
     }, []);
@@ -80,18 +80,13 @@ let machines = {};
 
     
 
-    // const tmpLogs = [
-    //     {time:"09:14:33", status:"[Information]", message:"Lorem ipsum dsadasdsa", service:"nmvsasdasd"},
-    //     {time:"09:14:33", status:"[Information]", message:"Lorem ipsum dsadasdsa", service:"nmvsasdasd"},
-    //     {time:"09:14:33", status:"[Information]", message:"Lorem ipsum dsadasdsa", service:"nmvsasdasd"},
-    //     {time:"09:14:33", status:"[Information]", message:"Lorem ipsum dsadasdsa", service:"nmvsasdasd"}
-    //   ]
+
     return (
         <div>
             <div className="machine-tiles-container">
                 {machines}
             </div>
-            {/* <Logs>{tmpLogs}</Logs> */}
+            <Logs></Logs>
         </div>
     );
 }

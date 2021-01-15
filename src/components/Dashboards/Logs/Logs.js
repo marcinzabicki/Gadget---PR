@@ -1,8 +1,31 @@
-import React from 'react'
+import {useState, useEffect, useContext} from 'react'
+import { SignalRContext } from '../../../utils/signalr-context'
 
-const logs = (props) => {
-    const headers =
-        Object.keys(props.children[0]).map((k, i) => {
+
+
+const Logs = () => {
+
+    const connection = useContext(SignalRContext);
+    const [services, setServices] = useState([]);
+
+    useEffect(() => {
+        if (connection !== null) {
+          connection.on("ServiceStatusChanged", (response) => {
+              console.log(response);
+              let updated = [...services];
+              updated.push(response);
+              if(updated>10){
+                  updated.length = 10;
+              }
+              setServices(updated);
+              console.log(services);
+          });
+        }
+      }, [connection, services]);
+
+      if(services.length>0){
+        const headers =
+        Object.keys(services.children[0]).map((k, i) => {
             return (
                 <th key={i}>
                     {k}
@@ -10,11 +33,11 @@ const logs = (props) => {
             )
         })
     
-    const data = props.children.map((l, i)=>{
+    const data = services.children.map((l, i)=>{
             return (
                 <tbody key={i}>
                     <tr >
-                    {Object.keys(props.children[0]).map((k,j)=>{
+                    {Object.keys(services.children[0]).map((k,j)=>{
                         return(
                             <td key={j}>
                                 {l[k]}
@@ -25,7 +48,6 @@ const logs = (props) => {
                 </tbody>
             )
         })
-
     return (
             <table className="log-table">
                <thead>
@@ -35,7 +57,9 @@ const logs = (props) => {
                </thead>
                 {data}
             </table>
-    )
+        )
+    }
+      return null;
 }
 
-export default logs;
+export default Logs;

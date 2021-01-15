@@ -47,4 +47,15 @@ export class API {
     }
   }
 
+  static async restartService(agent, service) {
+    try {
+      return await axios({
+        method: "POST",
+        url: `${BASE_URL}/agents/${agent}/${service}/restart`,
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
 }

@@ -30,7 +30,7 @@ const Dashboards = () => {
 
   useEffect(() => {
     if (connection !== null) {
-      connection.on("MachineHealthRecived", (response) => {
+      connection.on("MachineHealthReceived", (response) => {
         if (response.agent === machineName) {
           let updated = {};
           updated.cpu = response.cpuPercentUsage;
@@ -108,7 +108,7 @@ const Dashboards = () => {
             <MachineBar machine="nmv3" address="127.0.01" cpu={30} ram={20} disc="47/210" services="23/98"></MachineBar>
 
           </div> */}
-          <ServiceHeader setSearchTerm={setSearchTerm} searchTerm={searchTerm} setActivePage={setActivePage} />
+          {/* <ServiceHeader setSearchTerm={setSearchTerm} searchTerm={searchTerm} setActivePage={setActivePage} /> */}
 
           {currentServices && currentServices.length > 0 ? (
             currentServices.map((service, index) => {

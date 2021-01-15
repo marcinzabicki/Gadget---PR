@@ -129,6 +129,13 @@ svg path {
     flex-wrap: wrap; /* flex + wrap klocki będą się zwijać w dół strony a nie po za stronę   */
   }
 
+  .dead-machine-tile{
+      display: flex;
+      justify-content: center;
+      padding-top: 25px;
+      opacity: 10%;
+  }
+
   .log-table{
     background-color: #313843;
     color: #fff;
@@ -187,4 +194,11 @@ svg path {
         height: 23px;
         background-color:gray;
       border-radius: 50%;
+    }
+
+    @media (max-width:768px){
+        .machine-bar, .machine-bar-charts{
+            flex-direction: column;
+        }
+        
     }

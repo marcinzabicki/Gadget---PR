@@ -27,22 +27,23 @@ const Home = () => {
         if(machine.cpu>0.6 || machine.ram>0.6 || machine.discPercentage>0.7) return "#F0AD4E";
         if(machine.cpu>0 || machine.ram>0 || machine.discPercentage>0) return "#38E18D";
         return "#4B4E75"
-    }
+    };
+
 
 
     useEffect(() => {
         if (connection !== null) {
-            connection.on("MachineHealthRecived", (response) => {
+            connection.on("MachineHealthReceived", (response) => {
 
                 let updated = [...machineListState];
-                let index = updated.findIndex(x => x.name == response.agent)
+                let index = updated.findIndex(x => x.name == response.agent);
 
                 updated[index].cpu = response.cpuPercentUsage;
                 updated[index].ram = 100 * (1 - (response.memoryFree / response.memoryTotal));
                 updated[index].disc = `${Math.floor(response.discOccupied)}/${Math.floor(response.discTotal)}`;
-                updated[index].discPercentage = Math.floor(response.discOccupied/response.discTotal)
-                updated[index].services = `${response.servicesRunning}/${response.servicesCount}`
-                setMachineListState(updated)
+                updated[index].discPercentage = Math.floor(response.discOccupied/response.discTotal);
+                updated[index].services = `${response.servicesRunning}/${response.servicesCount}`;
+                setMachineListState(updated);
             });
         }
     }, [connection]);

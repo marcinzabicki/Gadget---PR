@@ -58,4 +58,26 @@ export class API {
     }
   }
 
+  static async login(login, password) {
+    try {
+      return await axios({
+        method: "POST",
+        url: `${BASE_URL}/loginUrl`,
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  static async logout(login, password) {
+    try {
+      return await axios({
+        method: "POST",
+        url: `${BASE_URL}/logoutUrl`,
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
 }

@@ -33,7 +33,7 @@ const Home = () => {
 
     useEffect(() => {
         if (connection !== null) {
-            connection.on("MachineHealthReceived", (response) => {
+            connection.on("MachineHealthRecived", (response) => { //MachineHealthReceived fix typo 
 
                 let updated = [...machineListState];
                 let index = updated.findIndex(x => x.name == response.agent);

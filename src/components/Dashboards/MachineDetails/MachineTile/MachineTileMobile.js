@@ -1,4 +1,4 @@
-import Label from '../Label'
+import React from 'react';
 import '../MachineDetails.css'
 import { Link } from 'react-router-dom'
 

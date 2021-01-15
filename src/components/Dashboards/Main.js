@@ -20,6 +20,7 @@ const Dashboards = () => {
   const [sortBy, setSortBy] = useState("");
   const connection = useContext(SignalRContext);
 
+  //fssdf
   useEffect(() => {
     API.fetchServicesList(machineName).then((response) => {
       setServices(response.data);
@@ -47,10 +48,15 @@ const Dashboards = () => {
     if (connection !== null && services.length > 0) {
       connection.on("ServiceStatusChanged", (response) => {
         if (response.agent === machineName) {
+          console.log(services);
           let updated = [...services];
+          console.log(updated);
+          console.log(services);
           let indexOfChangedService = updated.findIndex(x => x.name.toLowerCase() === response.name.toLowerCase());
+          console.log(indexOfChangedService);
           updated[indexOfChangedService].status = response.status;
           setServices(updated);
+          console.log(services);
         }
       });
     }
@@ -89,7 +95,7 @@ const Dashboards = () => {
       service.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
     setSearchResults(results);
-  }, [searchTerm, services]);
+  }, [searchTerm]);
 
 
 
@@ -108,7 +114,7 @@ const Dashboards = () => {
             <MachineBar machine="nmv3" address="127.0.01" cpu={30} ram={20} disc="47/210" services="23/98"></MachineBar>
 
           </div> */}
-          {/* <ServiceHeader setSearchTerm={setSearchTerm} searchTerm={searchTerm} setActivePage={setActivePage} /> */}
+          <ServiceHeader setSearchTerm={setSearchTerm} searchTerm={searchTerm} setActivePage={setActivePage} />
 
           {currentServices && currentServices.length > 0 ? (
             currentServices.map((service, index) => {
@@ -170,7 +176,7 @@ const Dashboards = () => {
 
       {currentServices && currentServices.length > 0 ? (
         currentServices.map((service, index) => {
-          return <Service key={index} service={service} index={index} agent={machineName} />;
+          return <Service key={index} service={service} index={index} />;
         })
       ) : (
           <p className="warning-text">No services detected</p>

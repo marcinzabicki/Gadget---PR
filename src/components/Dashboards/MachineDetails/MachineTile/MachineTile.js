@@ -4,13 +4,12 @@ import MetricTile from '../MetricTile'
 import Label from '../Label'
 import '../MachineDetails.css'
 import { Link } from 'react-router-dom'
-import deadIcon from '../images/agent_is_dead.png'
 
 const MachineTile = (props) => {
 
     const [machineTileState, setMachineTileState] = useState({
         metrics: {"RAM":props.ram, "CPU": props.cpu},
-        show:"CPU",
+        show:"CPU"
     })
 
     useEffect(()=>{
@@ -27,33 +26,22 @@ const MachineTile = (props) => {
         show: event.target.value
         })
     }
-
-    if(props.cpu>0){
-        return (
-            <div className="machine-tile">
-        <Link to={`/${props.machine}`}>
-            <Label machineName={props.machine} machineAddress={props.machineAddress}></Label>
-        </Link>
-        <div className="metric-tile-container">
-            <MetricTile values={props.services} type="service">Services</MetricTile>
-            <MetricTile values={props.disc} type="disc">Disc space</MetricTile>
-        </div>
-        <Chart 
-            changed={(event) => changeMetricData(event)} 
-            selectable={true}>
-            {parseInt(machineTileState.metrics[machineTileState.show])}
-        </Chart>
-        </div>
-        )
-    }
     return (
-        
         <div className="machine-tile">
-        <Label machineName={props.machine} machineAddress={props.machineAddress}></Label>
-        <div className="dead-machine-tile">
-            <img src={deadIcon} height={150}/>
+            <Link to={`/${props.machine}`}>
+                <Label machineName={props.machine} machineAddress={props.machineAddress}></Label>
+            </Link>
+            <div className="metric-tile-container">
+                <MetricTile values={props.services} type="service">Services</MetricTile>
+                <MetricTile values={props.disc} type="disc">Disc space</MetricTile>
+            </div>
+            <Chart 
+                changed={(event) => changeMetricData(event)} 
+                selectable={true}>
+                {parseInt(machineTileState.metrics[machineTileState.show])}
+            </Chart>
         </div>
-        </div>
+
     )
 }
 

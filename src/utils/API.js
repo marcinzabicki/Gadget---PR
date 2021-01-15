@@ -23,22 +23,57 @@ export class API {
     }
   }
 
-  static async stopService(serviceId) {
+  static async stopService(agent, service) {
     try {
+      console.log(`${BASE_URL}/agents/${agent}/${service}`)
       return await axios({
         method: "POST",
-        url: `${BASE_URL}/agents/${serviceId}/stop`,
+        url: `${BASE_URL}/agents/${agent}/${service}/stop`,
       });
     } catch (e) {
       console.log(e);
     }
   }
 
-  static async startService(serviceId) {
+  static async startService(agent, service) {
+    try {
+      console.log(`${BASE_URL}/agents/${agent}/${service}`)
+      return await axios({
+        method: "POST",
+        url: `${BASE_URL}/agents/${agent}/${service}/start`,
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  static async restartService(agent, service) {
     try {
       return await axios({
         method: "POST",
-        url: `${BASE_URL}/agents/${serviceId}/start`,
+        url: `${BASE_URL}/agents/${agent}/${service}/restart`,
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  static async login(login, password) {
+    try {
+      return await axios({
+        method: "POST",
+        url: `${BASE_URL}/loginUrl`,
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  static async logout(login, password) {
+    try {
+      return await axios({
+        method: "POST",
+        url: `${BASE_URL}/logoutUrl`,
       });
     } catch (e) {
       console.log(e);

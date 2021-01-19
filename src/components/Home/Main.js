@@ -33,7 +33,7 @@ const Home = () => {
     useEffect(() => {
         let isMounted = true;
         if (connection !== null) {
-            connection.on("MachineHealthRecived", (response) => { //MachineHealthReceived fix typo 
+            connection.on("MachineHealthReceived", (response) => { //MachineHealthReceived fix typo  MachineHealthRecived
                 const updated = [...machineListState];
                 const index = updated.findIndex(x => x.name == response.agent);
 
@@ -46,7 +46,7 @@ const Home = () => {
             });
         }
 
-        return () => { isMounted = false; connection && connection.off("MachineHealthRecived") };
+        return () => { isMounted = false; connection && connection.off("MachineHealthReceived") };
     }, [connection, machineListState]);
 
     let machines = {};
@@ -81,11 +81,11 @@ const Home = () => {
 
 
     return (
-        <div>
+        <div className="home-container">
             <div className="machine-tiles-container">
                 {machines}
             </div>
-            <Logs></Logs>
+            {/* <Logs></Logs> */}
         </div>
     );
 }

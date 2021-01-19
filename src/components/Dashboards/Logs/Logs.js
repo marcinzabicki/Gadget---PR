@@ -1,5 +1,6 @@
 import {useState, useEffect, useContext} from 'react'
 import { SignalRContext } from '../../../utils/signalr-context'
+import { API } from '../../../utils/API'
 
 
 
@@ -9,23 +10,25 @@ const Logs = () => {
     const [services, setServices] = useState([]);
 
     useEffect(() => {
+        API.fetchLastEvents(10).then((response) => {
+          setServices(response.data)
+        });
+      }, []);
+      
+
+    useEffect(() => {
         if (connection !== null) {
           connection.on("ServiceStatusChanged", (response) => {
-              console.log(response);
               let updated = [...services];
-              updated.push(response);
-              if(updated>10){
-                  updated.length = 10;
-              }
-              setServices(updated);
-              console.log(services);
+              updated.unshift({agent:response.agent, service:response.name, createdAt:Date.now(), status:response.status});
+              setServices(updated.slice(0,10));
           });
         }
       }, [connection, services]);
 
       if(services.length>0){
         const headers =
-        Object.keys(services.children[0]).map((k, i) => {
+        Object.keys(services[0]).map((k, i) => {
             return (
                 <th key={i}>
                     {k}
@@ -33,11 +36,11 @@ const Logs = () => {
             )
         })
     
-    const data = services.children.map((l, i)=>{
+    const data = services.map((l, i)=>{
             return (
                 <tbody key={i}>
                     <tr >
-                    {Object.keys(services.children[0]).map((k,j)=>{
+                    {Object.keys(services[0]).map((k,j)=>{
                         return(
                             <td key={j}>
                                 {l[k]}

@@ -33,36 +33,32 @@ const Logs = () => {
         const headers =
         Object.keys(services[0]).map((k, i) => {
             return (
-                <th key={i}>
+                <div className="header-item" key={i}>
                     {k}
-                </th>
+                </div>
             )
         })
     
     const data = services.map((l, i)=>{
             return (
-                <tbody key={i}>
-                    <tr >
+                <div key={i} className="logs-table-row" >
                     {Object.keys(services[0]).map((k,j)=>{
                         return(
-                            <td key={j}>
+                            <div className="log-item" key={j}>
                                 {l[k]}
-                            </td>
+                            </div>
                         )
                     })}
-                </tr>
-                </tbody>
+                </div>
             )
         })
     return (
-            <table className="log-table">
-               <thead>
-               <tr key={0}>
-                   {headers}
-                </tr>
-               </thead>
+            <div className="log-table">
+               <div className="logs-table-row">
+                    {headers}
+               </div>
                 {data}
-            </table>
+            </div>
         )
     }
       return null;

@@ -132,33 +132,41 @@ svg path {
       opacity: 10%;
   }
 
+
+/* log table ========================================================== */
+
   .log-table{
     background-color: #313843;
     color: #fff;
     font-size: 14px;
     width: 100%;
     margin-top:20px;
+    border-radius: 3px;
     /* padding: 14px 20px 19px 20px; */
   }
 
-  
-.log-table thead th{
-    color: #fff;
-    font-size: 17px;
-    font-weight: 600;
-    text-align: left;
-    padding: 14px 20px 10px 20px;
-    }
+.logs-table-row{
+    display: flex;
+    justify-content:space-between;
+    align-items: center;
+    border-bottom: 1px solid #495971;
+    padding: 10px;
+    
+}
 
-    .log-table tbody tr td {
-        padding: 9px 20px 4px 20px;
-        background-color: #313843;
-        border-bottom: 1px solid #495971;
-        text-align: left;
-    }
-    .log-table tbody:last-of-type td{
-        padding-bottom: 20px;
-    }
+.log-item{
+text-align: left;
+width: 15%;
+}
+
+.header-item{
+    font-size: 17px;
+    text-align: left;
+    font-weight: 600;
+    width: 15%;
+}
+
+
 
     /* home mobile */
     .label-mobile{
@@ -167,7 +175,7 @@ svg path {
     }
     .machine-tile-mobile-order{
         width: 5%;
-        padding-top: 15px;
+        
     }
     .machine-tile-mobile-name
     {
@@ -177,6 +185,7 @@ svg path {
     }
     .machine-tile-mobile{
         display: flex;
+        align-items: center;
         height: 47px;
         background-color: #313843;
         width: 100%;
@@ -200,6 +209,10 @@ svg path {
         .service-header input{
             margin-top: 15px;
         };
+
+        .log-table{
+            font-size: 11px;
+          }
     }
 
     

@@ -196,5 +196,10 @@ svg path {
         .machine-bar, .machine-bar-charts{
             flex-direction: column;
         }
-        
+
+        .service-header input{
+            margin-top: 15px;
+        };
     }
+
+    

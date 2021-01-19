@@ -24,6 +24,9 @@ const Logs = () => {
               setServices(updated.slice(0,10));
           });
         }
+        return function cleanup() {
+            connection && connection.off("ServiceStatusChanged")
+        }
       }, [connection, services]);
 
       if(services.length>0){

@@ -10,6 +10,7 @@ import { useWindowSize } from "../../Hooks";
 import { API } from "../../utils/API";
 import { SignalRContext } from '../../utils/signalr-context'
 import Logs from '../Dashboards/Logs/Logs'
+import ServiceHeaderMobile from "./ServiceHeaderMobile";
 
 const Dashboards = () => {
   const windowSize = useWindowSize();
@@ -100,14 +101,24 @@ const Dashboards = () => {
     return (
       <>
         <div>
-         
-          {/* <ServiceHeader setSearchTerm={setSearchTerm} searchTerm={searchTerm} setActivePage={setActivePage} /> */}
-
+        <ServiceHeaderMobile
+                    setSearchTerm={setSearchTerm}
+                    searchTerm={searchTerm}
+                    setActivePage={setActivePage}
+                />
           {currentServices && currentServices.length > 0 ? (
             currentServices.map((service, index) => {
               return (
+                
                 //tutaj zamienilem hubConnection na connection ale takie przekazywanie polaczenia przez propsy nie jest potrzebne, teraz mozna uzywac useContext w komponentach
-                <ServiceMobile key={index} service={service} index={index} machineName={machineName} connection={connection} connectionState={connectionState} />
+                <ServiceMobile 
+                  key={index} 
+                  service={service} 
+                  index={index} 
+                  machineName={machineName} 
+                  connection={connection} 
+                  connectionState={connectionState} 
+                />
               )
             })
           ) : (
@@ -126,19 +137,6 @@ const Dashboards = () => {
             lastPageText=".."
           />}
         </div>
-        {moreResults && (
-          <Pagination
-            activePage={activePage}
-            itemsCountPerPage={servicesPerPage}
-            totalItemsCount={searchResults.length}
-            pageRangeDisplayed={3}
-            onChange={handlePageChange}
-            prevPageText="<"
-            nextPageText=">"
-            firstPageText=".."
-            lastPageText=".."
-          />
-        )}
       </>
     );
   }

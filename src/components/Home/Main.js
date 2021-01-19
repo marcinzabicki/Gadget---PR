@@ -85,7 +85,7 @@ const Home = () => {
             <div className="machine-tiles-container">
                 {machines}
             </div>
-            {/* <Logs></Logs> */}
+            <Logs></Logs>
         </div>
     );
 }

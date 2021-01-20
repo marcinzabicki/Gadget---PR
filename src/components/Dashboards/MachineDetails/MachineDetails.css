@@ -142,7 +142,6 @@ svg path {
     width: 100%;
     margin-top:20px;
     border-radius: 3px;
-    /* padding: 14px 20px 19px 20px; */
   }
 
 .logs-table-row{
@@ -151,19 +150,18 @@ svg path {
     align-items: center;
     border-bottom: 1px solid #495971;
     padding: 10px;
-    
 }
 
 .log-item{
 text-align: left;
-width: 15%;
+/* width: 15%; */
 }
 
 .header-item{
     font-size: 17px;
     text-align: left;
     font-weight: 600;
-    width: 15%;
+    /* width: 15%; */
 }
 
 
@@ -192,11 +190,12 @@ width: 15%;
         border-radius: 3px;
         margin:10px;
         color:white;
+        font-size: 12px;
     }
 
     .status-dot{
-        width: 23px;
-        height: 23px;
+        width: 18px;
+        height: 18px;
         background-color:gray;
       border-radius: 50%;
     }
@@ -208,11 +207,29 @@ width: 15%;
 
         .service-header input{
             margin-top: 15px;
-        };
+        }
 
         .log-table{
-            font-size: 11px;
+            font-size: 10px;
           }
+          .header-item{
+            font-size: 12px;
+            text-align: left;
+            font-weight:500;
+        }
+
+        header .log-button p{
+            font-size: 12px;
+            white-space: nowrap;
+            padding: 10px 10px;
+        }
+
+        .logs-table-row{
+            display:flex;
+            flex-wrap: wrap;
+            flex-direction: column
+            
+        }
     }
 
     

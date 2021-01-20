@@ -31,7 +31,7 @@ const Dashboards = () => {
 
   useEffect(() => {
     if (connection !== null) {
-      connection.on("MachineHealthReceived", (response) => {
+      connection.on("MachineHealthRecived", (response) => {
         if (response.agent === machineName) {
           let updated = {};
           updated.cpu = response.cpuPercentUsage;
@@ -181,7 +181,7 @@ const Dashboards = () => {
           lastPageText=".."
         />
       )}
-      <Logs></Logs>
+      {/* <Logs></Logs> */}
     </div>
     
   );

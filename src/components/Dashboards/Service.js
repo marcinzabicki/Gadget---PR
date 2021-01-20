@@ -1,9 +1,21 @@
 import {API} from '../../utils/API'
 import React, { useState } from 'react';
+import Modal from 'react-modal';
+import RestartModal from './RestartModal';
+
 
 
 const Service = ({ service, index, agent,  props }) => {
     const [extendText, setExtendText] = useState(false);
+    const [showModal, setShowModal] = useState(false);
+    Modal.defaultStyles.overlay.backgroundColor = 'transparent';
+    Modal.defaultStyles.overlay.userSelect = 'none'
+
+   const showModalHandler = ()=>{
+        let isShowing = showModal;
+        setShowModal(!isShowing);
+      };
+
     return (
         <div key={service.name + index} className="service">
             <div className="service-wrapper">
@@ -20,10 +32,21 @@ const Service = ({ service, index, agent,  props }) => {
                 ) : (
                     <button className="button" onClick={()=>API.startService(agent,service.name)} >Start</button>
                 ) }
-                
-                <button className="button" onClick={()=>API.restartService(agent,service.name)} >Restart</button>
+                <button className="button" onClick={showModalHandler} >Restart</button>
                 <button className="button special">Show logs</button>
             </div>
+            
+            <Modal
+          isOpen={showModal}
+          // onAfterOpen={afterOpenModal}
+          // onRequestClose={closeModal}
+          // style={customStyles}
+          ariaHideApp={false}
+          contentLabel="Example Modal"
+          className="agent-modal"
+        >
+         <RestartModal service={service} decline={showModalHandler}></RestartModal>
+        </Modal>
         </div>
     )
 }

@@ -164,9 +164,52 @@ text-align: left;
     /* width: 15%; */
 }
 
+/* =========================Restart modal================= */
 
+.restart-modal{
+   width: 400px;
+   height: 300px;
+   background-color: #313843;
+   padding-top:150px;
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   color: white;
+}
 
-    /* home mobile */
+.agent-modal{
+    background-color: transparent;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.restart-button{
+    width: 230px;
+    height: 60px;
+    text-align: center;
+    margin: 15px;
+    font-weight: 600;
+    font-size: 20px;
+    cursor: pointer;
+    border-radius: 4px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.restart-button-no{
+background-color: #E13849;
+color: white;
+}
+
+.restart-button-yes{
+background-color: #38E18D;
+color:black;
+}
+
+/* ======================home mobile */
     .label-mobile{
         color:white;
         justify-content: left;
@@ -209,15 +252,25 @@ text-align: left;
             margin-top: 15px;
         }
 
+       
+    }
+
+    @media(max-width:400px){
         .log-table{
             font-size: 10px;
           }
-          .header-item{
-            font-size: 12px;
-            text-align: left;
-            font-weight:500;
-        }
 
+          .logs-header{
+              display: none;
+          }
+          
+          .header-item{
+            display: none;
+        }
+        .log-item{
+            margin: 2px;   
+        }
+ 
         header .log-button p{
             font-size: 12px;
             white-space: nowrap;
@@ -231,5 +284,4 @@ text-align: left;
             
         }
     }
-
     

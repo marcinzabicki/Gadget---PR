@@ -21,7 +21,7 @@ const Service = ({ service, index, agent,  props }) => {
                     <button className="button" onClick={()=>API.startService(agent,service.name)} >Start</button>
                 ) }
                 
-                <button className="button" onClick={()=>API.startService(service.id)} >Restart</button>
+                <button className="button" onClick={()=>API.restartService(agent,service.name)} >Restart</button>
                 <button className="button special">Show logs</button>
             </div>
         </div>

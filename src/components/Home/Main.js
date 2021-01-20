@@ -28,8 +28,6 @@ const Home = () => {
         return "#4B4E75"
     };
 
-
-
     useEffect(() => {
         let isMounted = true;
         if (connection !== null) {
@@ -85,7 +83,7 @@ const Home = () => {
             <div className="machine-tiles-container">
                 {machines}
             </div>
-            {/* <Logs></Logs> */}
+            <Logs></Logs>
         </div>
     );
 }

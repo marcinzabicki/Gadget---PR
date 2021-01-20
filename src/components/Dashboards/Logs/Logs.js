@@ -1,8 +1,34 @@
-import React from 'react'
+import {useState, useEffect, useContext} from 'react'
+import { SignalRContext } from '../../../utils/signalr-context'
+import { API } from '../../../utils/API'
 
-const logs = (props) => {
-    const headers =
-        Object.keys(props.children[0]).map((k, i) => {
+
+
+const Logs = () => {
+
+    const connection = useContext(SignalRContext);
+    const [services, setServices] = useState([]);
+
+    useEffect(() => {
+        API.fetchLastEvents(10).then((response) => {
+          setServices(response.data)
+        });
+      }, []);
+      
+
+    useEffect(() => {
+        if (connection !== null) {
+          connection.on("ServiceStatusChanged", (response) => {
+              let updated = [...services];
+              updated.unshift({agent:response.agent, service:response.name, createdAt:Date.now(), status:response.status});
+              setServices(updated.slice(0,10));
+          });
+        }
+      }, [connection, services]);
+
+      if(services.length>0){
+        const headers =
+        Object.keys(services[0]).map((k, i) => {
             return (
                 <th key={i}>
                     {k}
@@ -10,11 +36,11 @@ const logs = (props) => {
             )
         })
     
-    const data = props.children.map((l, i)=>{
+    const data = services.map((l, i)=>{
             return (
                 <tbody key={i}>
                     <tr >
-                    {Object.keys(props.children[0]).map((k,j)=>{
+                    {Object.keys(services[0]).map((k,j)=>{
                         return(
                             <td key={j}>
                                 {l[k]}
@@ -25,7 +51,6 @@ const logs = (props) => {
                 </tbody>
             )
         })
-
     return (
             <table className="log-table">
                <thead>
@@ -35,7 +60,9 @@ const logs = (props) => {
                </thead>
                 {data}
             </table>
-    )
+        )
+    }
+      return null;
 }
 
-export default logs;
+export default Logs;

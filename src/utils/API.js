@@ -23,6 +23,17 @@ export class API {
     }
   }
 
+  static async fetchLastEvents(number) {
+    try {
+      return await axios({
+        method: "GET",
+        url: `${BASE_URL}/agents/events/${number}`,
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
   static async stopService(agent, service) {
     try {
       console.log(`${BASE_URL}/agents/${agent}/${service}`)

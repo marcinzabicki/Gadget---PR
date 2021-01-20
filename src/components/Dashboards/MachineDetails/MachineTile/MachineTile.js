@@ -13,12 +13,22 @@ const MachineTile = (props) => {
         show:"CPU",
     })
 
+    const [refresher, setRefresher] = useState(true);
+    const [timer, setTimer] =useState(setTimeout(Date.now()));
+
     useEffect(()=>{
         setMachineTileState({
             metrics: {"RAM":props.ram, "CPU": props.cpu},
             show:machineTileState.show
-        })
+        });
+        setTimer(Date.now());
     },[props]);
+
+    // useEffect(()=>{
+    //    const ref =  setTimeout(function(){
+    //         setRefresher(!refresher);
+    //     }, 8000);
+    // }, [refresher])
 
     
     const changeMetricData = (event) => {
@@ -28,7 +38,7 @@ const MachineTile = (props) => {
         })
     }
 
-    if(props.cpu>0){
+    if(props.cpu>0 && ((Date.now() - timer<5000))){
         return (
             <div className="machine-tile">
         <Link to={`/${props.machine}`}>

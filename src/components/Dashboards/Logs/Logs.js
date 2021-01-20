@@ -54,7 +54,7 @@ const Logs = () => {
         })
     return (
             <div className="log-table">
-               <div className="logs-table-row">
+               <div className="logs-table-row logs-header">
                     {headers}
                </div>
                 {data}

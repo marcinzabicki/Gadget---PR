@@ -12,6 +12,7 @@ import { SignalRContext } from '../../utils/signalr-context'
 import Logs from '../Dashboards/Logs/Logs'
 import ServiceHeaderMobile from "./ServiceHeaderMobile";
 
+
 const Dashboards = () => {
   const windowSize = useWindowSize();
   const { machineName } = useParams();

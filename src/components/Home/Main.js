@@ -31,7 +31,7 @@ const Home = () => {
     useEffect(() => {
         let isMounted = true;
         if (connection !== null) {
-            connection.on("MachineHealthRecived", (response) => { //MachineHealthReceived fix typo  MachineHealthRecived
+            connection.on("MachineHealthReceived", (response) => { //MachineHealthReceived fix typo  MachineHealthRecived
                 const updated = [...machineListState];
                 const index = updated.findIndex(x => x.name == response.agent);
 
@@ -83,7 +83,7 @@ const Home = () => {
             <div className="machine-tiles-container">
                 {machines}
             </div>
-            {/* <Logs></Logs> */}
+            <Logs></Logs>
         </div>
     );
 }

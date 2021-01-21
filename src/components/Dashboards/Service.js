@@ -9,7 +9,7 @@ const Service = ({ service, index, agent,  props }) => {
     const [extendText, setExtendText] = useState(false);
     const [showModal, setShowModal] = useState(false);
     Modal.defaultStyles.overlay.backgroundColor = 'transparent';
-    Modal.defaultStyles.overlay.userSelect = 'none'
+
 
    const showModalHandler = ()=>{
         let isShowing = showModal;
@@ -42,7 +42,6 @@ const Service = ({ service, index, agent,  props }) => {
           // onRequestClose={closeModal}
           // style={customStyles}
           ariaHideApp={false}
-          contentLabel="Example Modal"
           className="agent-modal"
         >
          <RestartModal service={service} decline={showModalHandler}></RestartModal>

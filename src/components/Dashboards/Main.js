@@ -20,7 +20,6 @@ const Dashboards = () => {
   const [services, setServices] = useState([]);
   const [connectionState, setConnectionState] = useState("");
   const [machineAddress, setMachineAddress] = useState("");
-  const [sortBy, setSortBy] = useState("");
   const connection = useContext(SignalRContext);
 
   useEffect(() => {
@@ -31,7 +30,7 @@ const Dashboards = () => {
 
   useEffect(() => {
     if (connection !== null) {
-      connection.on("MachineHealthRecived", (response) => {
+      connection.on("MachineHealthReceived", (response) => {
         if (response.agent === machineName) {
           let updated = {};
           updated.cpu = response.cpuPercentUsage;
@@ -72,11 +71,6 @@ const Dashboards = () => {
     setActivePage(pageNumber);
   };
 
-  // sorting
-  const handleSortingBy = (sortBy) => {
-    setSortBy(sortBy);
-  }
-
   // search bar
 
   const [searchTerm, setSearchTerm] = useState("");
@@ -88,7 +82,6 @@ const Dashboards = () => {
     );
     setSearchResults(results);
   }, [searchTerm, services]);
-
 
 
   const indexOfLastService = activePage * servicesPerPage;
@@ -181,7 +174,7 @@ const Dashboards = () => {
           lastPageText=".."
         />
       )}
-      {/* <Logs></Logs> */}
+      <Logs></Logs>
     </div>
     
   );

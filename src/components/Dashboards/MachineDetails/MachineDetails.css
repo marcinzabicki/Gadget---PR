@@ -154,14 +154,15 @@ svg path {
 
 .log-item{
 text-align: left;
-/* width: 15%; */
+width: 20%;
+word-break: keep-all;
 }
 
 .header-item{
     font-size: 17px;
     text-align: left;
     font-weight: 600;
-    /* width: 15%; */
+    width: 20%;
 }
 
 /* =========================Restart modal================= */
@@ -182,7 +183,10 @@ text-align: left;
     display: flex;
     justify-content: center;
     align-items: center;
+    height: 100%;
 }
+
+
 
 .restart-button{
     width: 230px;
@@ -252,14 +256,6 @@ color:black;
             margin-top: 15px;
         }
 
-       
-    }
-
-    @media(max-width:400px){
-        .log-table{
-            font-size: 10px;
-          }
-
           .logs-header{
               display: none;
           }
@@ -268,7 +264,9 @@ color:black;
             display: none;
         }
         .log-item{
-            margin: 2px;   
+            margin: 4px;
+            width: 50%;
+            margin-left: 100px;
         }
  
         header .log-button p{
@@ -280,8 +278,6 @@ color:black;
         .logs-table-row{
             display:flex;
             flex-wrap: wrap;
-            flex-direction: column
-            
+            flex-direction: column;
         }
     }
-    

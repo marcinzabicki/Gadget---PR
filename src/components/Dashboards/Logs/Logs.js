@@ -14,13 +14,24 @@ const Logs = () => {
           setServices(response.data)
         });
       }, []);
+
+      function formatDate(date, format) {
+        const map = {
+            mm: date.getMonth() + 1,
+            dd: date.getDate(),
+            yy: date.getFullYear().toString().slice(-2),
+            yyyy: date.getFullYear()
+        }
+    
+        return format.replace(/mm|dd|yy|yyy/gi, matched => map[matched])
+    }
       
 
     useEffect(() => {
         if (connection !== null) {
           connection.on("ServiceStatusChanged", (response) => {
               let updated = [...services];
-              updated.unshift({agent:response.agent, service:response.name, createdAt:Date.now(), status:response.status});
+              updated.unshift({agent:response.agent, service:response.name, createdAt:formatDate(Date.now(), 'hh:mm dd-MM-yyyy'), status:response.status});
               setServices(updated.slice(0,10));
           });
         }

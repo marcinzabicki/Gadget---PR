@@ -38,9 +38,6 @@ const Service = ({ service, index, agent,  props }) => {
             
             <Modal
           isOpen={showModal}
-          // onAfterOpen={afterOpenModal}
-          // onRequestClose={closeModal}
-          // style={customStyles}
           ariaHideApp={false}
           className="agent-modal"
         >

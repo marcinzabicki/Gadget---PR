@@ -6,6 +6,7 @@ import '../MachineDetails.css'
 import { Link } from 'react-router-dom'
 import deadIcon from '../images/agent_is_dead.png'
 
+
 const MachineTile = (props) => {
 
     const [machineTileState, setMachineTileState] = useState({

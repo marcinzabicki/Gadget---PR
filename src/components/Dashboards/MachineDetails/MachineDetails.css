@@ -183,10 +183,8 @@ word-break: keep-all;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100%;
+    
 }
-
-
 
 .restart-button{
     width: 230px;
@@ -212,6 +210,30 @@ color: white;
 background-color: #38E18D;
 color:black;
 }
+/* =========================Login modal================= */
+.login-modal{
+    width: 300px;
+    height: 400px;
+    background-color: #313843;
+    padding-top:150px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: white;
+ }
+
+ .login-wrapper{
+     
+ }
+
+ .closeImage{
+     cursor: pointer;
+ }
+
+ .login-input{
+    margin: 10px;
+ }
+
 
 /* ======================home mobile */
     .label-mobile{
@@ -220,7 +242,6 @@ color:black;
     }
     .machine-tile-mobile-order{
         width: 5%;
-        
     }
     .machine-tile-mobile-name
     {

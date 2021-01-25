@@ -3,7 +3,7 @@ import Modal from 'react-modal';
 import LoginModal from './LoginModal'
 
 const Header = () => {
-    Modal.defaultStyles.overlay.backgroundColor = 'transparent';
+    Modal.defaultStyles.overlay.backgroundColor = '#2B3139';
 
     const [showModal, setShowModal] = useState(false);
     const showModalHandler = ()=>{

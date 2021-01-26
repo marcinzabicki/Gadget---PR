@@ -26,7 +26,7 @@ const MachineBar = (props) => {
           Services
         </MetricTile>
         <MetricTile values={props.disc} type="disc">
-          Disc space
+          Disk space
         </MetricTile>
       </div>
     </div>

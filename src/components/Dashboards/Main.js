@@ -63,6 +63,10 @@ const Dashboards = () => {
     };
 
     init();
+    return () => {
+      connection?.off("MachineHealthReceived");
+      connection?.off("ServiceStatusChanged");
+    };
   }, [connection]);
 
   const servicesPerPage = 10;

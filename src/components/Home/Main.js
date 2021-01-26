@@ -8,15 +8,9 @@ import { SignalRContext } from "../../utils/signalr-context";
 import { useWindowSize } from "../../Hooks";
 
 const Home = () => {
-  const [machineListState, setMachineListState] = useState([]);
+  const [machineList, setMachineList] = useState({});
   const connection = useContext(SignalRContext);
   const windowSize = useWindowSize();
-
-  useEffect(() => {
-    API.fetchMachineList().then((response) => {
-      setMachineListState(response.data);
-    });
-  }, []);
 
   function calculateMachineStatus(machine) {
     if (
@@ -33,65 +27,74 @@ const Home = () => {
   }
 
   useEffect(() => {
-    let isMounted = true;
+    let receivedInitialAPIdata = false;
     if (connection !== null) {
+      const init = async () => {
+        const response = await API.fetchMachineList();
+        let machines = {};
+        response.data.map((machine) => {
+          return (machines[machine.name] = machine);
+        });
+        setMachineList(machines);
+        receivedInitialAPIdata = true;
+      };
       connection.on("MachineHealthReceived", (response) => {
-        //MachineHealthReceived fix typo  MachineHealthRecived
-        const updated = [...machineListState];
-        const index = updated.findIndex((x) => x.name == response.agent);
-
-        updated[index].cpu = response.cpuPercentUsage;
-        updated[index].ram =
-          100 * (1 - response.memoryFree / response.memoryTotal);
-        updated[index].disc = `${Math.floor(
-          response.discOccupied
-        )}/${Math.floor(response.discTotal)}`;
-        updated[index].discPercentage = Math.floor(
-          response.discOccupied / response.discTotal
-        );
-        updated[
-          index
-        ].services = `${response.servicesRunning}/${response.servicesCount}`;
-        isMounted && setMachineListState(updated);
+        if (receivedInitialAPIdata)
+          setMachineList((prevState) => {
+            return {
+              ...prevState,
+              [response.agent]: {
+                name: response.agent,
+                cpu: response.cpuPercentUsage,
+                ram: 100 * (1 - response.memoryFree / response.memoryTotal),
+                disc: `${Math.floor(response.discOccupied)}/${Math.floor(
+                  response.discTotal
+                )}`,
+                services: `${response.servicesRunning}/${response.servicesCount}`,
+              },
+            };
+          });
       });
+      init();
     }
 
     return () => {
-      isMounted = false;
-      connection && connection.off("MachineHealthReceived");
+      connection?.off("MachineHealthReceived");
     };
-  }, [connection, machineListState]);
+  }, [connection]);
 
-  let machines = {};
-  windowSize <= 768
-    ? (machines = machineListState.map((m, i) => {
+  const getMachines = () => {
+    if (windowSize <= 768) {
+      return Object.keys(machineList).map((m, i) => {
         return (
           <MachineTileMobile
-            machine={m["name"]}
+            machine={machineList[m].name}
             key={i}
             order={i + 1}
-            color={calculateMachineStatus(m)}
-            machineAddress={m["address"]}
+            color={calculateMachineStatus(machineList[m])}
+            machineAddress={machineList[m].address}
           ></MachineTileMobile>
         );
-      }))
-    : (machines = machineListState.map((m, i) => {
-        return (
-          <MachineTile
-            machine={m["name"]}
-            cpu={m["cpu"]}
-            ram={m["ram"]}
-            disc={m["disc"]}
-            services={m["services"]}
-            key={i}
-            machineAddress={m["address"]}
-          ></MachineTile>
-        );
-      }));
+      });
+    }
+    return Object.keys(machineList).map((m, i) => {
+      return (
+        <MachineTile
+          machine={machineList[m].name}
+          cpu={machineList[m].cpu}
+          ram={machineList[m].ram}
+          disc={machineList[m].disc}
+          services={machineList[m].services}
+          key={i}
+          machineAddress={machineList[m].address}
+        ></MachineTile>
+      );
+    });
+  };
 
   return (
     <div className="home-container">
-      <div className="machine-tiles-container">{machines}</div>
+      <div className="machine-tiles-container">{getMachines()}</div>
       <Logs></Logs>
     </div>
   );

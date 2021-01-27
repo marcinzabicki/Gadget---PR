@@ -308,7 +308,6 @@ color:black;
         .log-item{
             margin: 4px;
             width: 50%;
-            margin-left: 100px;
         }
  
         header .log-button p{
@@ -320,6 +319,5 @@ color:black;
         .logs-table-row{
             display:flex;
             flex-wrap: wrap;
-            flex-direction: column;
         }
     }

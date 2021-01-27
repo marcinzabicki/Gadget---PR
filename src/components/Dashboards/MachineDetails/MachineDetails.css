@@ -1,5 +1,5 @@
 
-    .machine-tile{
+.machine-tile{
         background-color: #313843;
         border-radius: 3px;
         width: 279px;
@@ -8,7 +8,7 @@
         margin:10px 0 10px 0;
         padding: 14px 19px 27px 19px;
         margin:10px;
-    }
+}
 
 .metric-tile-container{
     display:flex;
@@ -88,7 +88,6 @@ svg path {
     border: none;
 }
 
-
 .metric-tile{
     background-color: #384456;
     border-radius: 3px;
@@ -167,6 +166,7 @@ word-break: keep-all;
 
 /* =========================Restart modal================= */
 
+
 .restart-modal{
    width: 400px;
    height: 300px;
@@ -183,7 +183,7 @@ word-break: keep-all;
     display: flex;
     justify-content: center;
     align-items: center;
-    
+    height: 100%;
 }
 
 .restart-button{
@@ -216,22 +216,43 @@ color:black;
     height: 400px;
     background-color: #313843;
     padding-top:150px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    
     color: white;
  }
 
- .login-wrapper{
-     
- }
+
 
  .closeImage{
      cursor: pointer;
+     opacity: 45%;
+ }
+
+ .login-modal-close-wrapper{
+    display: flex;
+    align-items: flex-end;
+    margin-left: 270px;
+    margin-top: -45px;
+ }
+
+ .login-modal-content-wrapper{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
  }
 
  .login-input{
     margin: 10px;
+ }
+
+ .log-modal-button{
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    text-transform: uppercase;
+    border-radius: 4px;
+    background-color: #de3143;
+    padding: 10px 30px;
+    cursor: pointer;
  }
 
 
@@ -287,7 +308,6 @@ color:black;
         .log-item{
             margin: 4px;
             width: 50%;
-            margin-left: 100px;
         }
  
         header .log-button p{
@@ -299,6 +319,5 @@ color:black;
         .logs-table-row{
             display:flex;
             flex-wrap: wrap;
-            flex-direction: column;
         }
     }

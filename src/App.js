@@ -1,11 +1,11 @@
-import { BrowserRouter, Switch, Route } from 'react-router-dom';
-import Home from './components/Home/Main';
-import Dashboards from './components/Dashboards/Main';
-import SignalRProvider from './utils/signalr-context'
+import { BrowserRouter, Switch, Route } from "react-router-dom";
+import Home from "./components/Home/Main";
+import Dashboards from "./components/Dashboards/Main";
+import SignalRProvider from "./utils/signalr-context";
 // import Inbox from './components/Inbox/Main';
 // import Products from './components/Products/Main';
 // import Invoices from './components/Invoices/Main';
-import Header from './components/Header';
+import Header from "./components/Header";
 // import Nav from './components/Nav';
 const App = () => {
   return (
@@ -33,6 +33,6 @@ const App = () => {
       </BrowserRouter>
     </SignalRProvider>
   );
-}
+};
 
 export default App;

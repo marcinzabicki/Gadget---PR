@@ -23,22 +23,84 @@ export class API {
     }
   }
 
-  static async stopService(serviceId) {
+  static async fetchLastEvents(number) {
     try {
       return await axios({
         method: "GET",
-        url: `${BASE_URL}/agents/${serviceId}/stop`,
+        url: `${BASE_URL}/agents/events/${number}`,
       });
     } catch (e) {
       console.log(e);
     }
   }
 
-  static async startService(serviceId) {
+  static async stopService(agent, service) {
+    try {
+      console.log(`${BASE_URL}/agents/${agent}/${service}`)
+      return await axios({
+        method: "POST",
+        url: `${BASE_URL}/agents/${agent}/${service}/stop`,
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  static async startService(agent, service) {
+    try {
+      console.log(`${BASE_URL}/agents/${agent}/${service}`)
+      return await axios({
+        method: "POST",
+        url: `${BASE_URL}/agents/${agent}/${service}/start`,
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  static async restartService(agent, service) {
+    try {
+      return await axios({
+        method: "POST",
+        url: `${BASE_URL}/agents/${agent}/${service}/restart`,
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  static async login(userName, password) {
+    try {
+      return await axios({
+        method: "POST",
+        url: `${BASE_URL}/auth/login`,
+        data:{userName:userName, password:password}
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  static async test() {
+    let token = localStorage.getItem('accessToken')
     try {
       return await axios({
         method: "GET",
-        url: `${BASE_URL}/agents/${serviceId}/start`,
+        url: `${BASE_URL}/auth/test`,
+        headers: {
+          Authorization: `Bearer ${token}`
+        } 
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  static async logout(login, password) {
+    try {
+      return await axios({
+        method: "POST",
+        url: `${BASE_URL}/logoutUrl`,
       });
     } catch (e) {
       console.log(e);

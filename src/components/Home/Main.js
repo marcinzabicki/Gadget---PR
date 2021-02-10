@@ -1,84 +1,103 @@
-import React, { useState, useEffect, useContext } from 'react'
-import MachineTile from '../Dashboards/MachineDetails/MachineTile/MachineTile'
-import '../Dashboards/MachineDetails/MachineDetails.css';
-//import Logs from '../Dashboards/Logs/Logs'
-import { API } from '../../utils/API'
-import { SignalRContext } from '../../utils/signalr-context';
+import React, { useState, useEffect, useContext } from "react";
+import MachineTile from "../Dashboards/MachineDetails/MachineTile/MachineTile";
+import MachineTileMobile from "../Dashboards/MachineDetails/MachineTile/MachineTileMobile";
+import "../Dashboards/MachineDetails/MachineDetails.css";
+import Logs from "../Dashboards/Logs/Logs";
+import { API } from "../../utils/API";
+import { SignalRContext } from "../../utils/signalr-context";
+import { useWindowSize } from "../../Hooks";
+
 const Home = () => {
+  const [machineList, setMachineList] = useState({});
+  const connection = useContext(SignalRContext);
+  const windowSize = useWindowSize();
 
-    const [machineListState, setMachineListState] = useState({
-        machines: [],
-        hubConnection: null
-    })
+  function calculateMachineStatus(machine) {
+    if (
+      machine.cpu > 0.7 ||
+      machine.ram > 0.75 ||
+      machine.discPercentage > 0.95
+    )
+      return "#E13849";
+    if (machine.cpu > 0.6 || machine.ram > 0.6 || machine.discPercentage > 0.7)
+      return "#F0AD4E";
+    if (machine.cpu > 0 || machine.ram > 0 || machine.discPercentage > 0)
+      return "#38E18D";
+    return "#4B4E75";
+  }
 
-    const connection = useContext(SignalRContext);
-
-
-    useEffect(() => {
-        API.fetchMachineList().then((response) => {
-            console.log(connection)
-
-            setMachineListState({
-                machines: response.data,
-                hubConnection: connection
-            });
+  useEffect(() => {
+    let receivedInitialAPIdata = false;
+    if (connection !== null) {
+      const init = async () => {
+        const response = await API.fetchMachineList();
+        let machines = {};
+        response.data.map((machine) => {
+          return (machines[machine.name] = machine);
         });
-        
-    }, []);
-
-    useEffect(() => {
-        connection?.start()
-            .then(() => console.log('Connection started!'))
-            .catch(err => console.log('Error while establishing connection :('));
-    }, [connection])
-
-    useEffect(() => {
-        if (machineListState.hubConnection !== null) {
-            machineListState.hubConnection.on("MachineHealthRecived", (response) => {
-                
-                let updated = [...machineListState.machines];
-                let index = updated.findIndex(x=>x.name==response.agent)
-               
-                updated[index].cpu = response.cpuPercentUsage;
-                updated[index].ram = 100*(1-(response.memoryFree/response.memoryTotal));
-                updated[index].disc = `${Math.floor(response.discOccupied)}/${Math.floor(response.discTotal)}`;
-                updated[index].services = `${response.servicesRunning}/${response.servicesCount}`
-                setMachineListState({
-                    machines: updated,
-                    hubConnection : machineListState.hubConnection
-                })
+        setMachineList(machines);
+        receivedInitialAPIdata = true;
+      };
+      connection.on("MachineHealthReceived", (response) => {
+        if (receivedInitialAPIdata)
+          setMachineList((prevState) => {
+            return {
+              ...prevState,
+              [response.agent]: {
+                name: response.agent,
+                cpu: response.cpuPercentUsage,
+                ram: 100 * (1 - response.memoryFree / response.memoryTotal),
+                disc: `${Math.floor(response.discOccupied)}/${Math.floor(
+                  response.discTotal
+                )}`,
+                services: `${response.servicesRunning}/${response.servicesCount}`,
+              },
+            };
           });
-        }
-    }, [machineListState.hubConnection]);
+      });
+      init();
+    }
 
-    const machines = machineListState.machines.map((m, i) => {
+    return () => {
+      connection?.off("MachineHealthReceived");
+    };
+  }, [connection]);
+
+  const getMachines = () => {
+    if (windowSize <= 768) {
+      return Object.keys(machineList).map((m, i) => {
         return (
-            <MachineTile 
-            machine = {m["name"]} 
-            cpu={m["cpu"]}  
-            ram={m["ram"]} 
-            disc={m["disc"]} 
-            services={m["services"]} 
+          <MachineTileMobile
+            machine={machineList[m].name}
             key={i}
-            machineAddress={m["address"]}>
-            </MachineTile>
-        )
-    })
+            order={i + 1}
+            color={calculateMachineStatus(machineList[m])}
+            machineAddress={machineList[m].address}
+          ></MachineTileMobile>
+        );
+      });
+    }
+    return Object.keys(machineList).map((m, i) => {
+      return (
+        <MachineTile
+          machine={machineList[m].name}
+          cpu={machineList[m].cpu}
+          ram={machineList[m].ram}
+          disc={machineList[m].disc}
+          services={machineList[m].services}
+          key={i}
+          machineAddress={machineList[m].address}
+        ></MachineTile>
+      );
+    });
+  };
 
-    // const tmpLogs = [
-    //     {time:"09:14:33", status:"[Information]", message:"Lorem ipsum dsadasdsa", service:"nmvsasdasd"},
-    //     {time:"09:14:33", status:"[Information]", message:"Lorem ipsum dsadasdsa", service:"nmvsasdasd"},
-    //     {time:"09:14:33", status:"[Information]", message:"Lorem ipsum dsadasdsa", service:"nmvsasdasd"},
-    //     {time:"09:14:33", status:"[Information]", message:"Lorem ipsum dsadasdsa", service:"nmvsasdasd"}
-    //   ]
-    return (
-        <div>
-        <div className="machine-tiles-container">
-            {machines}
-        </div>
-            {/* <Logs>{tmpLogs}</Logs> */}
-        </div>
-    );
-}
+  return (
+    <div className="home-container">
+      <div className="machine-tiles-container">{getMachines()}</div>
+      <Logs></Logs>
+    </div>
+  );
+};
 
 export default Home;

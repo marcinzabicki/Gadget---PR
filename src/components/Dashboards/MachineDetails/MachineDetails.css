@@ -1,17 +1,22 @@
 
-    .machine-tile{
+.machine-tile{
         background-color: #313843;
         border-radius: 3px;
         width: 279px;
         /* height: 279px; */
         color: white;
         margin:10px 0 10px 0;
-        padding: 14px 19px 27px 19px
-    }
+        padding: 14px 19px 27px 19px;
+        margin:10px;
+}
 
 .metric-tile-container{
     display:flex;
     justify-content: space-between;
+}
+
+.home-container{
+    width: 100%;
 }
 
 .machine-bar{
@@ -23,10 +28,6 @@
     padding: 27px 57px ;
     margin-bottom: 30px;
 }
-
-/* .machine-bar-label{
-
-} */
 
 .machine-bar-charts{
     display: flex;
@@ -87,7 +88,6 @@ svg path {
     border: none;
 }
 
-
 .metric-tile{
     background-color: #384456;
     border-radius: 3px;
@@ -120,9 +120,19 @@ svg path {
 
 .machine-tiles-container{
     display: flex;
-    justify-content: space-between;
+    justify-content: start;
     flex-wrap: wrap; /* flex + wrap klocki będą się zwijać w dół strony a nie po za stronę   */
   }
+
+  .dead-machine-tile{
+      display: flex;
+      justify-content: center;
+      padding-top: 25px;
+      opacity: 10%;
+  }
+
+
+/* log table ========================================================== */
 
   .log-table{
     background-color: #313843;
@@ -130,24 +140,187 @@ svg path {
     font-size: 14px;
     width: 100%;
     margin-top:20px;
-    /* padding: 14px 20px 19px 20px; */
+    border-radius: 3px;
   }
 
-  
-.log-table thead th{
-    color: #fff;
+.logs-table-row{
+    display: flex;
+    justify-content:space-between;
+    align-items: center;
+    border-bottom: 1px solid #495971;
+    padding: 10px;
+}
+
+.log-item{
+text-align: left;
+width: 20%;
+word-break: keep-all;
+}
+
+.header-item{
     font-size: 17px;
-    font-weight: 600;
     text-align: left;
-    padding: 14px 20px 10px 20px;
+    font-weight: 600;
+    width: 20%;
+}
+
+/* =========================Restart modal================= */
+
+
+.restart-modal{
+   width: 400px;
+   height: 300px;
+   background-color: #313843;
+   padding-top:150px;
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   color: white;
+}
+
+.agent-modal{
+    background-color: transparent;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+.restart-button{
+    width: 230px;
+    height: 60px;
+    text-align: center;
+    margin: 15px;
+    font-weight: 600;
+    font-size: 20px;
+    cursor: pointer;
+    border-radius: 4px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.restart-button-no{
+background-color: #E13849;
+color: white;
+}
+
+.restart-button-yes{
+background-color: #38E18D;
+color:black;
+}
+/* =========================Login modal================= */
+.login-modal{
+    width: 300px;
+    height: 400px;
+    background-color: #313843;
+    padding-top:150px;
+    
+    color: white;
+ }
+
+ .login-wrong-trial{
+     color:  #E13849;
+ }
+
+
+ .closeImage{
+     cursor: pointer;
+     opacity: 45%;
+ }
+
+ .login-modal-close-wrapper{
+    display: flex;
+    align-items: flex-end;
+    margin-left: 270px;
+    margin-top: -45px;
+ }
+
+ .login-modal-content-wrapper{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+ }
+
+ .login-input{
+    margin: 10px;
+ }
+
+ .log-modal-button{
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    text-transform: uppercase;
+    border-radius: 4px;
+    background-color: #de3143;
+    padding: 10px 30px;
+    cursor: pointer;
+ }
+
+
+/* ======================home mobile */
+    .label-mobile{
+        color:white;
+        justify-content: left;
+    }
+    .machine-tile-mobile-order{
+        width: 5%;
+    }
+    .machine-tile-mobile-name
+    {
+        width: 35%;
+        display: table-cell;
+        vertical-align: middle;
+    }
+    .machine-tile-mobile{
+        display: flex;
+        align-items: center;
+        height: 47px;
+        background-color: #313843;
+        width: 100%;
+        border-radius: 3px;
+        margin:10px;
+        color:white;
+        font-size: 12px;
     }
 
-    .log-table tbody tr td {
-        padding: 9px 20px 4px 20px;
-        background-color: #313843;
-        border-bottom: 1px solid #495971;
-        text-align: left;
+    .status-dot{
+        width: 18px;
+        height: 18px;
+        background-color:gray;
+      border-radius: 50%;
     }
-    .log-table tbody:last-of-type td{
-        padding-bottom: 20px;
+
+    @media (max-width:768px){
+        .machine-bar, .machine-bar-charts{
+            flex-direction: column;
+        }
+
+        .service-header input{
+            margin-top: 15px;
+        }
+
+          .logs-header{
+              display: none;
+          }
+          
+          .header-item{
+            display: none;
+        }
+        .log-item{
+            margin: 4px;
+            width: 50%;
+        }
+ 
+        header .log-button p{
+            font-size: 12px;
+            white-space: nowrap;
+            padding: 10px 10px;
+        }
+
+        .logs-table-row{
+            display:flex;
+            flex-wrap: wrap;
+        }
     }

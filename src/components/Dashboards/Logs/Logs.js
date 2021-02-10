@@ -1,41 +1,78 @@
-import React from 'react'
+import {useState, useEffect, useContext} from 'react'
+import { SignalRContext } from '../../../utils/signalr-context'
+import { API } from '../../../utils/API'
 
-const logs = (props) => {
-    const headers =
-        Object.keys(props.children[0]).map((k, i) => {
+
+
+const Logs = () => {
+
+    const connection = useContext(SignalRContext);
+    const [services, setServices] = useState([]);
+
+    useEffect(() => {
+        API.fetchLastEvents(10).then((response) => {
+          setServices(response.data)
+        });
+      }, []);
+
+      function formatDate(date, format) {
+        const map = {
+            mm: date.getMonth() + 1,
+            dd: date.getDate(),
+            yy: date.getFullYear().toString().slice(-2),
+            yyyy: date.getFullYear()
+        }
+    
+        return format.replace(/mm|dd|yy|yyy/gi, matched => map[matched])
+    }
+      
+
+    useEffect(() => {
+        if (connection !== null) {
+          connection.on("ServiceStatusChanged", (response) => {
+              let updated = [...services];
+              updated.unshift({agent:response.agent, service:response.name, createdAt:formatDate(Date.now(), 'hh:mm dd-MM-yyyy'), status:response.status});
+              setServices(updated.slice(0,10));
+          });
+        }
+        return function cleanup() {
+            connection && connection.off("ServiceStatusChanged")
+        }
+      }, [connection, services]);
+
+      if(services.length>0){
+        const headers =
+        Object.keys(services[0]).map((k, i) => {
             return (
-                <th key={i}>
+                <div className="header-item" key={i}>
                     {k}
-                </th>
+                </div>
             )
         })
     
-    const data = props.children.map((l, i)=>{
+    const data = services.map((l, i)=>{
             return (
-                <tbody key={i}>
-                    <tr >
-                    {Object.keys(props.children[0]).map((k,j)=>{
+                <div key={i} className="logs-table-row" >
+                    {Object.keys(services[0]).map((k,j)=>{
                         return(
-                            <td key={j}>
+                            <div className="log-item" key={j}>
                                 {l[k]}
-                            </td>
+                            </div>
                         )
                     })}
-                </tr>
-                </tbody>
+                </div>
             )
         })
-
     return (
-            <table className="log-table">
-               <thead>
-               <tr key={0}>
-                   {headers}
-                </tr>
-               </thead>
+            <div className="log-table">
+               <div className="logs-table-row logs-header">
+                    {headers}
+               </div>
                 {data}
-            </table>
-    )
+            </div>
+        )
+    }
+      return null;
 }
 
-export default logs;
+export default Logs;

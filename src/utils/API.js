@@ -69,11 +69,27 @@ export class API {
     }
   }
 
-  static async login(login, password) {
+  static async login(userName, password) {
     try {
       return await axios({
         method: "POST",
-        url: `${BASE_URL}/loginUrl`,
+        url: `${BASE_URL}/auth/login`,
+        data:{userName:userName, password:password}
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  static async test() {
+    let token = localStorage.getItem('accessToken')
+    try {
+      return await axios({
+        method: "GET",
+        url: `${BASE_URL}/auth/test`,
+        headers: {
+          Authorization: `Bearer ${token}`
+        } 
       });
     } catch (e) {
       console.log(e);

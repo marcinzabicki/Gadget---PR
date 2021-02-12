@@ -1,0 +1,13 @@
+.service-basic-info{
+    color:white;
+    width:30%
+}
+
+.service-info-row{
+    display: flex;
+    justify-content: space-between;
+}
+
+.service-info-key {
+    font-weight: 600;
+}

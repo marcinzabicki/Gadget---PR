@@ -6,6 +6,9 @@ import Logs from "../Dashboards/Logs/Logs";
 import { API } from "../../utils/API";
 import { SignalRContext } from "../../utils/signalr-context";
 import { useWindowSize } from "../../Hooks";
+import ServiceDetails from "../ServiceDetails/Main";
+
+
 
 const Home = () => {
   const [machineList, setMachineList] = useState({});
@@ -96,6 +99,7 @@ const Home = () => {
     <div className="home-container">
       <div className="machine-tiles-container">{getMachines()}</div>
       <Logs></Logs>
+      <ServiceDetails></ServiceDetails>
     </div>
   );
 };

@@ -44,8 +44,8 @@ const MachineTile = (props) => {
         show: event.target.value
         })
     }
-
-    if(props.cpu>0 && ((Date.now() - timer<10000))){
+    //TODO fix dead tile
+    // if(props.cpu>0 && ((Date.now() - timer<10000))){
         return (
             <div className="machine-tile">
         <Link to={`/${props.machine}`}>
@@ -62,7 +62,7 @@ const MachineTile = (props) => {
         </Chart>
         </div>
         )
-    }
+    // }
     return (
         
         <div className="machine-tile">

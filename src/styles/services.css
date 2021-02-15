@@ -30,7 +30,8 @@
     margin-bottom: 9px;
     padding: 14px 12px 14px 31px;
 }
-.service .text {
+.service .text,
+.service .link {
     color: #fff;
     font-size: 14px;
     overflow: hidden;

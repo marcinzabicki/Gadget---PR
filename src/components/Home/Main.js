@@ -6,11 +6,22 @@ import Logs from "../Dashboards/Logs/Logs";
 import { API } from "../../utils/API";
 import { SignalRContext } from "../../utils/signalr-context";
 import { useWindowSize } from "../../Hooks";
+import Modal from 'react-modal';
+import LoginModal from '../LoginModal';
 
 const Home = () => {
   const [machineList, setMachineList] = useState({});
   const connection = useContext(SignalRContext);
   const windowSize = useWindowSize();
+  const [loginStatus, setLoginStatus] = useState(false);
+
+  Modal.defaultStyles.overlay.backgroundColor = '#2B3139';
+
+  const [showModal, setShowModal] = useState(false);
+  const showModalHandler = () => {
+    let isShowing = showModal;
+    setShowModal(!isShowing);
+  };
 
   function calculateMachineStatus(machine) {
     if (
@@ -91,7 +102,14 @@ const Home = () => {
       );
     });
   };
-
+  API.test().then((response) => {
+    if (response?.status == "200") {
+      setLoginStatus(true)
+    }
+  })
+  if (!loginStatus) {
+    return <LoginModal decline={showModalHandler}></LoginModal>
+  }
   return (
     <div className="home-container">
       <div className="machine-tiles-container">{getMachines()}</div>

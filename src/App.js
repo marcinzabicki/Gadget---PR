@@ -1,4 +1,4 @@
-import { BrowserRouter, Switch, Route } from "react-router-dom";
+import { BrowserRouter, Route } from "react-router-dom";
 import Home from "./components/Home/Main";
 import Dashboards from "./components/Dashboards/Main";
 import SignalRProvider from "./utils/signalr-context";
@@ -18,8 +18,11 @@ const App = () => {
             <Route exact path="/">
               <Home />
             </Route>
-            <Route path="/:machineName">
+            <Route exact path="/:machineName">
               <Dashboards />
+            </Route>
+            <Route path="/:machineName/:serviceName">
+              <Home />
             </Route>
             {/* <Switch>
               <Route exact path="/" component={Home} />

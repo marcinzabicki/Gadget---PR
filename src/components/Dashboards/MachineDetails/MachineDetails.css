@@ -216,7 +216,7 @@ color:black;
     height: 400px;
     background-color: #313843;
     padding-top:150px;
-    
+    margin: 0 auto;
     color: white;
  }
 
@@ -322,5 +322,10 @@ color:black;
         .logs-table-row{
             display:flex;
             flex-wrap: wrap;
+        }
+        .login-modal-close-wrapper {
+            margin: 0;
+            justify-content: flex-end;
+            padding-right: 10px;
         }
     }

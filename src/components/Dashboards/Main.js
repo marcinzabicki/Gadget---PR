@@ -11,6 +11,8 @@ import { API } from "../../utils/API";
 import { SignalRContext } from "../../utils/signalr-context";
 import Logs from "../Dashboards/Logs/Logs";
 import ServiceHeaderMobile from "./ServiceHeaderMobile";
+import Modal from 'react-modal';
+import LoginModal from '../LoginModal';
 
 const Dashboards = () => {
   const windowSize = useWindowSize();
@@ -20,6 +22,7 @@ const Dashboards = () => {
   const [connectionState, setConnectionState] = useState("");
   const [machineAddress, setMachineAddress] = useState("");
   const connection = useContext(SignalRContext);
+  const [loginStatus, setLoginStatus] = useState(false);
 
   useEffect(() => {
     const init = async () => {
@@ -76,6 +79,14 @@ const Dashboards = () => {
     setActivePage(pageNumber);
   };
 
+  Modal.defaultStyles.overlay.backgroundColor = '#2B3139';
+
+  const [showModal, setShowModal] = useState(false);
+  const showModalHandler = () => {
+    let isShowing = showModal;
+    setShowModal(!isShowing);
+  };
+
   // search bar
 
   const [searchTerm, setSearchTerm] = useState("");
@@ -95,6 +106,16 @@ const Dashboards = () => {
     indexOfLastService
   );
   const moreResults = searchResults.length > servicesPerPage;
+
+  API.test().then((response) => {
+    if (response?.status == "200") {
+      setLoginStatus(true)
+    }
+  })
+  if (!loginStatus) {
+    return <LoginModal decline={showModalHandler}></LoginModal>
+  }
+
   if (windowSize <= 768) {
     return (
       <>
@@ -112,15 +133,15 @@ const Dashboards = () => {
                   key={index}
                   service={service}
                   index={index}
-                  machineName={machineName}
+                  agent={machineName}
                   connection={connection}
                   connectionState={connectionState}
                 />
               );
             })
           ) : (
-            <p className="warning-text">No services detected</p>
-          )}
+              <p className="warning-text">No services detected</p>
+            )}
 
           {moreResults && (
             <Pagination
@@ -170,8 +191,8 @@ const Dashboards = () => {
           );
         })
       ) : (
-        <p className="warning-text">No services detected</p>
-      )}
+          <p className="warning-text">No services detected</p>
+        )}
 
       {moreResults && (
         <Pagination

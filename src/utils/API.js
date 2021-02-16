@@ -3,20 +3,28 @@ import { BASE_URL } from "../config";
 
 export class API {
   static async fetchMachineList() {
+    let token = localStorage.getItem('accessToken');
     try {
       return await axios({
         method: "GET",
         url: `${BASE_URL}/agents`,
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
       });
     } catch (e) {
       console.log(e);
     }
   }
   static async fetchServicesList(machineId) {
+    let token = localStorage.getItem('accessToken');
     try {
       return await axios({
         method: "GET",
         url: `${BASE_URL}/agents/${machineId}`,
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
       });
     } catch (e) {
       console.log(e);
@@ -24,10 +32,14 @@ export class API {
   }
 
   static async fetchLastEvents(number) {
+    let token = localStorage.getItem('accessToken');
     try {
       return await axios({
         method: "GET",
         url: `${BASE_URL}/agents/events/${number}`,
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
       });
     } catch (e) {
       console.log(e);
@@ -74,7 +86,7 @@ export class API {
       return await axios({
         method: "POST",
         url: `${BASE_URL}/auth/login`,
-        data:{userName:userName, password:password}
+        data: { userName: userName, password: password }
       });
     } catch (e) {
       console.log(e);
@@ -82,14 +94,14 @@ export class API {
   }
 
   static async test() {
-    let token = localStorage.getItem('accessToken')
+    let token = localStorage.getItem('accessToken');
     try {
       return await axios({
         method: "GET",
         url: `${BASE_URL}/auth/test`,
         headers: {
           Authorization: `Bearer ${token}`
-        } 
+        }
       });
     } catch (e) {
       console.log(e);

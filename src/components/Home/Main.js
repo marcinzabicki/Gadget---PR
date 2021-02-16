@@ -116,7 +116,6 @@ const Home = () => {
     <div className="home-container">
       <div className="machine-tiles-container">{getMachines()}</div>
       <Logs></Logs>
-      <ServiceDetails></ServiceDetails>
     </div>
   );
 };

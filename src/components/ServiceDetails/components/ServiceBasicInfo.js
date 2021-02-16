@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
+import Helpers from '../../../utils/Helpers';
 //import { API } from "../../utils/API";
 
      //     const useEffect(() =>{
@@ -10,17 +11,12 @@ import React, { useState, useEffect, useContext } from "react";
         const service = 
             {serviceName:"Lucek service", LogonAs:"Lucjano", description: "Usługa do karmienia piesełów", status: "Running", };
 
-        function unCamel(str){
-            let result = str.replace( /([A-Z])/g, " $1" );
-            return result.charAt(0).toUpperCase() + result.slice(1);
-        };
-
         const label =
         Object.keys(service).map((k, i) => {
             return (
-                <div className="service-info-row">
-                    <div className="service-info-key" key={`key-${i}`}>
-                        {`${unCamel(k)}:`}
+                <div className="service-info-row" key={`key-${i}`}>
+                    <div className="service-info-key">
+                        {`${Helpers.unCamel(k)}:`}
                     </div>
                     <div className="service-info-value" key={`value-${i}`}>
                         {service[k]}
@@ -31,7 +27,7 @@ import React, { useState, useEffect, useContext } from "react";
 
 
         return (
-        <div className="service-basic-info">     
+        <div className="service-basic-info tile">     
             {label}
         </div>
     )};

@@ -8,7 +8,7 @@ export const useSignalRConnection = (connectionUrl) => {
     useEffect(() => {
         if (connection === null) {
             connection.current = new HubConnectionBuilder()
-                .withUrl('https://localhost:5001/gadget')
+                .withUrl('http://localhost:5000/gadget')
                 .configureLogging(LogLevel.Critical)
                 .withAutomaticReconnect()
                 .build()

@@ -6,6 +6,7 @@ import MachineBar from "../Dashboards/MachineDetails/MachineBar/MachineBar"
 import NotificationCharts from "./components/NotificationsChart";
 import ServiceEventsTable from "./components/ServiceEventsTable";
 import ServiceBasicInfo from "./components/ServiceBasicInfo"
+import NotificationSettings from "./components/NotificationsSettings"
 import './components/ServiceDetails.css';
 
 
@@ -23,14 +24,14 @@ return (
           disc={x.disc}
           services={x.services}
         ></MachineBar>
-        <div>
-          <div>
-              <ServiceBasicInfo></ServiceBasicInfo>
-              <NotificationCharts></NotificationCharts>
-          </div>
-          <div>
-            {/* tutaj panel ustawień */}
-          </div>
+        <div className="label-settings-container">
+            <div className="label-chart-container">
+                <ServiceBasicInfo></ServiceBasicInfo>
+                <NotificationCharts></NotificationCharts>
+            </div>
+            <div>
+              <NotificationSettings></NotificationSettings>
+            </div>
         </div>
         <ServiceEventsTable></ServiceEventsTable>
 </div>

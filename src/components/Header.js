@@ -25,7 +25,7 @@ const Header = () => {
                 <h1>Gadget - PR</h1>
             </div>
             <div className="log-button">
-                <p onClick={testClick}>Log in</p>
+                <p onClick={testClick}>Test</p>
             </div>
             <div className="log-button">
                 <p onClick={showModalHandler}>Log in</p>

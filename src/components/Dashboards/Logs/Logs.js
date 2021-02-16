@@ -11,7 +11,9 @@ const Logs = () => {
 
     useEffect(() => {
         API.fetchLastEvents(10).then((response) => {
-          setServices(response.data)
+          if (response) {
+            setServices(response.data)
+          }
         });
       }, []);
 

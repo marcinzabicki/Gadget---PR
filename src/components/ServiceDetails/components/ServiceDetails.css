@@ -1,0 +1,86 @@
+span, label, h1, .service-basic-info {
+    color:white;
+}
+
+.tile{
+    border-radius: 3px;
+    background-color: #313843;
+}
+
+input[type='checkbox'] {  
+    padding: 10px;
+}
+
+.service-basic-info{
+    width:610px; 
+    padding: 5px;
+}
+
+.label-chart-container{
+    display: flex;
+    flex-direction: column;
+}
+
+.label-settings-container{
+    display: flex;
+    justify-content: space-between;
+}
+
+.service-details-chart{
+    
+    margin-top: 10px;
+    margin-bottom: 10px;
+    width: 620px;
+}
+
+.service-info-row{
+    display: flex;
+    justify-content: space-between;
+}
+
+.service-info-key {
+    font-weight: 600;
+}
+
+
+
+/* notification settings panel  */
+
+.notifications-settings{
+width: 550px;
+}
+
+.notifications-sink-settings{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.notifications-sink-parameters{
+    display: flex;
+}
+
+
+.notifications-levels{
+    display: flex;
+}
+
+.level-item{
+    margin: 5px;
+}
+
+.apply-btn{
+    color:#2A3038;
+    font-size: 14px;
+    font-weight: 600;
+    text-transform: uppercase;
+    border-radius: 4px;
+    background-color: #38E18D;
+    padding: 10px 30px;
+    cursor: pointer;
+}
+
+.sink-input{
+    margin:5px;
+    width: 100px;
+}

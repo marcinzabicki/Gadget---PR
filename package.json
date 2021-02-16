@@ -14,6 +14,7 @@
     "react-modal": "^3.12.1",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.1",
+    "react-switch": "^6.0.0",
     "recharts": "^1.8.5",
     "signalr-client-react": "^0.2.1",
     "web-vitals": "^0.2.4"

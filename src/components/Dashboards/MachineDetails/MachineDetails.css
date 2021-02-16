@@ -1,5 +1,5 @@
 
-    .machine-tile{
+.machine-tile{
         background-color: #313843;
         border-radius: 3px;
         width: 279px;
@@ -8,7 +8,7 @@
         margin:10px 0 10px 0;
         padding: 14px 19px 27px 19px;
         margin:10px;
-    }
+}
 
 .metric-tile-container{
     display:flex;
@@ -88,7 +88,6 @@ svg path {
     border: none;
 }
 
-
 .metric-tile{
     background-color: #384456;
     border-radius: 3px;
@@ -154,17 +153,19 @@ svg path {
 
 .log-item{
 text-align: left;
-/* width: 15%; */
+width: 20%;
+word-break: keep-all;
 }
 
-.header-item{
+.header-item {
     font-size: 17px;
     text-align: left;
     font-weight: 600;
-    /* width: 15%; */
+    width: 20%;
 }
 
 /* =========================Restart modal================= */
+
 
 .restart-modal{
    width: 400px;
@@ -182,6 +183,7 @@ text-align: left;
     display: flex;
     justify-content: center;
     align-items: center;
+    height: 100%;
 }
 
 .restart-button{
@@ -208,6 +210,54 @@ color: white;
 background-color: #38E18D;
 color:black;
 }
+/* =========================Login modal================= */
+.login-modal{
+    width: 300px;
+    height: 400px;
+    background-color: #313843;
+    padding-top:150px;
+    margin: 0 auto;
+    color: white;
+ }
+
+ .login-wrong-trial{
+     color:  #E13849;
+ }
+
+
+ .closeImage{
+     cursor: pointer;
+     opacity: 45%;
+ }
+
+ .login-modal-close-wrapper{
+    display: flex;
+    align-items: flex-end;
+    margin-left: 270px;
+    margin-top: -45px;
+ }
+
+ .login-modal-content-wrapper{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+ }
+
+ .login-input{
+    margin: 10px;
+ }
+
+ .log-modal-button{
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    text-transform: uppercase;
+    border-radius: 4px;
+    background-color: #de3143;
+    padding: 10px 30px;
+    cursor: pointer;
+ }
+
 
 /* ======================home mobile */
     .label-mobile{
@@ -216,7 +266,6 @@ color:black;
     }
     .machine-tile-mobile-order{
         width: 5%;
-        
     }
     .machine-tile-mobile-name
     {
@@ -252,14 +301,6 @@ color:black;
             margin-top: 15px;
         }
 
-       
-    }
-
-    @media(max-width:400px){
-        .log-table{
-            font-size: 10px;
-          }
-
           .logs-header{
               display: none;
           }
@@ -268,7 +309,8 @@ color:black;
             display: none;
         }
         .log-item{
-            margin: 2px;   
+            margin: 4px;
+            width: 50%;
         }
  
         header .log-button p{
@@ -280,8 +322,10 @@ color:black;
         .logs-table-row{
             display:flex;
             flex-wrap: wrap;
-            flex-direction: column
-            
+        }
+        .login-modal-close-wrapper {
+            margin: 0;
+            justify-content: flex-end;
+            padding-right: 10px;
         }
     }
-    

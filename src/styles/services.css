@@ -10,7 +10,7 @@
     font-size: 17px;
     font-weight: 600;
 }
-.service-header input {
+input[type=text], .service-header input {
     color: #fff;
     font-size: 15px;
     border-radius: 4px;
@@ -30,7 +30,8 @@
     margin-bottom: 9px;
     padding: 14px 12px 14px 31px;
 }
-.service .text {
+.service .text,
+.service .link {
     color: #fff;
     font-size: 14px;
     overflow: hidden;

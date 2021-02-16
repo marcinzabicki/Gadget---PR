@@ -8,62 +8,69 @@ import "../Dashboards/MachineDetails/MachineDetails.css";
 import { useParams } from "react-router-dom";
 import { useWindowSize } from "../../Hooks";
 import { API } from "../../utils/API";
-import { SignalRContext } from '../../utils/signalr-context'
-import Logs from '../Dashboards/Logs/Logs'
+import { SignalRContext } from "../../utils/signalr-context";
+import Logs from "../Dashboards/Logs/Logs";
 import ServiceHeaderMobile from "./ServiceHeaderMobile";
-
+import Modal from 'react-modal';
+import LoginModal from '../LoginModal';
 
 const Dashboards = () => {
   const windowSize = useWindowSize();
   const { machineName } = useParams();
-  const [machineState, setMachineState] = useState([]);
+  const [machineState, setMachineState] = useState({});
   const [services, setServices] = useState([]);
   const [connectionState, setConnectionState] = useState("");
   const [machineAddress, setMachineAddress] = useState("");
-  const [sortBy, setSortBy] = useState("");
   const connection = useContext(SignalRContext);
+  const [loginStatus, setLoginStatus] = useState(false);
 
   useEffect(() => {
-    API.fetchServicesList(machineName).then((response) => {
-      setServices(response.data);
-    });
-  }, []);
+    const init = async () => {
+      if (connection !== null) {
+        await Promise.all([
+          API.fetchServicesList(machineName).then((response) => {
+            setServices(response.data);
+          }),
+          API.fetchMachineList().then((response) => {
+            let ipAddress = response.data.filter(
+              (ms) => ms.name == machineName
+            )[0];
+            setMachineAddress(ipAddress.address);
+          }),
+        ]);
+        connection.on("MachineHealthReceived", (response) => {
+          if (response.agent === machineName) {
+            let updated = {};
+            updated.cpu = response.cpuPercentUsage;
+            updated.ram = Math.floor(
+              100 * (1 - response.memoryFree / response.memoryTotal)
+            );
+            updated.disc = `${Math.floor(response.discOccupied)}/${Math.floor(
+              response.discTotal
+            )}`;
+            updated.services = `${response.servicesRunning}/${response.servicesCount}`;
+            setMachineState(updated);
+          }
+        });
+        connection.on("ServiceStatusChanged", (response) => {
+          if (response.agent === machineName) {
+            let updated = [...services];
+            let indexOfChangedService = updated.findIndex(
+              (x) => x.name.toLowerCase() === response.name.toLowerCase()
+            );
+            updated[indexOfChangedService].status = response.status;
+            setServices(updated);
+          }
+        });
+      }
+    };
 
-  useEffect(() => {
-    if (connection !== null) {
-      connection.on("MachineHealthRecived", (response) => {
-        if (response.agent === machineName) {
-          let updated = {};
-          updated.cpu = response.cpuPercentUsage;
-          updated.ram = Math.floor(100 * (1 - (response.memoryFree / response.memoryTotal)));
-          updated.disc = `${Math.floor(response.discOccupied)}/${Math.floor(response.discTotal)}`;
-          updated.services = `${response.servicesRunning}/${response.servicesCount}`;
-          setMachineState(updated);
-        }
-      });
-    }
+    init();
+    return () => {
+      connection?.off("MachineHealthReceived");
+      connection?.off("ServiceStatusChanged");
+    };
   }, [connection]);
-
-  useEffect(() => {
-    if (connection !== null && services.length > 0) {
-      connection.on("ServiceStatusChanged", (response) => {
-        if (response.agent === machineName) {
-          let updated = [...services];
-          let indexOfChangedService = updated.findIndex(x => x.name.toLowerCase() === response.name.toLowerCase());
-          updated[indexOfChangedService].status = response.status;
-          setServices(updated);
-        }
-      });
-    }
-  }, [connection, services]);
-
-
-  useEffect(() => {
-    API.fetchMachineList().then((response) => {
-      let ipAddress = response.data.filter((ms) => ms.name == machineName)[0];
-      setMachineAddress(ipAddress.address);
-    });
-  }, []);
 
   const servicesPerPage = 10;
   const [activePage, setActivePage] = useState(1);
@@ -72,10 +79,13 @@ const Dashboards = () => {
     setActivePage(pageNumber);
   };
 
-  // sorting
-  const handleSortingBy = (sortBy) => {
-    setSortBy(sortBy);
-  }
+  Modal.defaultStyles.overlay.backgroundColor = '#2B3139';
+
+  const [showModal, setShowModal] = useState(false);
+  const showModalHandler = () => {
+    let isShowing = showModal;
+    setShowModal(!isShowing);
+  };
 
   // search bar
 
@@ -89,8 +99,6 @@ const Dashboards = () => {
     setSearchResults(results);
   }, [searchTerm, services]);
 
-
-
   const indexOfLastService = activePage * servicesPerPage;
   const indexOfFirstService = indexOfLastService - servicesPerPage;
   const currentServices = searchResults.slice(
@@ -98,45 +106,56 @@ const Dashboards = () => {
     indexOfLastService
   );
   const moreResults = searchResults.length > servicesPerPage;
+
+  API.test().then((response) => {
+    if (response?.status == "200") {
+      setLoginStatus(true)
+    }
+  })
+  if (!loginStatus) {
+    return <LoginModal decline={showModalHandler}></LoginModal>
+  }
+
   if (windowSize <= 768) {
     return (
       <>
         <div>
-        <ServiceHeaderMobile
-                    setSearchTerm={setSearchTerm}
-                    searchTerm={searchTerm}
-                    setActivePage={setActivePage}
-                />
+          <ServiceHeaderMobile
+            setSearchTerm={setSearchTerm}
+            searchTerm={searchTerm}
+            setActivePage={setActivePage}
+          />
           {currentServices && currentServices.length > 0 ? (
             currentServices.map((service, index) => {
               return (
-                
                 //tutaj zamienilem hubConnection na connection ale takie przekazywanie polaczenia przez propsy nie jest potrzebne, teraz mozna uzywac useContext w komponentach
-                <ServiceMobile 
-                  key={index} 
-                  service={service} 
-                  index={index} 
-                  machineName={machineName} 
-                  connection={connection} 
-                  connectionState={connectionState} 
+                <ServiceMobile
+                  key={index}
+                  service={service}
+                  index={index}
+                  agent={machineName}
+                  connection={connection}
+                  connectionState={connectionState}
                 />
-              )
+              );
             })
           ) : (
               <p className="warning-text">No services detected</p>
             )}
 
-          {moreResults && <Pagination
-            activePage={activePage}
-            itemsCountPerPage={servicesPerPage}
-            totalItemsCount={searchResults.length}
-            pageRangeDisplayed={3}
-            onChange={handlePageChange}
-            prevPageText="<"
-            nextPageText=">"
-            firstPageText=".."
-            lastPageText=".."
-          />}
+          {moreResults && (
+            <Pagination
+              activePage={activePage}
+              itemsCountPerPage={servicesPerPage}
+              totalItemsCount={searchResults.length}
+              pageRangeDisplayed={3}
+              onChange={handlePageChange}
+              prevPageText="<"
+              nextPageText=">"
+              firstPageText=".."
+              lastPageText=".."
+            />
+          )}
         </div>
       </>
     );
@@ -162,7 +181,14 @@ const Dashboards = () => {
 
       {currentServices && currentServices.length > 0 ? (
         currentServices.map((service, index) => {
-          return <Service key={index} service={service} index={index} agent={machineName} />;
+          return (
+            <Service
+              key={index}
+              service={service}
+              index={index}
+              agent={machineName}
+            />
+          );
         })
       ) : (
           <p className="warning-text">No services detected</p>
@@ -181,9 +207,8 @@ const Dashboards = () => {
           lastPageText=".."
         />
       )}
-      {/* <Logs></Logs> */}
+      <Logs></Logs>
     </div>
-    
   );
 };
 

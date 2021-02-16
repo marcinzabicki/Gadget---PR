@@ -1,5 +1,7 @@
 export const SIGNALR_URL = "http://localhost:5000/gadget";
 
+export const NOTIFICATIONS_URL = "http://localhost:5000/gadget";
+
 export const BASE_URL = "http://localhost:5001";
 
 

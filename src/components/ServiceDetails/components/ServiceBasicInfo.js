@@ -8,18 +8,17 @@ import Helpers from '../../../utils/Helpers';
     
     const ServiceBasicInfo = (props)=>{
    
-        const service = 
-            {serviceName:"Lucek service", LogonAs:"Lucjano", description: "Usługa do karmienia piesełów", status: "Running", };
+        
 
         const label =
-        Object.keys(service).map((k, i) => {
+        Object.keys(props.serviceInfo).map((k, i) => {
             return (
                 <div className="service-info-row" key={`key-${i}`}>
                     <div className="service-info-key">
                         {`${Helpers.unCamel(k)}:`}
                     </div>
                     <div className="service-info-value" key={`value-${i}`}>
-                        {service[k]}
+                        {props.serviceInfo[k]}
                     </div>
                 </div>
         )});

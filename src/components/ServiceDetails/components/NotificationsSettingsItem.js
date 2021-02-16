@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useContext } from "react";
 //import { API } from "../../utils/API";
 
-     //     const useEffect(() =>{
-    //         let tmp = 0;
-    //     },[]);
+// useEffect(() => {
+    
+// });
     
     const NotificationSettingsItem = (props)=>{
    

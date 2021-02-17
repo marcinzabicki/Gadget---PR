@@ -10,31 +10,30 @@ import NotificationSettings from "./components/NotificationsSettings"
 import './components/ServiceDetails.css';
 
 
-const ServiceDetails = ()=>{
-  const x = {cpu:31, ram :45, disc :"45/345", services : "13/34"}
+const ServiceDetails = () => {
+  const x = { cpu: 31, ram: 45, disc: "45/345", services: "13/34" }
   const machineName = "Lucek"
   const machineAddress = "Kobielska"
-return (
+  return (
     <div>
-        <MachineBar
-          machine={machineName}
-          address={machineAddress}
-          cpu={x.cpu}
-          ram={x.ram}
-          disc={x.disc}
-          services={x.services}
-        ></MachineBar>
-        <div className="label-settings-container">
-            <div className="label-chart-container">
-                <ServiceBasicInfo></ServiceBasicInfo>
-                <NotificationCharts></NotificationCharts>
-            </div>
-            <div>
-              <NotificationSettings></NotificationSettings>
-            </div>
+      <MachineBar
+        machine={machineName}
+        address={machineAddress}
+        cpu={x.cpu}
+        ram={x.ram}
+        disc={x.disc}
+        services={x.services}
+      ></MachineBar>
+      <div className="label-settings-container">
+        <div className="label-chart-container">
+          <ServiceBasicInfo></ServiceBasicInfo>
+          <NotificationCharts></NotificationCharts>
         </div>
-        <ServiceEventsTable></ServiceEventsTable>
-</div>
-)}
+        <NotificationSettings></NotificationSettings>
+      </div>
+      <ServiceEventsTable></ServiceEventsTable>
+    </div>
+  )
+}
 
 export default ServiceDetails;

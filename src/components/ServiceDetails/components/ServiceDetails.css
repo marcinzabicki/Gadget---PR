@@ -11,64 +11,101 @@ input[type='checkbox'] {
     padding: 10px;
 }
 
-.service-basic-info{
-    width:610px; 
-    padding: 5px;
-}
-
 .label-chart-container{
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
+    width: 47%;
 }
 
 .label-settings-container{
     display: flex;
     justify-content: space-between;
-}
-
-.service-details-chart{
-    
-    margin-top: 10px;
-    margin-bottom: 10px;
-    width: 620px;
+    margin-bottom: 30px;
 }
 
 .service-info-row{
     display: flex;
-    justify-content: space-between;
+    margin: 9px 0;
 }
 
 .service-info-key {
+    font-size: 16px;
     font-weight: 600;
+    width: 30%;
+}
+.service-info-value {
+    font-size: 14px;
 }
 
-
+.service-details-chart {
+    height: 300px;
+}
+.service-details-chart text {
+    font-size: 8px;
+}
 
 /* notification settings panel  */
 
 .notifications-settings{
-width: 550px;
+    width: 47%;
+    padding: 20px 20px 20px 30px;
+}
+
+.notifications-settings > h1 {
+    font-size: 25px;
+    font-weight: 600;
+    margin-bottom: 15px;
 }
 
 .notifications-sink-settings{
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    margin: 15px 0;
+}
+
+.notifications-sink-settings h1 {
+    font-size: 17px;
+    font-weight: 600;
+    width: 20%;
+}
+
+.notifications-sink-settings > div:first-of-type {
+    width: 15%;
 }
 
 .notifications-sink-parameters{
     display: flex;
+    justify-content: space-between;
+    width: 65%;
 }
 
+.notifications-sink-parameters div {
+    width: 48%;
+}
+
+.notifications-sink-parameters input {
+    width: 100%;
+}
 
 .notifications-levels{
     display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 30px;
 }
 
 .level-item{
-    margin: 5px;
+    margin: 5px 15px 5px 0;
+    display: flex;
+    align-items: center;
 }
-
+.level-item label {
+    margin-left: 5px;
+}
+.apply-btn-wrapper {
+    display: flex;
+    justify-content: flex-end;
+}
 .apply-btn{
     color:#2A3038;
     font-size: 14px;
@@ -76,11 +113,69 @@ width: 550px;
     text-transform: uppercase;
     border-radius: 4px;
     background-color: #38E18D;
-    padding: 10px 30px;
+    padding: 5px 40px;
     cursor: pointer;
+    margin-top: 40px;
 }
 
 .sink-input{
     margin:5px;
     width: 100px;
+}
+
+@media (max-width: 768px) {
+    .label-chart-container {
+        width: 100%;
+        background: #313843;
+        padding: 16px 13px;
+    }
+    .service-details-chart {
+        display: none;
+    }
+    .service-info-key,
+    .service-info-value {
+        font-size: 13px;
+    }
+    .service-info-value {
+        margin-left: 15px;
+    }
+    .label-settings-container {
+        flex-direction: column;
+    }
+    .notifications-settings {
+        width: 100%;
+        padding: 17px 25px;
+        margin-top: 35px;
+    }
+    .notifications-settings > h1 {
+        text-align: center;
+    }
+    .level-item label {
+        font-size: 14px;
+    }
+    .apply-btn-wrapper {
+        justify-content: center;
+    }
+    .apply-btn {
+        padding: 5px 25px;
+        color: #fff;
+        margin-top: 20px;
+    }
+    .notifications-sink-settings {
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+    .notifications-sink-parameters {
+        width: 100%;
+        flex-direction: column;
+    }
+    .notifications-sink-parameters div {
+        width: 100%;
+    }
+    .notifications-sink-settings h1 {
+        margin-bottom: 10px;
+    }
+    .notifications-sink-settings > div:first-of-type {
+        margin-bottom: 10px;
+    }
 }

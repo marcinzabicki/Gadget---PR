@@ -169,4 +169,15 @@ export class API {
     }
   }
 
+  static async fetchServiceEvents(agent, service) {
+    try {
+      return await axios({
+        method: "GET",
+        url: `${BASE_URL}/agents/${agent}/${service}/events?count=100`,
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
 }

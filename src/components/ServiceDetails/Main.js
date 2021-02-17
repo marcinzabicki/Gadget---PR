@@ -9,6 +9,7 @@ import ServiceBasicInfo from "./components/ServiceBasicInfo"
 import NotificationSettings from "./components/NotificationsSettings"
 import './components/ServiceDetails.css';
 import { API } from "../../utils/API";
+import Helpers from "../../utils/Helpers"
 
 
 
@@ -19,6 +20,8 @@ const ServiceDetails = ()=>{
   const { machineName, serviceName } = useParams();
   const [machineState, setMachineState] = useState({});
   const [machineAddress, setMachineAddress] = useState("");
+  const [serviceEvents, setServiceEvents] = useState({});
+  const [chartData, setChartDat] = useState([]);
 
   
   
@@ -34,9 +37,15 @@ const ServiceDetails = ()=>{
       const init = async () => {
         if (connection !== null) {
           await Promise.all([
-            // API.fetchServicesList(machineName).then((response) => {
-            //   setServices(response.data);
-            // }),
+            API.fetchServiceEvents(machineName, serviceName).then((response) => {
+              const cd =[] 
+              response.data.map((e, i)=>{
+                let val = 0;
+                e.status.toLowerCase(e.status) === 'running' ? val = 1 : val = 0.3
+                cd.push({time:Helpers.formatDate(e.createdAt), value:val})
+              })
+              setChartDat(cd);
+            }),
             API.fetchMachineList().then((response) => {
               let ipAddress = response.data.filter(
                 (ms) => ms.name == machineName
@@ -58,16 +67,7 @@ const ServiceDetails = ()=>{
               setMachineState(updated);
             }
           });
-          // connection.on("ServiceStatusChanged", (response) => {
-          //   if (response.agent === machineName) {
-          //     let updated = [...services];
-          //     let indexOfChangedService = updated.findIndex(
-          //       (x) => x.name.toLowerCase() === response.name.toLowerCase()
-          //     );
-          //     updated[indexOfChangedService].status = response.status;
-          //     setServices(updated);
-          //   }
-          // });
+         
         }
       };
     
@@ -94,7 +94,7 @@ return (
                 serviceInfo={service}
                 >
                 </ServiceBasicInfo>
-                <NotificationCharts></NotificationCharts>
+                <NotificationCharts data={chartData}></NotificationCharts>
             </div>
             <div>
               <NotificationSettings></NotificationSettings>

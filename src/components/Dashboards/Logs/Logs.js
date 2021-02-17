@@ -1,6 +1,7 @@
 import {useState, useEffect, useContext} from 'react'
 import { SignalRContext } from '../../../utils/signalr-context'
 import { API } from '../../../utils/API'
+import Helpers from '../../../utils/Helpers'
 
 
 
@@ -17,23 +18,12 @@ const Logs = () => {
         });
       }, []);
 
-      function formatDate(date, format) {
-        const map = {
-            mm: date.getMonth() + 1,
-            dd: date.getDate(),
-            yy: date.getFullYear().toString().slice(-2),
-            yyyy: date.getFullYear()
-        }
-    
-        return format.replace(/mm|dd|yy|yyy/gi, matched => map[matched])
-    }
-      
 
     useEffect(() => {
         if (connection !== null) {
           connection.on("ServiceStatusChanged", (response) => {
               let updated = [...services];
-              updated.unshift({agent:response.agent, service:response.name, createdAt:formatDate(Date.now(), 'hh:mm dd-MM-yyyy'), status:response.status});
+              updated.unshift({agent:response.agent, service:response.name, createdAt:Helpers.formatDate(Date.now()), status:response.status});
               setServices(updated.slice(0,10));
           });
         }
@@ -58,7 +48,7 @@ const Logs = () => {
                     {Object.keys(services[0]).map((k,j)=>{
                         return(
                             <div className="log-item" key={j}>
-                                {l[k]}
+                                {Helpers.isDate(l[k]) ? Helpers.formatDate(l[k]) : l[k] }
                             </div>
                         )
                     })}

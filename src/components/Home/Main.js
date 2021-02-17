@@ -44,7 +44,7 @@ const Home = () => {
     if (connection !== null) {
       const init = async () => {
         const response = await API.fetchMachineList();
-         let machines = {};
+        let machines = {};
         response.data.map((machine) => {
           return (machines[machine.name] = machine);
         });

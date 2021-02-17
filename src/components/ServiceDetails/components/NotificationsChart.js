@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Line, LineChart, XAxis, YAxis, CartesianGrid} from 'recharts';
+import { Line, LineChart, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from 'recharts';
 //import { API } from "../../utils/API";
 
-     //     const useEffect(() =>{
-    //         let tmp = 0;
-    //     },[]);
+//     const useEffect(() =>{
+//         let tmp = 0;
+//     },[]);
+
 
     
 
@@ -35,4 +36,4 @@ import { Line, LineChart, XAxis, YAxis, CartesianGrid} from 'recharts';
         </div>
         )}
 
-    export default NotificationCharts;
+export default NotificationCharts;

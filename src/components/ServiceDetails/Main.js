@@ -11,9 +11,6 @@ import './components/ServiceDetails.css';
 import { API } from "../../utils/API";
 import Helpers from "../../utils/Helpers"
 
-
-
-
 const ServiceDetails = ()=>{
 
   const connection = useContext(SignalRContext);
@@ -99,9 +96,13 @@ return (
             <div>
               <NotificationSettings></NotificationSettings>
             </div>
+
         </div>
-        <ServiceEventsTable></ServiceEventsTable>
-</div>
-)}
+        <NotificationSettings></NotificationSettings>
+      </div>
+      <ServiceEventsTable></ServiceEventsTable>
+    </div>
+  )
+}
 
 export default ServiceDetails;

@@ -26,7 +26,7 @@ import Helpers from '../../../utils/Helpers';
 
 
     return (
-        <div className="service-basic-info">
+        <div className="service-basic-info tile">
             {label}
         </div>
     )

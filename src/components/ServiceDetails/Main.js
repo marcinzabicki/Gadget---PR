@@ -77,31 +77,24 @@ const ServiceDetails = ()=>{
   
 return (
     <div>
-        <MachineBar
+       <MachineBar
           machine={machineName}
           address={machineAddress}
           cpu={machineState.cpu}
           ram={machineState.ram}
           disc={machineState.disc}
-          services={machineState.services}
-        ></MachineBar>
-        <div className="label-settings-container">
+          services={machineState.services}>
+</MachineBar>
+
+<div className="label-settings-container">
             <div className="label-chart-container">
-                <ServiceBasicInfo 
-                serviceInfo={service}
-                >
-                </ServiceBasicInfo>
+                <ServiceBasicInfo serviceInfo={service}></ServiceBasicInfo>
                 <NotificationCharts data={chartData}></NotificationCharts>
             </div>
-            <div>
               <NotificationSettings></NotificationSettings>
-            </div>
-
-        </div>
-        <NotificationSettings></NotificationSettings>
-      </div>
-      <ServiceEventsTable></ServiceEventsTable>
-    </div>
+</div> 
+          <ServiceEventsTable></ServiceEventsTable>
+</div>    
   )
 }
 

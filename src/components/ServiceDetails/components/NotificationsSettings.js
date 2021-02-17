@@ -7,13 +7,25 @@ import Helpers from '../../../utils/Helpers';
     
     const NotificationSettings = (props)=>{
 
+        const data = {
+            levels: [{name:"critical", checked: true},
+                        {name:"error", checked: false},
+                        {name:"warning", checked: false},
+                        {name:"serviceStarted", checked: false},
+                        {name:"ServiceStopped", checked: false}],
+            sinks:  [{name:"email", checked: false, settings:[{name:"email csv", value:""}]},
+                    {name:"discord", checked: true, settings:[{name:"discord server", value:""},{name:"users csv", value:""}]},
+                    {name:"GSM", checked: false, settings:[{name:"phone number", value:""}]},
+                    {name:"slack", checked: false, settings:[{name:"slack server", value:""}, {name:"users csv", value:""}]}],
+            }
 
-        return (<div className="level-item" key={i}>
+        const levels = data["levels"].map((l, i)=>{
 
-            <input type="checkbox" id={`level-${l["name"]}`} checked={l["checked"]} onChange={()=>{console.log("dfdf")}} />
-            <label >{l["name"]}</label>
-        </div>)
-    });
+            return (<div className="level-item" key={i}>
+                <input type="checkbox" id={`level-${l["name"]}`} checked={l["checked"]} onChange={()=>{console.log("dfdf")}} />
+                <label >{l["name"]}</label>
+            </div>)
+        });
 
     const sinks = data["sinks"].map((s, i) => {
         return (
@@ -49,11 +61,11 @@ import Helpers from '../../../utils/Helpers';
                 {levels}
             </div>
             {sinks}
-            <div class="apply-btn-wrapper">
+            <div className="apply-btn-wrapper">
                 <button className="apply-btn">Apply</button>
             </div>
         </div>
     )
-}
 
+}
 export default NotificationSettings;

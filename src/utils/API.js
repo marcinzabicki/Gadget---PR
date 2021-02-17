@@ -1,5 +1,5 @@
 import axios from "axios";
-import { BASE_URL } from "../config";
+import { BASE_URL, NOTIFICATIONS_URL } from "../config";
 
 export class API {
   static async fetchMachineList() {
@@ -113,6 +113,67 @@ export class API {
       return await axios({
         method: "POST",
         url: `${BASE_URL}/logoutUrl`,
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  static async fetchServiceDetails(agent, service) {
+    try {
+      // return await axios({
+      //   method: "POST",
+      //   url: `${NOTIFICATIONS_URL}/${agent}/${service}`,
+      // });
+
+      // mock:
+      return {
+        machine: "nmv3",
+        serviceName:"Lucek service", 
+        LogonAs:"Lucjano", 
+        description: "Usługa do karmienia piesełów", 
+        status: "Running",
+        events:[
+          {time:"2021-02-01", value:0.3 },
+          {time:"2021-02-02", value:0.3 },
+          {time:"2021-02-03", value:1 },
+          {time:"2021-02-04", value:1 },
+          {time:"2021-02-05", value:1, },
+          {time:"2021-02-06", value:1, },
+          {time:"2021-02-07", value:1 },
+          {time:"2021-02-08", value:1 },
+          {time:"2021-02-09", value:0.3},
+          {time:"2021-02-10", value:0.3},
+          {time:"2021-02-11", value:0.3 },
+          {time:"2021-02-12", value:1 },
+          {time:"2021-02-13", value:1},
+          {time:"2021-02-14", value:1},
+          {time:"2021-02-15", value:1},
+          {time:"2021-02-16", value:1},
+          {time:"2021-02-17", value:1 },
+          {time:"2021-02-18", value:1 }]
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  static async fetchNotificationsSettings(agent, service) {
+    try {
+      return await axios({
+        method: "POST",
+        url: `${NOTIFICATIONS_URL}/${agent}/${service}`,
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  static async fetchServiceEvents(agent, service) {
+    try {
+      return await axios({
+        method: "GET",
+        url: `${BASE_URL}/agents/${agent}/${service}/events?count=100`,
       });
     } catch (e) {
       console.log(e);

@@ -1,17 +1,17 @@
 import React, { useState, useEffect, useContext } from "react";
+import { useParams } from "react-router-dom";
+import { useWindowSize } from "../../Hooks";
+import Modal from 'react-modal';
 import Pagination from "react-js-pagination";
 import Service from "./Service";
 import ServiceMobile from "./ServiceMobile";
 import ServiceHeader from "./ServiceHeader";
 import MachineBar from "./MachineDetails/MachineBar/MachineBar";
 import "../Dashboards/MachineDetails/MachineDetails.css";
-import { useParams } from "react-router-dom";
-import { useWindowSize } from "../../Hooks";
 import { API } from "../../utils/API";
 import { SignalRContext } from "../../utils/signalr-context";
 import Logs from "../Dashboards/Logs/Logs";
 import ServiceHeaderMobile from "./ServiceHeaderMobile";
-import Modal from 'react-modal';
 import LoginModal from '../LoginModal';
 
 const Dashboards = () => {

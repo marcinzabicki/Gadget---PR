@@ -1,30 +1,16 @@
 import React, { useState, useEffect, useContext } from "react";
-import Helpers from '../../../utils/Helpers';
 import Switch from "react-switch";
-//import { API } from "../../utils/API";
+import Helpers from '../../../utils/Helpers';
+//import {API}  from "../../../utils/API";
 
-//     const useEffect(() =>{
-//         let tmp = 0;
-//     },[]);
 
-const data = {
-    levels: [{ name: "critical", checked: true },
-    { name: "error", checked: false },
-    { name: "warning", checked: false },
-    { name: "serviceStarted", checked: false },
-    { name: "ServiceStopped", checked: false }],
-    sinks: [{ name: "email", checked: false, settings: [{ name: "email csv", value: "" }] },
-    { name: "discord", checked: true, settings: [{ name: "discord server", value: "" }, { name: "users csv", value: "" }] },
-    { name: "GSM", checked: false, settings: [{ name: "phone number", value: "" }] },
-    { name: "slack", checked: false, settings: [{ name: "slack server", value: "" }, { name: "users csv", value: "" }] }],
-}
+    
+    const NotificationSettings = (props)=>{
 
-const NotificationSettings = (props) => {
-
-    const levels = data["levels"].map((l, i) => {
 
         return (<div className="level-item" key={i}>
-            <input type="checkbox" id={`level-${l["name"]}`} checked={l["checked"]} />
+
+            <input type="checkbox" id={`level-${l["name"]}`} checked={l["checked"]} onChange={()=>{console.log("dfdf")}} />
             <label >{l["name"]}</label>
         </div>)
     });

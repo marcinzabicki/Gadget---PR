@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { Line, LineChart, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from 'recharts';
  
     const NotificationCharts = (props)=>{
-
+      console.log(props);
       const lineStyle = {
         stroke:"#FFFFFF"
       }

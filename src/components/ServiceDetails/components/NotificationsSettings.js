@@ -6,33 +6,55 @@ import Helpers from '../../../utils/Helpers';
 
     
     const NotificationSettings = (props)=>{
+const [settings, setSettings] = useState({
+    levels: [{name:"critical", checked: true},
+                {name:"error", checked: false},
+                {name:"warning", checked: false},
+                {name:"serviceStarted", checked: false},
+                {name:"ServiceStopped", checked: false}],
+    sinks:  [{name:"email", checked: false, settings:[{name:"email csv", value:""}]},
+            {name:"discord", checked: true, settings:[{name:"discord server", value:""},{name:"users csv", value:""}]},
+            {name:"GSM", checked: false, settings:[{name:"phone number", value:""}]},
+            {name:"slack", checked: false, settings:[{name:"slack server", value:""}, {name:"users csv", value:""}]}],
+    });
 
-        const data = {
-            levels: [{name:"critical", checked: true},
-                        {name:"error", checked: false},
-                        {name:"warning", checked: false},
-                        {name:"serviceStarted", checked: false},
-                        {name:"ServiceStopped", checked: false}],
-            sinks:  [{name:"email", checked: false, settings:[{name:"email csv", value:""}]},
-                    {name:"discord", checked: true, settings:[{name:"discord server", value:""},{name:"users csv", value:""}]},
-                    {name:"GSM", checked: false, settings:[{name:"phone number", value:""}]},
-                    {name:"slack", checked: false, settings:[{name:"slack server", value:""}, {name:"users csv", value:""}]}],
-            }
+    // settings[sinks]
 
-        const levels = data["levels"].map((l, i)=>{
+    // useEffect(() => {
+      
+    // });
+
+    const checkBoxHandler = (value, checkName, parent)=>{
+        let updated = {...settings};
+        let index = updated[parent].findIndex(x=>x.name == checkName);
+        updated[parent][index].checked = !value;
+        setSettings(updated);
+        
+    };
+
+    const sinkSettingsHandler = (value, sinkName, settingName)=>{
+       let updated = {...settings};
+        // get sink index = 
+        let sinkIndex = updated['sinks'].findIndex(x=>x.name == sinkName);
+        let settingIndex = updated['sinks'][sinkIndex]['settings'].findIndex(x=>x.name == settingName);
+        updated['sinks'][sinkIndex]['settings'][settingIndex].value = value.target.value;
+        setSettings(updated);
+        console.log(updated);
+    }
+        const levels = settings["levels"].map((l, i)=>{
 
             return (<div className="level-item" key={i}>
-                <input type="checkbox" id={`level-${l["name"]}`} checked={l["checked"]} onChange={()=>{console.log("dfdf")}} />
+                <input type="checkbox" id={`level-${l["name"]}`} checked={l["checked"]} onChange={()=>{checkBoxHandler(l['checked'], l['name'], 'levels')}} />
                 <label >{l["name"]}</label>
             </div>)
         });
 
-    const sinks = data["sinks"].map((s, i) => {
+    const sinks = settings["sinks"].map((s, i) => {
         return (
             <div className="notifications-sink-settings" key={i}>
                 <h1>{Helpers.upperFirst(s["name"])}</h1>
                 <Switch
-                    onChange={() => { console.log("dfdf") }}
+                    onChange={() => {checkBoxHandler(s.checked, s.name, 'sinks')}}
                     checked={s["checked"]}
                     offColor="#707070"
                     onColor="#38E18D"
@@ -45,7 +67,14 @@ import Helpers from '../../../utils/Helpers';
                         s.settings.map((p, j) => {
                             return (
                                 <div key={j}>
-                                    <input className="sink-input" placeholder={p["name"]} type="text" id={`sink-param-${p["name"]}`} value={s["value"]}></input>
+                                    <input 
+                                    className="sink-input"
+                                    placeholder={p["name"]} 
+                                    type="text" 
+                                    id={`sink-param-${p["name"]}`} 
+                                    value={s["value"]}
+                                    onChange={(e)=>{sinkSettingsHandler(e, s["name"], p["name"])}}>
+                                    </input>
                                 </div>
                             )
                         })

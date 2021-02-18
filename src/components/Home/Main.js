@@ -8,8 +8,6 @@ import { SignalRContext } from "../../utils/signalr-context";
 import { useWindowSize } from "../../Hooks";
 import Modal from 'react-modal';
 import LoginModal from '../LoginModal';
-import ServiceDetails from "../ServiceDetails/Main";
-
 
 const Home = () => {
   const [machineList, setMachineList] = useState({});

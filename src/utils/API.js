@@ -169,11 +169,11 @@ export class API {
     }
   }
 
-  static async fetchServiceEvents(agent, service) {
+  static async fetchServiceEvents(agent, service, queryString) {
     try {
       return await axios({
         method: "GET",
-        url: `${BASE_URL}/agents/${agent}/${service}/events?count=100`,
+        url: `${BASE_URL}/agents/${agent}/${service}/events?count=100&${queryString}`,
       });
     } catch (e) {
       console.log(e);

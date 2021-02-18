@@ -64,7 +64,6 @@ const ServiceDetails = ()=>{
               setMachineState(updated);
             }
           });
-         
         }
       };
     
@@ -93,6 +92,7 @@ return (
             </div>
               <NotificationSettings></NotificationSettings>
 </div> 
+          
           <ServiceEventsTable></ServiceEventsTable>
 </div>    
   )

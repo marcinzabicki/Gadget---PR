@@ -11,8 +11,8 @@ let passwordInput = React.createRef();
 const LoginModal = (props)=>{
 const [loginFailed, setLoginFailed] = useState(false);
   const  loginClickHandle = ()=>{
-        let user = loginInput.current.value;
-        let pass = passwordInput.current.value;
+        let user ='lucek';// loginInput.current.value;
+        let pass ='lucek'// passwordInput.current.value;
         if (user!=='' && pass!=='') {
             API.login(user, pass).then((response)=>{
                 

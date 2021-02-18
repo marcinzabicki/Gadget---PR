@@ -29,9 +29,11 @@ const Dashboards = () => {
       if (connection !== null) {
         await Promise.all([
           API.fetchServicesList(machineName).then((response) => {
+            console.log(response);
             setServices(response.data);
           }),
           API.fetchMachineList().then((response) => {
+            console.log(response)
             let ipAddress = response.data.filter(
               (ms) => ms.name == machineName
             )[0];
@@ -54,6 +56,7 @@ const Dashboards = () => {
         });
         connection.on("ServiceStatusChanged", (response) => {
           if (response.agent === machineName) {
+            console.log(response);
             let updated = [...services];
             let indexOfChangedService = updated.findIndex(
               (x) => x.name.toLowerCase() === response.name.toLowerCase()

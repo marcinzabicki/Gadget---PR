@@ -48,7 +48,6 @@ export class API {
 
   static async stopService(agent, service) {
     try {
-      console.log(`${BASE_URL}/agents/${agent}/${service}`)
       return await axios({
         method: "POST",
         url: `${BASE_URL}/agents/${agent}/${service}/stop`,
@@ -60,7 +59,6 @@ export class API {
 
   static async startService(agent, service) {
     try {
-      console.log(`${BASE_URL}/agents/${agent}/${service}`)
       return await axios({
         method: "POST",
         url: `${BASE_URL}/agents/${agent}/${service}/start`,

@@ -19,8 +19,7 @@ const ServiceDetails = ()=>{
   const [machineAddress, setMachineAddress] = useState("");
   const [serviceEvents, setServiceEvents] = useState([]);
   const [chartData, setChartDat] = useState([]);
-
-  
+  const windowSize = useWindowSize();
   
   const service = {
     serviceName:serviceName,
@@ -80,15 +79,17 @@ const ServiceDetails = ()=>{
   
 return (
     <div>
-       <MachineBar
-          machine={machineName}
-          address={machineAddress}
-          cpu={machineState.cpu}
-          ram={machineState.ram}
-          disc={machineState.disc}
-          services={machineState.services}>
-</MachineBar>
-
+      {
+        windowSize<=768 ? null : <MachineBar
+        machine={machineName}
+        address={machineAddress}
+        cpu={machineState.cpu}
+        ram={machineState.ram}
+        disc={machineState.disc}
+        services={machineState.services}>
+      </MachineBar> 
+      }
+       
 <div className="label-settings-container">
             <div className="label-chart-container">
                 <ServiceBasicInfo serviceInfo={service}></ServiceBasicInfo>

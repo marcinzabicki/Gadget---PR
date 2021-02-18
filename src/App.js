@@ -1,6 +1,7 @@
 import { BrowserRouter, Route } from "react-router-dom";
 import Home from "./components/Home/Main";
 import Dashboards from "./components/Dashboards/Main";
+import ServiceDetails from './components/ServiceDetails/Main';
 import SignalRProvider from "./utils/signalr-context";
 // import Inbox from './components/Inbox/Main';
 // import Products from './components/Products/Main';
@@ -22,7 +23,7 @@ const App = () => {
               <Dashboards />
             </Route>
             <Route path="/:machineName/:serviceName">
-              <Home />
+              <ServiceDetails />
             </Route>
             {/* <Switch>
               <Route exact path="/" component={Home} />

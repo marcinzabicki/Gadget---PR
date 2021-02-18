@@ -44,7 +44,7 @@ const Home = () => {
     if (connection !== null) {
       const init = async () => {
         const response = await API.fetchMachineList();
-         let machines = {};
+        let machines = {};
         response.data.map((machine) => {
           return (machines[machine.name] = machine);
         });
@@ -116,7 +116,6 @@ const Home = () => {
     <div className="home-container">
       <div className="machine-tiles-container">{getMachines()}</div>
       <Logs></Logs>
-      <ServiceDetails></ServiceDetails>
     </div>
   );
 };

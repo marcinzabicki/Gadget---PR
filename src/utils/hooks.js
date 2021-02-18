@@ -9,7 +9,7 @@ export const useSignalRConnection = (connectionUrl) => {
         if (connection === null) {
             connection.current = new HubConnectionBuilder()
                // .withUrl('http://localhost:5000/gadget')
-              .withUrl('http://157.230.114.249/gadget')
+              .withUrl('http://157.230.114.249:5000/gadget')
                 .configureLogging(LogLevel.Critical)
                 .withAutomaticReconnect()
                 .build()

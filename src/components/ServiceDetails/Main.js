@@ -17,7 +17,7 @@ const ServiceDetails = ()=>{
   const { machineName, serviceName } = useParams();
   const [machineState, setMachineState] = useState({});
   const [machineAddress, setMachineAddress] = useState("");
-  const [serviceEvents, setServiceEvents] = useState({});
+  const [serviceEvents, setServiceEvents] = useState([]);
   const [chartData, setChartDat] = useState([]);
 
   
@@ -35,13 +35,17 @@ const ServiceDetails = ()=>{
         if (connection !== null) {
           await Promise.all([
             API.fetchServiceEvents(machineName, serviceName).then((response) => {
-              const cd =[] 
+              const cd =[];
+              const td = [];
               response.data.map((e, i)=>{
                 let val = 0;
                 e.status.toLowerCase(e.status) === 'running' ? val = 1 : val = 0.3
-                cd.push({time:Helpers.formatDate(e.createdAt), value:val})
+                cd.push({time:Helpers.formatDate(e.createdAt), value:val});
+                td.push({agent:e.agent,time:Helpers.formatDate(e.createdAt), status:e.status});
               })
               setChartDat(cd);
+              setServiceEvents(td);
+              console.log(td);
             }),
             API.fetchMachineList().then((response) => {
               let ipAddress = response.data.filter(
@@ -93,7 +97,7 @@ return (
               <NotificationSettings></NotificationSettings>
 </div> 
           
-          <ServiceEventsTable></ServiceEventsTable>
+          <ServiceEventsTable tableData={serviceEvents} ></ServiceEventsTable>
 </div>    
   )
 }

@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { SignalRContext } from "../../utils/signalr-context";
 import { useWindowSize } from "../../Hooks";
 import { useParams } from "react-router-dom";
+import DatePicker from 'react-datepicker';
 import MachineBar from "../Dashboards/MachineDetails/MachineBar/MachineBar"
 import NotificationCharts from "./components/NotificationsChart";
 import ServiceEventsTable from "./components/ServiceEventsTable";
@@ -19,6 +20,8 @@ const ServiceDetails = ()=>{
   const [machineAddress, setMachineAddress] = useState("");
   const [serviceEvents, setServiceEvents] = useState([]);
   const [chartData, setChartDat] = useState([]);
+  const [notifierTypes, setNotifierTypes] = useState([]);
+  const [notifications, setNotifications] = useState([]);
   const windowSize = useWindowSize();
   
   const service = {
@@ -31,7 +34,6 @@ const ServiceDetails = ()=>{
 
     useEffect(() => {
       const init = async () => {
-        if (connection !== null) {
           await Promise.all([
             API.fetchServiceEvents(machineName, serviceName).then((response) => {
               const cd =[];
@@ -44,7 +46,6 @@ const ServiceDetails = ()=>{
               })
               setChartDat(cd);
               setServiceEvents(td);
-              console.log(td);
             }),
             API.fetchMachineList().then((response) => {
               let ipAddress = response.data.filter(
@@ -52,7 +53,20 @@ const ServiceDetails = ()=>{
               )[0];
               setMachineAddress(ipAddress.address);
             }),
+            API.getNotifierTypes().then((response) => {
+              setNotifierTypes(response.data);
+            }),
+            API.fetchWebhooks(machineName, serviceName).then((response) => {
+              setNotifications(response.data);
+            })
           ]);
+        };
+      init();
+    }, []);//[machineName, serviceName]
+
+    useEffect(() => {
+      const init = async () => {
+        if (connection !== null) {
           connection.on("MachineHealthReceived", (response) => {
             if (response.agent === machineName) {
               let updated = {};
@@ -69,13 +83,13 @@ const ServiceDetails = ()=>{
           });
         }
       };
-    
       init();
       return () => {
         connection?.off("MachineHealthReceived");
-        connection?.off("ServiceStatusChanged");
       };
-    }, [connection]);
+    }, [connection, machineName, serviceName]);
+
+
   
 return (
     <div>
@@ -95,10 +109,14 @@ return (
                 <ServiceBasicInfo serviceInfo={service}></ServiceBasicInfo>
                 <NotificationCharts data={chartData}></NotificationCharts>
             </div>
-              <NotificationSettings></NotificationSettings>
+              <NotificationSettings
+              types={notifierTypes}
+              notifications={notifications}>
+              </NotificationSettings>
 </div> 
           
           <ServiceEventsTable tableData={serviceEvents} ></ServiceEventsTable>
+          <DatePicker selected={new Date("2021-02-19")} onChange={date => console.log(date)} />
 </div>    
   )
 }

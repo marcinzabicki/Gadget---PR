@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useContext } from "react";
-import { Line, LineChart, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from 'recharts';
+import React from "react";
+import { Line, LineChart, XAxis, YAxis } from 'recharts';
  
     const NotificationCharts = (props)=>{
       console.log(props);

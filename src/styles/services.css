@@ -10,7 +10,7 @@
     font-size: 17px;
     font-weight: 600;
 }
-input[type=text], .service-header input {
+input[type=text], input[type=password], .service-header input {
     color: #fff;
     font-size: 15px;
     border-radius: 4px;

@@ -81,6 +81,62 @@ input[type='checkbox'] {
     width: 65%;
 }
 
+.gadget-btn{
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    text-transform: uppercase;
+    border-radius: 4px;
+    padding: 10px 30px;
+    cursor: pointer;
+}
+
+.webhook-setting-btn {
+width: 35px;
+height: 35px;
+padding: 12px;
+margin: 7px;
+}
+
+.notifications-head-wrapper{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+option{
+    color: white;
+    background-color: #313843;
+    border: none;
+}
+
+select{
+    background-color: transparent;
+    border: none;
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+    margin-top: 24px;
+}
+
+.webhook-type{
+    margin-top: 19px;
+    margin-right: 10px;
+    width:80px
+}
+
+.webhook-item{
+    display: flex;
+}
+
+.setting-accept-btn{
+    background-color: #38E18D;
+}
+
+.setting-delete-btn{
+    background-color: #DE3143;
+}
+
 .notifications-sink-parameters div {
     width: 48%;
 }
@@ -121,7 +177,7 @@ input[type='checkbox'] {
 
 .sink-input{
     margin:5px;
-    width: 100px;
+    width: 240px;
 }
 
 @media (max-width: 768px) {

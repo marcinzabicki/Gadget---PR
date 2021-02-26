@@ -112,7 +112,7 @@ export class API {
     }
   }
 
-  static async logout(login, password) {
+  static async logout() {
     try {
       return await axios({
         method: "POST",
@@ -127,10 +127,14 @@ export class API {
  
  //#region notifictions
  static async fetchWebhooks(agent, service) {
+  let token = localStorage.getItem('accessToken');
   try {
     return await axios({
-      method: "POST",
+      method: "GET",
       url: `${NOTIFICATIONS_URL}/notifications/${agent}/${service}/webhooks`,
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
     });
   } catch (e) {
     console.log(e);
@@ -138,10 +142,46 @@ export class API {
 }
 
 static async getNotifierTypes() {
+  let token = localStorage.getItem('accessToken');
+  try {
+    return await axios({
+      method: "GET",
+      url: `${NOTIFICATIONS_URL}/notifications/types`,
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+  } catch (e) {
+    console.log(e);
+  }
+}
+
+static async createNotifier(agent, service, receiver, type) {
+  let token = localStorage.getItem('accessToken');
   try {
     return await axios({
       method: "POST",
-      url: `${NOTIFICATIONS_URL}/notifications/types`,
+      url: `${NOTIFICATIONS_URL}/notifications/${agent}/${service}/webhooks`,
+      data: { receiver: receiver, type: type },
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+  } catch (e) {
+    console.log(e);
+  }
+}
+
+static async deleteNotifier(agent, service, receiver) {
+  let token = localStorage.getItem('accessToken');
+  try {
+    return await axios({
+      method: "POST",
+      url: `${NOTIFICATIONS_URL}/notifications/${agent}/${service}/deleteNotifier`,
+      data: { receiver: receiver},
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
     });
   } catch (e) {
     console.log(e);

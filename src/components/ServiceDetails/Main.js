@@ -21,7 +21,7 @@ const ServiceDetails = ()=>{
   const [serviceEvents, setServiceEvents] = useState([]);
   const [chartData, setChartDat] = useState([]);
   const [notifierTypes, setNotifierTypes] = useState([]);
-  const [notifications, setNotifications] = useState([]);
+  const [notifiers, setNotifiers] = useState([]);
   const windowSize = useWindowSize();
   
   const service = {
@@ -31,38 +31,6 @@ const ServiceDetails = ()=>{
     description: "Usługa do karmienia piesełów", 
     status: "Running"};
 
-
-    useEffect(() => {
-      const init = async () => {
-          await Promise.all([
-            API.fetchServiceEvents(machineName, serviceName).then((response) => {
-              const cd =[];
-              const td = [];
-              response.data.map((e, i)=>{
-                let val = 0;
-                e.status.toLowerCase(e.status) === 'running' ? val = 1 : val = 0.3
-                cd.push({time:Helpers.formatDate(e.createdAt), value:val});
-                td.push({agent:e.agent,time:Helpers.formatDate(e.createdAt), status:e.status});
-              })
-              setChartDat(cd);
-              setServiceEvents(td);
-            }),
-            API.fetchMachineList().then((response) => {
-              let ipAddress = response.data.filter(
-                (ms) => ms.name == machineName
-              )[0];
-              setMachineAddress(ipAddress.address);
-            }),
-            API.getNotifierTypes().then((response) => {
-              setNotifierTypes(response.data);
-            }),
-            API.fetchWebhooks(machineName, serviceName).then((response) => {
-              setNotifications(response.data);
-            })
-          ]);
-        };
-      init();
-    }, []);//[machineName, serviceName]
 
     useEffect(() => {
       const init = async () => {
@@ -89,6 +57,40 @@ const ServiceDetails = ()=>{
       };
     }, [connection, machineName, serviceName]);
 
+    useEffect(() => {
+      const init = async () => {
+          await Promise.all([
+            API.fetchServiceEvents(machineName, serviceName).then((response) => {
+              const cd =[];
+              const td = [];
+              response.data.map((e, i)=>{
+                let val = 0;
+                e.status.toLowerCase(e.status) === 'running' ? val = 1 : val = 0.3
+                cd.push({time:Helpers.formatDate(e.createdAt), value:val});
+                td.push({agent:e.agent,time:Helpers.formatDate(e.createdAt), status:e.status});
+              })
+              setChartDat(cd);
+              setServiceEvents(td);
+            }),
+            API.fetchMachineList().then((response) => {
+              let ipAddress = response.data.filter(
+                (ms) => ms.name == machineName
+              )[0];
+              setMachineAddress(ipAddress.address);
+            }),
+            API.getNotifierTypes().then((response) => {
+              setNotifierTypes(response.data);
+            }),
+            API.fetchWebhooks(machineName, serviceName).then((response) => {
+              setNotifiers(response.data.notifiers);
+            })
+          ]);
+        };
+      init();
+    }, []);//[machineName, serviceName]
+
+   
+
 
   
 return (
@@ -111,7 +113,10 @@ return (
             </div>
               <NotificationSettings
               types={notifierTypes}
-              notifications={notifications}>
+              notifiers={notifiers}
+              agent={machineName}
+              service={serviceName}
+              >
               </NotificationSettings>
 </div> 
           

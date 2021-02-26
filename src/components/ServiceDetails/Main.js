@@ -79,10 +79,10 @@ const ServiceDetails = ()=>{
               setMachineAddress(ipAddress.address);
             }),
             API.getNotifierTypes().then((response) => {
-              setNotifierTypes(response.data);
+              setNotifierTypes(response?.data);
             }),
             API.fetchWebhooks(machineName, serviceName).then((response) => {
-              setNotifiers(response.data.notifiers);
+              setNotifiers(response?.data.notifiers);
             })
           ]);
         };

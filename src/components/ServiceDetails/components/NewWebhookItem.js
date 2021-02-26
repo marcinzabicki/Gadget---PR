@@ -3,13 +3,14 @@ import Helpers from '../../../utils/Helpers';
 import { API } from "../../../utils/API";
     
     const NewWebhookItem = (props)=>{
-        const [webhook, setWebhook] = useState("undef");
         const [receiver, setReceiver] = useState("");
+        const [webhook, setWebhook] = useState(-1);
 
         const changeTypeHandler = (e)=>{
-            let w = e.target.value;
-            setWebhook(w)
-            console.log(webhook)
+            let w = e.currentTarget.value;
+            setWebhook(w);
+            console.log(e.target.value);
+            console.log(webhook);
         }
 
         const createNotifierHandler = ()=>{
@@ -36,7 +37,7 @@ import { API } from "../../../utils/API";
                 </input>
                 <p 
                 className="gadget-btn webhook-setting-btn setting-accept-btn"
-                onClick={()=> {API.createNotifier(props.agent, props.service, receiver, webhook )}}
+                onClick={()=> {API.createNotifier(props.agent, props.service, receiver, parseInt(webhook) )}}
                 >&#10003;</p>
                 <p 
                 className="gadget-btn webhook-setting-btn setting-delete-btn"

@@ -34,7 +34,9 @@ const Service = ({ service, index, agent }) => {
                         <button className="button" onClick={() => API.startService(agent, service.name)} >Start</button>
                     )}
                 <button className="button" onClick={showModalHandler} >Restart</button>
-                <button className="button special">Show logs</button>
+                <Link to={`/${agent}/${service.name}`}>
+                <button className="button special">More</button>
+                </Link>
             </div>
 
             <Modal

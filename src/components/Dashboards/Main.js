@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useParams } from "react-router-dom";
 import { useWindowSize } from "../../Hooks";
-import Modal from 'react-modal';
+import Modal from "react-modal";
 import Pagination from "react-js-pagination";
 import Service from "./Service";
 import ServiceMobile from "./ServiceMobile";
@@ -12,7 +12,7 @@ import { API } from "../../utils/API";
 import { SignalRContext } from "../../utils/signalr-context";
 import Logs from "../Dashboards/Logs/Logs";
 import ServiceHeaderMobile from "./ServiceHeaderMobile";
-import LoginModal from '../LoginModal';
+import LoginModal from "../LoginModal";
 
 const Dashboards = () => {
   const windowSize = useWindowSize();
@@ -26,20 +26,24 @@ const Dashboards = () => {
 
   useEffect(() => {
     const init = async () => {
+      await Promise.all([
+        API.fetchServicesList(machineName).then((response) => {
+          setServices(response.data);
+        }),
+        API.fetchMachineList().then((response) => {
+          let ipAddress = response.data.filter(
+            (ms) => ms.name == machineName
+          )[0];
+          setMachineAddress(ipAddress.address);
+        }),
+      ]);
+    };
+    init();
+  }, [machineName]);
+
+  useEffect(() => {
+    const init = async () => {
       if (connection !== null) {
-        await Promise.all([
-          API.fetchServicesList(machineName).then((response) => {
-            console.log(response);
-            setServices(response.data);
-          }),
-          API.fetchMachineList().then((response) => {
-            console.log(response)
-            let ipAddress = response.data.filter(
-              (ms) => ms.name == machineName
-            )[0];
-            setMachineAddress(ipAddress.address);
-          }),
-        ]);
         connection.on("MachineHealthReceived", (response) => {
           if (response.agent === machineName) {
             let updated = {};
@@ -56,7 +60,6 @@ const Dashboards = () => {
         });
         connection.on("ServiceStatusChanged", (response) => {
           if (response.agent === machineName) {
-            console.log(response);
             let updated = [...services];
             let indexOfChangedService = updated.findIndex(
               (x) => x.name.toLowerCase() === response.name.toLowerCase()
@@ -73,7 +76,7 @@ const Dashboards = () => {
       connection?.off("MachineHealthReceived");
       connection?.off("ServiceStatusChanged");
     };
-  }, [connection]);
+  }, [connection, services, machineName]);
 
   const servicesPerPage = 10;
   const [activePage, setActivePage] = useState(1);
@@ -82,7 +85,7 @@ const Dashboards = () => {
     setActivePage(pageNumber);
   };
 
-  Modal.defaultStyles.overlay.backgroundColor = '#2B3139';
+  Modal.defaultStyles.overlay.backgroundColor = "#2B3139";
 
   const [showModal, setShowModal] = useState(false);
   const showModalHandler = () => {
@@ -112,11 +115,11 @@ const Dashboards = () => {
 
   API.test().then((response) => {
     if (response?.status == "200") {
-      setLoginStatus(true)
+      setLoginStatus(true);
     }
-  })
+  });
   if (!loginStatus) {
-    return <LoginModal decline={showModalHandler}></LoginModal>
+    return <LoginModal decline={showModalHandler}></LoginModal>;
   }
 
   if (windowSize <= 768) {
@@ -143,8 +146,8 @@ const Dashboards = () => {
               );
             })
           ) : (
-              <p className="warning-text">No services detected</p>
-            )}
+            <p className="warning-text">No services detected</p>
+          )}
 
           {moreResults && (
             <Pagination
@@ -194,8 +197,8 @@ const Dashboards = () => {
           );
         })
       ) : (
-          <p className="warning-text">No services detected</p>
-        )}
+        <p className="warning-text">No services detected</p>
+      )}
 
       {moreResults && (
         <Pagination

@@ -27,7 +27,7 @@ import Helpers from "../../../utils/Helpers";
         setNewNotifiers(deleted);
     };
 
-    const notifiers = props.notifiers.map((n, i) => {
+    const notifiers = props.notifiers?.map((n, i) => {
         return (
             <WebhookItem 
             key={i}
@@ -39,7 +39,7 @@ import Helpers from "../../../utils/Helpers";
         )
     });
 
-    const newN = newNotifers.map((n, i) => {
+    const newN = newNotifers?.map((n, i) => {
         return (
             <NewWebhookItem 
             key={i}

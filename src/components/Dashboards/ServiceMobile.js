@@ -12,10 +12,12 @@ const ServiceMobile = ({ agent, service, index }) => {
         setShowModal(!isShowing);
     };
 
+
     const restartServiceHandler = ()=>{
-        API.restartService(agent,service.name);
-        setShowModal(false);
-    }
+        console.log("ffdsgfgdfdfgfgfgfgfgfgfgfgfgfgf");
+          API.restartService(agent,service.name);
+          setShowModal(false);
+      }
 
     return (
         <>

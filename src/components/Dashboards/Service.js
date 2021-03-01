@@ -16,6 +16,7 @@ const Service = ({ service, index, agent }) => {
     };
 
     const restartServiceHandler = ()=>{
+      console.log("ffdsgfgdfdfgfgfgfgfgfgfgfgfgfgf");
         API.restartService(agent,service.name);
         setShowModal(false);
     }

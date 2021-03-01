@@ -62,7 +62,6 @@ export class API {
 
   static async startService(agent, service) {
     try {
-      console.log("ffdsgfgdfdfgfgfgfgfgfgfgfgfgfgf")
       return await axios({
         method: "POST",
         url: `${BASE_URL}/agents/${agent}/${service}/start`,

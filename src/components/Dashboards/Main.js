@@ -106,14 +106,6 @@ const Dashboards = () => {
   );
   const moreResults = searchResults.length > servicesPerPage;
 
-  API.test().then((response) => {
-    // if (response?.status === "200") {
-    //   setLoginStatus(true);
-    // }
-    // else{
-    //   setLoginStatus(false);
-    // }
-  });
   if (!loginStatus) {
     return <LoginModal decline={showModalHandler}></LoginModal>;
   }

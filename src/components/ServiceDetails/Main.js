@@ -5,7 +5,7 @@ import { useParams } from "react-router-dom";
 import DatePicker from 'react-datepicker';
 import MachineBar from "../Dashboards/MachineDetails/MachineBar/MachineBar"
 import NotificationCharts from "./components/NotificationsChart";
-import ServiceEventsTable from "./components/ServiceEventsTable";
+import DashboardTable from "../Common/DashboardTable";
 import ServiceBasicInfo from "./components/ServiceBasicInfo"
 import NotificationSettings from "./components/NotificationsSettings"
 import './components/ServiceDetails.css';
@@ -113,7 +113,7 @@ return (
               </NotificationSettings>
 </div> 
           
-          <ServiceEventsTable tableData={serviceEvents} ></ServiceEventsTable>
+          <DashboardTable tableData={serviceEvents} ></DashboardTable>
           <DatePicker selected={new Date("2021-02-19")} onChange={date => console.log(date)} />
 </div>    
   )

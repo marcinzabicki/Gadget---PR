@@ -22,8 +22,6 @@ import Helpers from "../../../utils/Helpers";
         let deleted = update.filter(function(o) {
             return o.index !== k;
           });
-          console.log("deleted:")
-          console.log(deleted);
         setNewNotifiers(deleted);
     };
 

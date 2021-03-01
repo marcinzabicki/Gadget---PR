@@ -11,6 +11,7 @@ import NotificationSettings from "./components/NotificationsSettings"
 import './components/ServiceDetails.css';
 import { API } from "../../utils/API";
 import Helpers from "../../utils/Helpers"
+import ResponseParser from '../../utils/ResponseParser'
 
 const ServiceDetails = ()=>{
 
@@ -37,15 +38,7 @@ const ServiceDetails = ()=>{
         if (connection !== null) {
           connection.on("MachineHealthReceived", (response) => {
             if (response.agent === machineName) {
-              let updated = {};
-              updated.cpu = response.cpuPercentUsage;
-              updated.ram = Math.floor(
-                100 * (1 - response.memoryFree / response.memoryTotal)
-              );
-              updated.disc = `${Math.floor(response.discOccupied)}/${Math.floor(
-                response.discTotal
-              )}`;
-              updated.services = `${response.servicesRunning}/${response.servicesCount}`;
+              let updated = ResponseParser.MachineHealtStatusReceived(response);
               setMachineState(updated);
             }
           });
@@ -63,7 +56,7 @@ const ServiceDetails = ()=>{
             API.fetchServiceEvents(machineName, serviceName).then((response) => {
               const cd =[];
               const td = [];
-              response.data.map((e, i)=>{
+              response?.data.map((e, i)=>{
                 let val = 0;
                 e.status.toLowerCase(e.status) === 'running' ? val = 1 : val = 0.3
                 cd.push({time:Helpers.formatDate(e.createdAt), value:val});
@@ -73,10 +66,10 @@ const ServiceDetails = ()=>{
               setServiceEvents(td);
             }),
             API.fetchMachineList().then((response) => {
-              let ipAddress = response.data.filter(
+              let ipAddress = response?.data.filter(
                 (ms) => ms.name == machineName
               )[0];
-              setMachineAddress(ipAddress.address);
+              setMachineAddress(ipAddress?.address);
             }),
             API.getNotifierTypes().then((response) => {
               setNotifierTypes(response?.data);

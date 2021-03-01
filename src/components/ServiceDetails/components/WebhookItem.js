@@ -1,11 +1,27 @@
-import React, { useState, useEffect, useContext } from "react";
-import Helpers from '../../../utils/Helpers';
+import React from "react";
+import { useState } from "react/cjs/react.development";
 import { API } from "../../../utils/API";
     
-    const WebhookItem = (props)=>{
-    return (
+const WebhookItem = (props)=>{
+
+    const [displayItem, setDispalyItem] = useState(true);
+
+    const deleteWebhookHandler = ()=>{
+        
+        API.deleteNotifier(props.agent, props.service, props.receiver)
+        .then(response=>{
+            console.log(response);
+            if(response.status >= 200 & response.status<300){
+                console.log("weszło");
+                setDispalyItem(false);
+                console.log(displayItem);
+            }
+        });
+    };
+
+    const item = (
         <div className="webhook-item">
-            <span className="webhook-type">{Helpers.upperFirst(props.type)}</span>
+            <span className="webhook-type">{props.type}</span>
                 <input 
                 className="sink-input"
                 placeholder="receiver"
@@ -14,15 +30,13 @@ import { API } from "../../../utils/API";
                 onChange={(e)=>{console.log("fsdfsdf")}}
                 >
                 </input>
-                {/* <p 
-                className="gadget-btn webhook-setting-btn setting-accept-btn"
-                onClick={()=> {console.log("lucekekekeke")}}
-                >&#10003;</p> */}
                 <p 
                 className="gadget-btn webhook-setting-btn setting-delete-btn"
-                onClick={()=>{API.deleteNotifier(props.agent, props.service, props.receiver)}}
+                onClick={deleteWebhookHandler}
                 >x</p>
         </div>
     )
+
+    return displayItem ? item : null;
 };
 export default WebhookItem;

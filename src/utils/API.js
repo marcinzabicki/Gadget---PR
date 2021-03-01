@@ -162,7 +162,7 @@ static async createNotifier(agent, service, receiver, type) {
     return await axios({
       method: "POST",
       url: `${NOTIFICATIONS_URL}/notifications/${agent}/${service}/webhooks`,
-      data: { receiver: receiver, type: type },
+      data: { receiver: receiver, notifierType: type },
       headers: {
         Authorization: `Bearer ${token}`
       }
@@ -189,8 +189,6 @@ static async deleteNotifier(agent, service, receiver) {
 }
 
  //#endregion
-
-  
 
   static async fetchServiceEvents(agent, service, queryString) {
     try {

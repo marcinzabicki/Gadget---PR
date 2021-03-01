@@ -8,6 +8,7 @@ import { SignalRContext } from "../../utils/signalr-context";
 import { useWindowSize } from "../../Hooks";
 import Modal from 'react-modal';
 import LoginModal from '../LoginModal';
+import ResponseParser from '../../utils/ResponseParser'
 
 const Home = () => {
   const [machineList, setMachineList] = useState({});
@@ -54,15 +55,7 @@ const Home = () => {
           setMachineList((prevState) => {
             return {
               ...prevState,
-              [response.agent]: {
-                name: response.agent,
-                cpu: response.cpuPercentUsage,
-                ram: 100 * (1 - response.memoryFree / response.memoryTotal),
-                disc: `${Math.floor(response.discOccupied)}/${Math.floor(
-                  response.discTotal
-                )}`,
-                services: `${response.servicesRunning}/${response.servicesCount}`,
-              },
+              [response.agent]: ResponseParser.MachineHealtStatusReceived(response),
             };
           });
       });

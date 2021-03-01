@@ -12,6 +12,7 @@ import { API } from "../../utils/API";
 import { SignalRContext } from "../../utils/signalr-context";
 import Logs from "../Dashboards/Logs/Logs";
 import ServiceHeaderMobile from "./ServiceHeaderMobile";
+import ResponseParser from '../../utils/ResponseParser'
 import LoginModal from "../LoginModal";
 
 const Dashboards = () => {
@@ -22,19 +23,19 @@ const Dashboards = () => {
   const [connectionState, setConnectionState] = useState("");
   const [machineAddress, setMachineAddress] = useState("");
   const connection = useContext(SignalRContext);
-  const [loginStatus, setLoginStatus] = useState(false);
+  const [loginStatus, setLoginStatus] = useState(true);
 
   useEffect(() => {
     const init = async () => {
       await Promise.all([
         API.fetchServicesList(machineName).then((response) => {
-          setServices(response.data);
+          setServices(response?.data);
         }),
         API.fetchMachineList().then((response) => {
-          let ipAddress = response.data.filter(
-            (ms) => ms.name == machineName
+          let ipAddress = response?.data.filter(
+            (ms) => ms.name === machineName
           )[0];
-          setMachineAddress(ipAddress.address);
+          setMachineAddress(ipAddress?.address);
         }),
       ]);
     };
@@ -45,21 +46,13 @@ const Dashboards = () => {
     const init = async () => {
       if (connection !== null) {
         connection.on("MachineHealthReceived", (response) => {
-          if (response.agent === machineName) {
-            let updated = {};
-            updated.cpu = response.cpuPercentUsage;
-            updated.ram = Math.floor(
-              100 * (1 - response.memoryFree / response.memoryTotal)
-            );
-            updated.disc = `${Math.floor(response.discOccupied)}/${Math.floor(
-              response.discTotal
-            )}`;
-            updated.services = `${response.servicesRunning}/${response.servicesCount}`;
+          if (response?.agent === machineName) {
+            let updated = ResponseParser.MachineHealtStatusReceived(response);
             setMachineState(updated);
           }
         });
         connection.on("ServiceStatusChanged", (response) => {
-          if (response.agent === machineName) {
+          if (response?.agent === machineName) {
             let updated = [...services];
             let indexOfChangedService = updated.findIndex(
               (x) => x.name.toLowerCase() === response.name.toLowerCase()
@@ -99,7 +92,7 @@ const Dashboards = () => {
   const [searchResults, setSearchResults] = useState([]);
 
   useEffect(() => {
-    const results = services.filter((service) =>
+    const results = services?.filter((service) =>
       service.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
     setSearchResults(results);
@@ -114,9 +107,12 @@ const Dashboards = () => {
   const moreResults = searchResults.length > servicesPerPage;
 
   API.test().then((response) => {
-    if (response?.status == "200") {
-      setLoginStatus(true);
-    }
+    // if (response?.status === "200") {
+    //   setLoginStatus(true);
+    // }
+    // else{
+    //   setLoginStatus(false);
+    // }
   });
   if (!loginStatus) {
     return <LoginModal decline={showModalHandler}></LoginModal>;

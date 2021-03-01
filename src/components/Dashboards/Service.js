@@ -1,7 +1,7 @@
 import { API } from '../../utils/API'
 import React, { useState } from 'react';
 import Modal from 'react-modal';
-import RestartModal from './RestartModal';
+import ApprovalModal from '../Common/ApprovalModal'
 import { Link } from "react-router-dom";
 
 const Service = ({ service, index, agent }) => {
@@ -14,6 +14,11 @@ const Service = ({ service, index, agent }) => {
         let isShowing = showModal;
         setShowModal(!isShowing);
     };
+
+    const restartServiceHandler = ()=>{
+        API.restartService(agent,service.name);
+        setShowModal(false);
+    }
 
     return (
         <div key={service.name + index} className="service">
@@ -44,7 +49,13 @@ const Service = ({ service, index, agent }) => {
                 ariaHideApp={false}
                 className="agent-modal"
             >
-                <RestartModal service={service} decline={showModalHandler}></RestartModal>
+                <ApprovalModal 
+                service={service.name} 
+                decline={showModalHandler}
+                message="Are you sure you want to restart service?"
+                entity={service.name}
+                action={restartServiceHandler}>
+                </ApprovalModal>
             </Modal>
         </div>
     )

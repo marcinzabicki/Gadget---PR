@@ -1,7 +1,7 @@
 import { API } from '../../utils/API'
 import React, { useState } from 'react';
 import Modal from 'react-modal';
-import RestartModal from './RestartModal';
+import ApprovalModal from '../Common/ApprovalModal'
 
 const ServiceMobile = ({ agent, service, index }) => {
     const [showModal, setShowModal] = useState(false);
@@ -11,6 +11,11 @@ const ServiceMobile = ({ agent, service, index }) => {
         let isShowing = showModal;
         setShowModal(!isShowing);
     };
+
+    const restartServiceHandler = ()=>{
+        API.restartService(agent,service.name);
+        setShowModal(false);
+    }
 
     return (
         <>
@@ -36,7 +41,13 @@ const ServiceMobile = ({ agent, service, index }) => {
                 ariaHideApp={false}
                 className="agent-modal"
             >
-                <RestartModal service={service} decline={showModalHandler}></RestartModal>
+                <ApprovalModal 
+                service={service.name} 
+                decline={showModalHandler}
+                message="Are you sure you want to restart service?"
+                entity={service.name}
+                action={restartServiceHandler}>
+                </ApprovalModal>
             </Modal>
         </>
     )

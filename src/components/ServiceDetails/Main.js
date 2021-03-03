@@ -103,11 +103,11 @@ return (
 <div className="label-settings-container">
             <div className="label-chart-container">
                 <ServiceBasicInfo serviceInfo={service}></ServiceBasicInfo>
-                {/* <ManageServiceTile
+                <ManageServiceTile
                 agent={machineName}
                 serviceName={serviceName}
                 status="running">
-                </ManageServiceTile> */}
+                </ManageServiceTile>
                 <NotificationCharts data={chartData}></NotificationCharts>
             </div>
               <NotificationSettings

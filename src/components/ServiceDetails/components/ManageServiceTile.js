@@ -1,21 +1,90 @@
-import React from "react";
+import React, { useState } from 'react';
 import {API} from '../../../utils/API'
+import Modal from 'react-modal';
+import ApprovalModal from '../../Common/ApprovalModal'
 
-
-    
     const ManageServiceTile = (props)=>{
-        const showModalHandler = ()=> {console.log("sdsfd")}
+    const [showRestartModal, setShowRestartModal] = useState(false);
+    const [showStartModal, setShowStartModal] = useState(false);
+    const [showStopModal, setShowStopModal] = useState(false);
+    Modal.defaultStyles.overlay.backgroundColor = 'transparent';
+
+        const hideModal = (name)=>{
+            switch(name) {
+               case 'restart' : setShowRestartModal(false);
+               break;
+               case 'start': setShowStartModal(false);
+               break;
+               case'stop':setShowStopModal(false);
+               break;
+            }
+        }
+    
+        const restartServiceHandler = ()=>{
+            API.restartService(props.agent, props.serviceName);
+            setShowRestartModal(false);
+        }
+    
+        const startServiceHandler = ()=>{
+            API.startService(props.agent, props.serviceName);
+            setShowStartModal(false);
+        }
+    
+        const stopServiceHandler = ()=>{
+            API.stopService(props.agent, props.serviceName);
+            setShowStopModal(false);
+        }
+    
    
     return (
         <div className="tile">
            <div className="button-wrapper">
                 {props.status.toLowerCase() === "running" ? (
-                    <button className="button" onClick={() => API.stopService(props.agent, props.serviceName)} >Stop</button>
+                    <button className="manage-btn" onClick={()=>setShowStopModal(true)} >Stop</button>
                 ) : (
-                        <button className="button" onClick={() => API.startService(props.agent, props.serviceName)} >Start</button>
+                        <button className="manage-btn" onClick={()=>setShowStartModal(true)} >Start</button>
                     )}
-                <button className="button" onClick={showModalHandler} >Restart</button>
+                <button className="manage-btn" onClick={()=>setShowRestartModal(true)} >Restart</button>
             </div>
+            <Modal
+                isOpen={showRestartModal}
+                ariaHideApp={false}
+                className="agent-modal"
+            >
+                <ApprovalModal 
+                service={props.serviceName} 
+                decline={()=>{hideModal('restart')}}
+                message="Are you sure you want to restart service?"
+                entity={props.serviceName}
+                action={restartServiceHandler}>
+                </ApprovalModal>
+            </Modal>
+            <Modal
+                isOpen={showStartModal}
+                ariaHideApp={false}
+                className="agent-modal"
+            >
+                <ApprovalModal 
+                service={props.serviceName} 
+                decline={()=>{hideModal('start')}}
+                message="Are you sure you want to start service?"
+                entity={props.serviceName}
+                action={startServiceHandler}>
+                </ApprovalModal>
+            </Modal>
+            <Modal
+                isOpen={showStopModal}
+                ariaHideApp={false}
+                className="agent-modal"
+            >
+                <ApprovalModal 
+                service={props.serviceName} 
+                decline={()=>{hideModal('stop')}}
+                message="Are you sure you want to stop service?"
+                entity={props.serviceName}
+                action={stopServiceHandler}>
+                </ApprovalModal>
+            </Modal>
         </div>
     )
 };

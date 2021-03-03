@@ -2,11 +2,11 @@ import React from "react";
 import { Line, LineChart, XAxis, YAxis, ResponsiveContainer } from 'recharts';
  
     const NotificationCharts = (props)=>{
-      console.log(props);
       const lineStyle = {
         stroke:"#FFFFFF"
       }
-        return (
+
+      const chart = (
         <div className="service-details-chart tile">  
           <ResponsiveContainer width="100%" height="100%">
             <LineChart
@@ -29,6 +29,11 @@ import { Line, LineChart, XAxis, YAxis, ResponsiveContainer } from 'recharts';
         </ResponsiveContainer> 
        
         </div>
-        )}
+        )
+        if (props.data?.length >0) {
+          return chart;
+        }
+        return null;
+      }
 
 export default NotificationCharts;

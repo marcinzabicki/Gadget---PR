@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useContext } from "react";
-import MachineTile from "../Dashboards/MachineDetails/MachineTile/MachineTile";
-import MachineTileMobile from "../Dashboards/MachineDetails/MachineTile/MachineTileMobile";
-import "../Dashboards/MachineDetails/MachineDetails.css";
-import Logs from "../Dashboards/Logs/Logs";
+import MachineTile from "./MachineTile/MachineTile";
+import MachineTileMobile from "./MachineTile/MachineTileMobile";
+import "../Common/MetricsComponents/MachineDetails.css";
+import Logs from "../Common/Tables/Logs";
 import { API } from "../../utils/API";
 import { SignalRContext } from "../../utils/signalr-context";
 import { useWindowSize } from "../../Hooks";

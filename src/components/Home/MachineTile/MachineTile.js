@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import Chart from "../Chart";
-import MetricTile from "../MetricTile";
-import Label from "../Label";
-import "../MachineDetails.css";
+import Chart from "../../Common/MetricsComponents/Chart";
+import MetricTile from "../../Common/MetricsComponents/MetricTile";
+import Label from "../../Common/MetricsComponents/Label";
+import "../../Common/MetricsComponents/MachineDetails.css";
 import { Link } from "react-router-dom";
-import deadIcon from "../images/agent_is_dead.png";
+import deadIcon from "../../Common/MetricsComponents/images/agent_is_dead.png";
 
 const MachineTile = (props) => {
   const [machineTileState, setMachineTileState] = useState({

@@ -1,8 +1,8 @@
 import React from "react";
-import Chart from "../Chart";
-import MetricTile from "../MetricTile";
-import Label from "../Label";
-import "../MachineDetails.css";
+import Chart from "./Chart";
+import MetricTile from "./MetricTile";
+import Label from "./Label";
+import "./MachineDetails.css";
 
 const MachineBar = (props) => {
   return (

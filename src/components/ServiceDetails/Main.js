@@ -3,11 +3,12 @@ import { SignalRContext } from "../../utils/signalr-context";
 import { useWindowSize } from "../../Hooks";
 import { useParams } from "react-router-dom";
 import DatePicker from 'react-datepicker';
-import MachineBar from "../Dashboards/MachineDetails/MachineBar/MachineBar"
+import MachineBar from "../Common/MetricsComponents/MachineBar"
 import NotificationCharts from "./components/NotificationsChart";
-import DashboardTable from "../Common/DashboardTable";
+import DashboardTable from "../Common/Tables/DashboardTable";
 import ServiceBasicInfo from "./components/ServiceBasicInfo"
 import NotificationSettings from "./components/NotificationsSettings"
+import ManageServiceTile from './components/ManageServiceTile'
 import './components/ServiceDetails.css';
 import { API } from "../../utils/API";
 import Helpers from "../../utils/Helpers"
@@ -102,6 +103,11 @@ return (
 <div className="label-settings-container">
             <div className="label-chart-container">
                 <ServiceBasicInfo serviceInfo={service}></ServiceBasicInfo>
+                {/* <ManageServiceTile
+                agent={machineName}
+                serviceName={serviceName}
+                status="running">
+                </ManageServiceTile> */}
                 <NotificationCharts data={chartData}></NotificationCharts>
             </div>
               <NotificationSettings

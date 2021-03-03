@@ -6,11 +6,11 @@ import Pagination from "react-js-pagination";
 import Service from "./Service";
 import ServiceMobile from "./ServiceMobile";
 import ServiceHeader from "./ServiceHeader";
-import MachineBar from "./MachineDetails/MachineBar/MachineBar";
-import "../Dashboards/MachineDetails/MachineDetails.css";
+import MachineBar from "../Common/MetricsComponents/MachineBar";
+import "../Common/MetricsComponents/MachineDetails.css";
 import { API } from "../../utils/API";
 import { SignalRContext } from "../../utils/signalr-context";
-import Logs from "../Dashboards/Logs/Logs";
+import Logs from "../Common/Tables/Logs";
 import ServiceHeaderMobile from "./ServiceHeaderMobile";
 import ResponseParser from '../../utils/ResponseParser'
 import LoginModal from "../LoginModal";

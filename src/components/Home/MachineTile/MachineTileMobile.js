@@ -1,5 +1,5 @@
 import React from 'react';
-import '../MachineDetails.css'
+import '../../Common/MetricsComponents/MachineDetails.css'
 import { Link } from 'react-router-dom'
 
 const MachineTileMobile = (props) => {

@@ -39,7 +39,7 @@ import ApprovalModal from '../../Common/ApprovalModal'
     return (
         <div className="tile">
            <div className="button-wrapper">
-                {props.status.toLowerCase() === "running" ? (
+                {props.status?.toLowerCase() === "running" ? (
                     <button className="manage-btn" onClick={()=>setShowStopModal(true)} >Stop</button>
                 ) : (
                         <button className="manage-btn" onClick={()=>setShowStartModal(true)} >Start</button>

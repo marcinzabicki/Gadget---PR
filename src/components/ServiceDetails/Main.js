@@ -20,36 +20,14 @@ const ServiceDetails = ()=>{
   const { machineName, serviceName } = useParams();
   const [machineState, setMachineState] = useState({});
   const [machineAddress, setMachineAddress] = useState("");
+  const [serviceStatus, setServiceStatus] = useState({});
   const [serviceEvents, setServiceEvents] = useState([]);
   const [chartData, setChartDat] = useState([]);
   const [notifierTypes, setNotifierTypes] = useState([]);
   const [notifiers, setNotifiers] = useState([]);
   const windowSize = useWindowSize();
   
-  const service = {
-    serviceName:serviceName,
-    machineName:machineName, 
-    LogonAs:"Lucjano", 
-    description: "Usługa do karmienia piesełów", 
-    status: "Running"};
-
-
-    useEffect(() => {
-      const init = async () => {
-        if (connection !== null) {
-          connection.on("MachineHealthReceived", (response) => {
-            if (response.agent === machineName) {
-              let updated = ResponseParser.MachineHealtStatusReceived(response);
-              setMachineState(updated);
-            }
-          });
-        }
-      };
-      init();
-      return () => {
-        connection?.off("MachineHealthReceived");
-      };
-    }, [connection, machineName, serviceName]);
+  
 
     useEffect(() => {
       const init = async () => {
@@ -72,6 +50,18 @@ const ServiceDetails = ()=>{
               )[0];
               setMachineAddress(ipAddress?.address);
             }),
+            API.fetchServicesList(machineName).then((response) => {
+              let service = response.data.filter(x=>{ return x.name === serviceName})[0];
+              console.log(service);
+              let newServiceState = {
+                machineName:machineName,
+                serviceName:serviceName,
+                logonAs:service.logOnAs,
+                description:service.description,
+                status:service.status
+              };
+              setServiceStatus(newServiceState);
+            }),
             API.getNotifierTypes().then((response) => {
               setNotifierTypes(response?.data);
             }),
@@ -84,7 +74,31 @@ const ServiceDetails = ()=>{
     }, []);//[machineName, serviceName]
 
    
-
+    useEffect(() => {
+      const init = async () => {
+        if (connection !== null) {
+          connection.on("MachineHealthReceived", (response) => {
+            if (response?.agent === machineName) {
+              let updated = ResponseParser.MachineHealtStatusReceived(response);
+              setMachineState(updated);
+            }
+          });
+          connection.on("ServiceStatusChanged", (response) => {
+            if (response?.agent === machineName) {
+              let update = Object.assign({}, serviceStatus);
+              update.status = response.status;
+              setServiceStatus(update);
+            }
+          });
+        }
+      };
+  
+      init();
+      return () => {
+        connection?.off("MachineHealthReceived");
+        connection?.off("ServiceStatusChanged");
+      };
+    }, [connection, machineName]);
 
   
 return (
@@ -102,11 +116,11 @@ return (
        
 <div className="label-settings-container">
             <div className="label-chart-container">
-                <ServiceBasicInfo serviceInfo={service}></ServiceBasicInfo>
+                <ServiceBasicInfo serviceInfo={serviceStatus}></ServiceBasicInfo>
                 <ManageServiceTile
                 agent={machineName}
                 serviceName={serviceName}
-                status="running">
+                status={serviceStatus.status}>
                 </ManageServiceTile>
                 <NotificationCharts data={chartData}></NotificationCharts>
             </div>

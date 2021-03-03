@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, {useState} from "react";
 import Pagination from "react-js-pagination";
     
-    const ServiceEventsTable = (props)=>{
+    const DashboardTable = (props)=>{
         const [activePage, setActivePage] = useState(1);
        if(props === null || props.tableData.length <1){
            return null;
@@ -65,4 +65,4 @@ import Pagination from "react-js-pagination";
     </div>
    )}
 
-export default ServiceEventsTable;
+export default DashboardTable;

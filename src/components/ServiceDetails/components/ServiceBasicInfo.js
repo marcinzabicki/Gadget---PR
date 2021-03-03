@@ -1,13 +1,7 @@
-import React, { useState, useEffect, useContext } from "react";
+import React from "react";
 import Helpers from '../../../utils/Helpers';
-//import { API } from "../../utils/API";
-
-
     
     const ServiceBasicInfo = (props)=>{
-   
-        
-
         const label =
         Object.keys(props.serviceInfo).map((k, i) => {
 
@@ -22,8 +16,6 @@ import Helpers from '../../../utils/Helpers';
                 </div>
             )
         });
-
-
 
     return (
         <div className="service-basic-info tile">

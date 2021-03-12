@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import {API} from '../../../utils/API'
+import {UserPreferencesManager} from '../../../utils/UserPreferencesManager'
 import Modal from 'react-modal';
 import ApprovalModal from '../../Common/ApprovalModal'
 
@@ -7,6 +8,7 @@ import ApprovalModal from '../../Common/ApprovalModal'
     const [showRestartModal, setShowRestartModal] = useState(false);
     const [showStartModal, setShowStartModal] = useState(false);
     const [showStopModal, setShowStopModal] = useState(false);
+    const [isFavourite, setIsFavourite] = useState(false);
     Modal.defaultStyles.overlay.backgroundColor = 'transparent';
 
         const hideModal = (name)=>{
@@ -18,7 +20,13 @@ import ApprovalModal from '../../Common/ApprovalModal'
                case'stop':setShowStopModal(false);
                break;
             }
-        }
+        };
+
+        const addToVavourites = ()=>{
+            UserPreferencesManager.AddServiceToFavourites(props.agent, props.serviceName);
+            setIsFavourite(true);
+        };
+
     
         const restartServiceHandler = ()=>{
             API.restartService(props.agent, props.serviceName);
@@ -45,6 +53,7 @@ import ApprovalModal from '../../Common/ApprovalModal'
                         <button className="manage-btn" onClick={()=>setShowStartModal(true)} >Start</button>
                     )}
                 <button className="manage-btn" onClick={()=>setShowRestartModal(true)} >Restart</button>
+                <button className="manage-btn" onClick={()=>addToVavourites()} >Favourites</button>
             </div>
             <Modal
                 isOpen={showRestartModal}

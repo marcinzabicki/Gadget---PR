@@ -26,8 +26,6 @@ const ServiceDetails = ()=>{
   const [notifierTypes, setNotifierTypes] = useState([]);
   const [notifiers, setNotifiers] = useState([]);
   const windowSize = useWindowSize();
-  
-  
 
     useEffect(() => {
       const init = async () => {

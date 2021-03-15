@@ -8,10 +8,6 @@ import Helpers from "../../../utils/Helpers"
       }
 
       let sorted = props.data?.sort((a,b)=>b.time - a.time);
-      let datePArsed = sorted.map((item)=>{return {time:Helpers.formatDate(item.time), value:item.value}})
-
-      console.log(datePArsed);
-
       const chart = (
         <div className="service-details-chart tile">  
           <ResponsiveContainer width="100%" height="100%">

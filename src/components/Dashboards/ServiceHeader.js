@@ -1,11 +1,21 @@
 import React from 'react';
+import Switch from "react-switch";
 
-const ServiceHeader = ({ searchTerm, setSearchTerm, setActivePage }) => {
+const ServiceHeader = ({ searchTerm, 
+                        setSearchTerm, 
+                        setActivePage, 
+                        showFavourites, 
+                        setShowFavourites }) => {
 
     const handleSearch = e => {
         setSearchTerm(e.target.value);
         setActivePage(1)
     };
+
+    const showFavHandle = e=>{
+        setShowFavourites(e)
+    }
+
 
     return (
         <div className="service-header">
@@ -23,6 +33,16 @@ const ServiceHeader = ({ searchTerm, setSearchTerm, setActivePage }) => {
                     onChange={handleSearch}
                 />
             </div>
+            <p className="fav-only-label">Favourites</p>
+            <Switch
+                    onChange={showFavHandle}
+                    checked={showFavourites}
+                    offColor="#707070"
+                    onColor="#38E18D"
+                    width={52}
+                    height={19}
+                    handleDiameter={16}
+                />
         </div>
     )
 }

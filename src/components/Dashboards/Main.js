@@ -26,10 +26,10 @@ const Dashboards = () => {
   const [displayedServices, setDisplayedServices] = useState([]);
   const [showFavourites, setShowFavourites] = useState(false);
 
-  const [connectionState, setConnectionState] = useState("");
+  const [connectionState] = useState("");
   const [machineAddress, setMachineAddress] = useState("");
   const connection = useContext(SignalRContext);
-  const [loginStatus, setLoginStatus] = useState(true);
+  const [loginStatus] = useState(true);
 
 //#region fetch data effects
 useEffect(() => {
@@ -78,27 +78,21 @@ useEffect(() => {
   };
 }, [connection, services, machineName]);
 
+useEffect(()=>{
+  let favourites = UserPreferencesManager.getFavouritesByAgent(machineName, services);
+  setFavouriteServices(favourites);
+ 
+}, [services]);
 
+useEffect(()=>{
+  showFavourites? setDisplayedServices(favouriteServices) : setDisplayedServices(services);
+}, [services, showFavourites])
 
 
 //#endregion
 
-useEffect(()=>{
-  let favourites = UserPreferencesManager.getFavouritesByAgent(machineName, services);
-  setFavouriteServices(favourites);
-  showFavourites? setDisplayedServices(favourites) : setDisplayedServices(services);
-  console.log(showFavourites);
-  console.log("favs:", favourites);
-  console.log("displayed:", displayedServices);
-  console.log("services:", services);
-}, [services, showFavourites, displayedServices]);
-
-
-
-
-
- 
-  const servicesPerPage = 10;
+//#region search and pagination services
+const servicesPerPage = 10;
   const [activePage, setActivePage] = useState(1);
 
   const handlePageChange = (pageNumber) => {
@@ -106,7 +100,6 @@ useEffect(()=>{
   };
 
   Modal.defaultStyles.overlay.backgroundColor = "#2B3139";
-
   const [showModal, setShowModal] = useState(false);
   const showModalHandler = () => {
     let isShowing = showModal;
@@ -131,6 +124,11 @@ useEffect(()=>{
     indexOfLastService
   );
   const moreResults = searchResults.length > servicesPerPage;
+
+
+
+//#endregion
+ 
 
   if (!loginStatus) {
     return <LoginModal decline={showModalHandler}></LoginModal>;
@@ -231,7 +229,7 @@ useEffect(()=>{
           lastPageText=".."
         />
       )}
-      <Logs></Logs>
+      {/* <Logs></Logs> */}
     </div>
   );
 };

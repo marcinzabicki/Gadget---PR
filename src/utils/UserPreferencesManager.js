@@ -70,7 +70,12 @@ static isServiceFavourite(agent, service){
   //#endregion
 
     static getFavouritesByAgent(agent, services){
-        let favs =  JSON.parse(localStorage.getItem('userPreferences')).favourites;
+        let settings = localStorage.getItem('userPreferences');
+        if (settings === null || settings === undefined) {
+            this.initUeserPreferences();
+            return [];
+        }
+        let favs =  JSON.parse(settings).favourites;
         if (favs === null || favs === undefined) {
             return [];
         }
@@ -78,7 +83,6 @@ static isServiceFavourite(agent, service){
         return  services.filter(s=> this.containsObject({agent:agent, service:s.name}, agentFavs));
     }
 
-  
 
 //#region general
     static containsObject(obj, list) {

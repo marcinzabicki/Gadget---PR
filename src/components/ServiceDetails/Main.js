@@ -13,6 +13,9 @@ import './components/ServiceDetails.css';
 import { API } from "../../utils/API";
 import Helpers from "../../utils/Helpers"
 import ResponseParser from '../../utils/ResponseParser'
+import InMemoryJwt from '../../utils/Authentication/InMemoryJwt'
+import LoginModal from '../Common/LoginModal'
+import Modal from "react-modal";
 
 const ServiceDetails = ()=>{
 
@@ -26,6 +29,13 @@ const ServiceDetails = ()=>{
   const [notifierTypes, setNotifierTypes] = useState([]);
   const [notifiers, setNotifiers] = useState([]);
   const windowSize = useWindowSize();
+  const [loginStatus, setLoginStatus] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+
+
+  useEffect(()=>{
+    setLoginStatus(InMemoryJwt.getToken()!=null);
+  });
 
     useEffect(() => {
       const init = async () => {
@@ -106,6 +116,14 @@ const ServiceDetails = ()=>{
       };
     }, [connection, machineName]);
 
+  Modal.defaultStyles.overlay.backgroundColor = "#2B3139";
+  const showModalHandler = () => {
+    let isShowing = showModal;
+    setShowModal(!isShowing);
+  };
+    if (!loginStatus) {
+      return <LoginModal decline={showModalHandler}></LoginModal>;
+    }
   
 return (
     <div>

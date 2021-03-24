@@ -11,10 +11,10 @@ import "../Common/MetricsComponents/MachineDetails.css";
 import { API } from "../../utils/API";
 import {UserPreferencesManager} from '../../utils/UserPreferencesManager'
 import { SignalRContext } from "../../utils/signalr-context";
-import Logs from "../Common/Tables/Logs";
 import ServiceHeaderMobile from "./ServiceHeaderMobile";
 import ResponseParser from '../../utils/ResponseParser'
-import LoginModal from "../LoginModal";
+import LoginModal from "../Common/LoginModal";
+import InMemoryJwt from '../../utils/Authentication/InMemoryJwt'
 
 const Dashboards = () => {
   const windowSize = useWindowSize();
@@ -29,7 +29,11 @@ const Dashboards = () => {
   const [connectionState] = useState("");
   const [machineAddress, setMachineAddress] = useState("");
   const connection = useContext(SignalRContext);
-  const [loginStatus] = useState(true);
+  const [loginStatus, setLoginStatus] = useState(false);
+
+  useEffect(()=>{
+    setLoginStatus(InMemoryJwt.getToken()!=null);
+  });
 
 //#region fetch data effects
 useEffect(() => {
@@ -133,6 +137,7 @@ const servicesPerPage = 10;
   if (!loginStatus) {
     return <LoginModal decline={showModalHandler}></LoginModal>;
   }
+
 
   if (windowSize <= 768) {
     return (

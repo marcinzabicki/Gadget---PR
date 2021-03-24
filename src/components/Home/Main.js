@@ -7,8 +7,10 @@ import { API } from "../../utils/API";
 import { SignalRContext } from "../../utils/signalr-context";
 import { useWindowSize } from "../../Hooks";
 import Modal from 'react-modal';
-import LoginModal from '../LoginModal';
-import ResponseParser from '../../utils/ResponseParser'
+import LoginModal from '../Common/LoginModal';
+import ResponseParser from '../../utils/ResponseParser';
+import InMemoryJwt from '../../utils/Authentication/InMemoryJwt'
+
 
 const Home = () => {
   const [machineList, setMachineList] = useState({});
@@ -67,6 +69,10 @@ const Home = () => {
     };
   }, [connection]);
 
+  useEffect(()=>{
+    setLoginStatus(InMemoryJwt.getToken()!=null);
+  })
+
   const getMachines = () => {
     if (windowSize <= 768) {
       return Object.keys(machineList).map((m, i) => {
@@ -95,11 +101,7 @@ const Home = () => {
       );
     });
   };
-  API.test().then((response) => {
-    if (response?.status == "200") {
-      setLoginStatus(true)
-    }
-  })
+ 
   if (!loginStatus) {
     return <LoginModal decline={showModalHandler}></LoginModal>
   }

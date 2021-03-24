@@ -1,6 +1,7 @@
 import React from 'react'
-import {API} from '../utils/API'
-import closeImage from './Home/close.png'
+import {API} from '../../utils/API'
+import InMemoryJwt from '../../utils/Authentication/InMemoryJwt'
+import closeImage from '../Home/close.png'
 import { useState } from 'react'
 
 let loginInput = React.createRef();
@@ -16,9 +17,10 @@ const [loginFailed, setLoginFailed] = useState(false);
         if (user!=='' && pass!=='') {
             API.login(user, pass).then((response)=>{
                 
-                if (response.status >= 200 || response.status < 300) {
+                if (response.status ===200) {
                     localStorage.setItem('accessToken', response.data)
-                    console.log(response.data);
+                    InMemoryJwt.setToken(response.data);
+                    console.log(response);
                     props.decline();
                 }
             }).catch((error)=>{

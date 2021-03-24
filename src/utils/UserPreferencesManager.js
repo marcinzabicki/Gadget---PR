@@ -67,7 +67,7 @@ static isServiceFavourite(agent, service){
     return this.containsObject(obj, settings.favourites)
 }
 
-  //#endregion
+
 
     static getFavouritesByAgent(agent, services){
         let settings = localStorage.getItem('userPreferences');
@@ -83,8 +83,9 @@ static isServiceFavourite(agent, service){
         return  services.filter(s=> this.containsObject({agent:agent, service:s.name}, agentFavs));
     }
 
+  //#endregion
 
-//#region general
+  //#region general
     static containsObject(obj, list) {
         for (let i = 0; i < list.length; i++) {
             if (JSON.stringify(list[i]) === JSON.stringify(obj)) {

@@ -1,9 +1,13 @@
 import axios from "axios";
 import { BASE_URL, NOTIFICATIONS_URL } from "../config";
+import InMemoryJwt from './Authentication/InMemoryJwt';
 
 export class API {
+
+//#region fetch data
+
   static async fetchMachineList() {
-    let token = localStorage.getItem('accessToken');
+    let token = InMemoryJwt.getToken();
     try {
       return await axios({
         method: "GET",
@@ -18,7 +22,7 @@ export class API {
   }
 
   static async fetchServicesList(machineId) {
-    let token = localStorage.getItem('accessToken');
+    let token = InMemoryJwt.getToken();
     try {
       return await axios({
         method: "GET",
@@ -33,7 +37,7 @@ export class API {
   }
 
   static async fetchLastEvents(number) {
-    let token = localStorage.getItem('accessToken');
+    let token = InMemoryJwt.getToken();
     try {
       return await axios({
         method: "GET",
@@ -46,6 +50,19 @@ export class API {
       console.log(e);
     }
   }
+
+  static async fetchServiceEvents(agent, service, queryString) {
+    try {
+      return await axios({
+        method: "GET",
+        url: `${BASE_URL}/agents/${agent}/${service}/events?count=100&${queryString}`,
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  //#endregion
 
 //#region manageServices
 
@@ -98,7 +115,7 @@ export class API {
   }
 
   static async test() {
-    let token = localStorage.getItem('accessToken');
+    let token = InMemoryJwt.getToken();
     try {
       return await axios({
         method: "GET",
@@ -116,7 +133,7 @@ export class API {
     try {
       return await axios({
         method: "POST",
-        url: `${BASE_URL}/logoutUrl`,
+        url: `${BASE_URL}/logout`,
       });
     } catch (e) {
       console.log(e);
@@ -142,7 +159,7 @@ export class API {
 }
 
 static async getNotifierTypes() {
-  let token = localStorage.getItem('accessToken');
+  let token =InMemoryJwt.getToken();
   try {
     return await axios({
       method: "GET",
@@ -157,7 +174,7 @@ static async getNotifierTypes() {
 }
 
 static async createNotifier(agent, service, receiver, type) {
-  let token = localStorage.getItem('accessToken');
+  let token = InMemoryJwt.getToken();
   try {
     return await axios({
       method: "POST",
@@ -173,7 +190,7 @@ static async createNotifier(agent, service, receiver, type) {
 }
 
 static async deleteNotifier(agent, service, receiver) {
-  let token = localStorage.getItem('accessToken');
+  let token = InMemoryJwt.getToken();
   try {
     return await axios({
       method: "POST",
@@ -187,18 +204,6 @@ static async deleteNotifier(agent, service, receiver) {
     console.log(e);
   }
 }
-
  //#endregion
-
-  static async fetchServiceEvents(agent, service, queryString) {
-    try {
-      return await axios({
-        method: "GET",
-        url: `${BASE_URL}/agents/${agent}/${service}/events?count=100&${queryString}`,
-      });
-    } catch (e) {
-      console.log(e);
-    }
-  }
 
 }

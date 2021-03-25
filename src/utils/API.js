@@ -115,26 +115,12 @@ export class API {
     }
   }
 
-  static async test() {
-    let token = InMemoryJwt.getToken();
-    try {
-      return await axios({
-        method: "GET",
-        url: `${BASE_URL}/auth/test`,
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      });
-    } catch (e) {
-      console.log(e);
-    }
-  }
-
   static async logout() {
     try {
       return await axios({
         method: "POST",
-        url: `${BASE_URL}/logout`,
+        url: `${BASE_URL}/auth/logout`,
+        withCredentials: true
       });
     } catch (e) {
       console.log(e);
@@ -219,4 +205,22 @@ static async deleteNotifier(agent, service, receiver) {
 }
  //#endregion
 
+
+ //#region  tests
+
+ static async test() {
+  let token = InMemoryJwt.getToken();
+  try {
+    return await axios({
+      method: "GET",
+      url: `${BASE_URL}/auth/test`,
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+  } catch (e) {
+    console.log(e);
+  }
+}
+ //#endregion
 }

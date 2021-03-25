@@ -107,7 +107,8 @@ export class API {
       return await axios({
         method: "POST",
         url: `${BASE_URL}/auth/login`,
-        data: { userName: userName, password: password }
+        data: { userName: userName, password: password },
+        withCredentials: true
       });
     } catch (e) {
       console.log(e);
@@ -134,6 +135,18 @@ export class API {
       return await axios({
         method: "POST",
         url: `${BASE_URL}/logout`,
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  static async refreshToken(){
+    try {
+      return await axios({
+        method: "POST",
+        url: `${BASE_URL}/auth/refresh`,
+        withCredentials: true
       });
     } catch (e) {
       console.log(e);

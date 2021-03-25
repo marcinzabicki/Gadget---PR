@@ -16,14 +16,13 @@ const Header = () => {
       const [isLoggedIn, setIsLoggedIn] = useState(false);
 
     const testClick = ()=>{
-        API.test().then((response)=>{
+        API.refreshToken().then((response)=>{
             console.log(response);
         })
     }
 
     useEffect(()=>{
         setIsLoggedIn(InMemoryJwt.getToken()!=null)
-        console.log("fjjfjjfjfjfjf");
     })
 
     const logout = ()=>{

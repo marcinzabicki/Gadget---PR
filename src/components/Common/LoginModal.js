@@ -7,8 +7,6 @@ import { useState } from 'react'
 let loginInput = React.createRef();
 let passwordInput = React.createRef();
 
-
-
 const LoginModal = (props)=>{
 const [loginFailed, setLoginFailed] = useState(false);
   const  loginClickHandle = ()=>{
@@ -18,10 +16,10 @@ const [loginFailed, setLoginFailed] = useState(false);
             API.login(user, pass).then((response)=>{
                 
                 if (response.status ===200) {
-                    localStorage.setItem('accessToken', response.data)
                     InMemoryJwt.setToken(response.data);
-                    console.log(response);
+                    //window.addEventListener('storage', ()=>{console.log("event fjfjfjfj")})
                     props.decline();
+
                 }
             }).catch((error)=>{
                setLoginFailed(true);

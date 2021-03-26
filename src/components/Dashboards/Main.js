@@ -234,7 +234,6 @@ const servicesPerPage = 10;
           lastPageText=".."
         />
       )}
-      {/* <Logs></Logs> */}
     </div>
   );
 };

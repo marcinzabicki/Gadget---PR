@@ -11,7 +11,7 @@ const Logs = () => {
       useEffect(() => {
         if (connection !== null) {
           const init = async () => {
-            const response = await API.fetchMachineList();
+            const response = await API.fetchLastEvents(10);
            setServices(response.data)
           };
           connection.on("ServiceStatusChanged", (response) => {
@@ -25,7 +25,7 @@ const Logs = () => {
         return () => {
           connection?.off("ServiceStatusChanged");
         };
-      }, [connection]);
+      }, [connection, services]);
       
 
       if(services.length>0){

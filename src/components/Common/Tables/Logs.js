@@ -3,34 +3,30 @@ import { SignalRContext } from '../../../utils/signalr-context'
 import { API } from '../../../utils/API'
 import Helpers from '../../../utils/Helpers'
 
-
-
 const Logs = () => {
 
     const connection = useContext(SignalRContext);
     const [services, setServices] = useState([]);
 
-    useEffect(() => {
-        API.fetchLastEvents(10).then((response) => {
-          if (response) {
-            setServices(response.data)
-          }
-        });
-      }, []);
-
-
-    useEffect(() => {
+      useEffect(() => {
         if (connection !== null) {
+          const init = async () => {
+            const response = await API.fetchMachineList();
+           setServices(response.data)
+          };
           connection.on("ServiceStatusChanged", (response) => {
-              let updated = [...services];
-              updated.unshift({agent:response.agent, service:response.name, createdAt:Helpers.formatDate(Date.now()), status:response.status});
-              setServices(updated.slice(0,10));
+            let updated = [...services];
+            updated.unshift({agent:response.agent, service:response.name, createdAt:Helpers.formatDate(Date.now()), status:response.status});
+            setServices(updated.slice(0,10));
           });
+          init();
         }
-        return function cleanup() {
-            connection && connection.off("ServiceStatusChanged")
-        }
-      }, [connection, services]);
+    
+        return () => {
+          connection?.off("ServiceStatusChanged");
+        };
+      }, [connection]);
+      
 
       if(services.length>0){
         const headers =

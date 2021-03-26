@@ -13,7 +13,7 @@ const Header = () => {
         let isShowing = showModal;
         setShowModal(!isShowing);
       };
-      const [isLoggedIn, setIsLoggedIn] = useState(false);
+    //   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
     const testClick = ()=>{
         API.refreshToken().then((response)=>{
@@ -21,9 +21,9 @@ const Header = () => {
         })
     }
 
-    useEffect(()=>{
-        setIsLoggedIn(InMemoryJwt.getToken()!=null)
-    })
+    // useEffect(()=>{
+    //     setIsLoggedIn(InMemoryJwt.getToken()!=null)
+    // })
 
     const logout = ()=>{
         InMemoryJwt.ereaseToken();
@@ -39,11 +39,11 @@ const Header = () => {
             <div className="log-button">
                 <p onClick={testClick}>Test</p>
             </div>
-            <div className="log-button">
+            {/* <div className="log-button">
                {
                    isLoggedIn?<p onClick={logout}>Log out</p>:  <p onClick={showModalHandler}>Log in</p>
                }
-            </div>
+            </div> */}
             <Modal
             className="agent-modal"
              isOpen={showModal}

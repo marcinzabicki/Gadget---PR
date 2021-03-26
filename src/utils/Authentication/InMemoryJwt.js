@@ -39,6 +39,7 @@ function IsExpired(token){
     try{
         let decoded = parseJwt(token);
        return  decoded.exp < new Date().getTime()/1000
+
     }
     catch{
         return false;

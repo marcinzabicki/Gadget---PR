@@ -10,7 +10,6 @@ const App = () => {
       <Header />
       <BrowserRouter>
         <div className="content-wrapper">
-          {/* <Nav /> */}
           <section className="content">
             <Route exact path="/">
               <Home />

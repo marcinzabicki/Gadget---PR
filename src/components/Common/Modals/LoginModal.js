@@ -1,12 +1,12 @@
 import React from 'react'
-import {API} from '../../utils/API'
-import InMemoryJwt from '../../utils/Authentication/InMemoryJwt'
-import closeImage from '../Home/close.png'
+import {API} from '../../../utils/API'
+import InMemoryJwt from '../../../utils/Authentication/InMemoryJwt'
+import closeImage from '../../Home/close.png'
 import { useState } from 'react'
 
 let loginInput = React.createRef();
 let passwordInput = React.createRef();
-
+ 
 const LoginModal = (props)=>{
 const [loginFailed, setLoginFailed] = useState(false);
   const  loginClickHandle = ()=>{

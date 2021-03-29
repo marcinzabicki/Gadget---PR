@@ -13,7 +13,7 @@ import {UserPreferencesManager} from '../../utils/UserPreferencesManager'
 import { SignalRContext } from "../../utils/signalr-context";
 import ServiceHeaderMobile from "./ServiceHeaderMobile";
 import ResponseParser from '../../utils/ResponseParser'
-import LoginModal from "../Common/LoginModal";
+import LoginModal from "../Common/Modals/LoginModal";
 import InMemoryJwt from '../../utils/Authentication/InMemoryJwt'
 
 const Dashboards = () => {

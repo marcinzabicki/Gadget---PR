@@ -10,8 +10,8 @@ const ApprovalModal = (props)=>{
             <span>{props.message}</span>
             <span>{props.entity}</span>
             <div>
-                <p className="restart-button restart-button-yes" onClick={props.action}>TAK</p>
-                <p className="restart-button restart-button-no" onClick={props.decline}>NIE</p>
+                <p className="restart-button restart-button-yes" onClick={props.action}>YES</p>
+                <p className="restart-button restart-button-no" onClick={props.decline}>NO</p>
             </div>
         </div>
     )

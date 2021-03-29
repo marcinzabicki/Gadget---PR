@@ -1,7 +1,7 @@
 import React from "react";
 import { useState } from "react/cjs/react.development";
 import { API } from "../../../utils/API";
-import ApprovalModal from '../../Common/ApprovalModal'
+import ApprovalModal from '../../Common/Modals/ApprovalModal'
 import Modal from 'react-modal';
     
 const WebhookItem = (props)=>{

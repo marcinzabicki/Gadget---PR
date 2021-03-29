@@ -6,8 +6,9 @@ import { API } from "../../utils/API";
 import { SignalRContext } from "../../utils/signalr-context";
 import { useWindowSize } from "../../Hooks";
 import Modal from 'react-modal';
-import LoginModal from '../Common/LoginModal';
+import LoginModal from '../Common/Modals/LoginModal';
 import Logs from '../Common/Tables/Logs'
+import EventPushModal from '../Common/Modals/EventPushModal'
 import ResponseParser from '../../utils/ResponseParser';
 import InMemoryJwt from '../../utils/Authentication/InMemoryJwt'
 
@@ -18,6 +19,7 @@ const Home = () => {
   const windowSize = useWindowSize();
   const [loginStatus, setLoginStatus] = useState(true);
   const [showModal, setShowModal] = useState(false);
+  const [showEventModal, setShowEventModal] = useState(false);
  
   const showModalHandler = () => {
     let isShowing = showModal;
@@ -99,14 +101,16 @@ const Home = () => {
       );
     });
   };
-  Modal.defaultStyles.overlay.backgroundColor = '#2B3139';
+  
   if (!loginStatus) {
-    return <LoginModal decline={showModalHandler}></LoginModal>
+    Modal.defaultStyles.overlay.backgroundColor = '#2B3139';
+    return <LoginModal decline={showModalHandler}/>
   }
   return (
     <div className="home-container">
       <div className="machine-tiles-container">{getMachines()}</div>
-      <Logs></Logs>
+      <Logs/>
+      <EventPushModal status="running" agent="testdf" service="usluga"/>
     </div>
   );
 };

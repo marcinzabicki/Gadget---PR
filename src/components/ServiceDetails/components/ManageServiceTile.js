@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import {API} from '../../../utils/API'
 import {UserPreferencesManager} from '../../../utils/UserPreferencesManager'
 import Modal from 'react-modal';
-import ApprovalModal from '../../Common/ApprovalModal'
+import ApprovalModal from '../../Common/Modals/ApprovalModal'
 
     const ManageServiceTile = (props)=>{
     const [showRestartModal, setShowRestartModal] = useState(false);

@@ -14,7 +14,7 @@ import { API } from "../../utils/API";
 import Helpers from "../../utils/Helpers"
 import ResponseParser from '../../utils/ResponseParser'
 import InMemoryJwt from '../../utils/Authentication/InMemoryJwt'
-import LoginModal from '../Common/LoginModal'
+import LoginModal from '../Common/Modals/LoginModal'
 import Modal from "react-modal";
 
 const ServiceDetails = ()=>{

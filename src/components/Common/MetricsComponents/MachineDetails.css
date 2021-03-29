@@ -263,6 +263,30 @@ color:black;
     cursor: pointer;
  }
 
+ /* ===================== notifications bells */
+
+ .push-event-modal{
+    height: 150px;
+    border-radius: 4px;
+    background-color: #313843;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+    margin:5px;
+    max-width: fit-content;
+    min-width: 150px;
+}
+
+.push-event-column{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.push-event-modal span{
+    margin:5px;
+}
 
 /* ======================home mobile */
     .label-mobile{

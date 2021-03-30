@@ -17,6 +17,7 @@ import LoginModal from "../Common/Modals/LoginModal";
 import EventPushModal from '../Common/Modals/EventPushModal'
 import InMemoryJwt from '../../utils/Authentication/InMemoryJwt'
 import Helpers from '../../utils/Helpers'
+import DashboardTable from '../Common/Tables/DashboardTable'
 
 
 const Dashboards = () => {
@@ -86,10 +87,10 @@ useEffect(() => {
           );
           updated[indexOfChangedService].status = response.status;
           setServices(updated);
-          let newRecord = {agent:response.agent, service:response.name, time:Helpers.formatDate(Date.now()), status:response.status}
+        }
+        let newRecord = {agent:response.agent, service:response.name, time:Helpers.formatDate(Date.now()), status:response.status}
         setServiceEvents(prev=>[...prev, newRecord]);
         setShowEventModal(true);
-        }
       });
     }
   };
@@ -273,6 +274,7 @@ const servicesPerPage = 10;
       >
         <EventPushModal event={serviceEvents[serviceEvents.length-1]} />
       </Modal>
+      <DashboardTable tableData={serviceEvents}/>
     </div>
   );
 };

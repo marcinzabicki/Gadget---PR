@@ -7,9 +7,10 @@ import { SignalRContext } from "../../utils/signalr-context";
 import { useWindowSize } from "../../Hooks";
 import Modal from 'react-modal';
 import LoginModal from '../Common/Modals/LoginModal';
-import Logs from '../Common/Tables/Logs'
+import DashboardTable from '../Common/Tables/DashboardTable'
 import EventPushModal from '../Common/Modals/EventPushModal'
 import ResponseParser from '../../utils/ResponseParser';
+import Helpers from '../../utils/Helpers'
 import InMemoryJwt from '../../utils/Authentication/InMemoryJwt'
 
 
@@ -18,13 +19,17 @@ const Home = () => {
   const connection = useContext(SignalRContext);
   const windowSize = useWindowSize();
   const [loginStatus, setLoginStatus] = useState(true);
-  const [showModal, setShowModal] = useState(false);
+  const [showLoginModal, setShowLoginModal] = useState(false);
   const [showEventModal, setShowEventModal] = useState(false);
+  const [serviceEvents, setServiceEvents] = useState([]);
  
-  const showModalHandler = () => {
-    let isShowing = showModal;
-    setShowModal(!isShowing);
+  const showModalLoginHandler = () => {
+    let isShowing = showLoginModal;
+    setShowLoginModal(!isShowing);
   };
+  const onAfterModalOpenHandler = ()=>{
+    setTimeout(function(){setShowEventModal(false)}, 5000);
+  }
 
   function calculateMachineStatus(machine) {
     if (
@@ -52,6 +57,13 @@ const Home = () => {
         setMachineList(machines);
         receivedInitialAPIdata = true;
       };
+      API.fetchLastEvents(10).then((response) => {
+        const td = [];
+        response?.data.map((e, i)=>{
+          td.push({agent:e.agent,service:e.service,time:Helpers.formatDate(e.createdAt), status:e.status});
+        })
+        setServiceEvents(td);
+      });
       connection.on("MachineHealthReceived", (response) => {
         if (receivedInitialAPIdata)
           setMachineList((prevState) => {
@@ -61,13 +73,20 @@ const Home = () => {
             };
           });
       });
+      connection.on("ServiceStatusChanged", (response) => {
+        let newRecord = {agent:response.agent, service:response.service, time:Helpers.formatDate(Date.now()), status:response.status}
+        setServiceEvents(prev=>[...prev, newRecord]);
+        setShowEventModal(true);
+      });
       init();
     }
 
     return () => {
       connection?.off("MachineHealthReceived");
+      connection?.off("ServiceStatusChanged");
     };
   }, [connection]);
+
 
   useEffect(()=>{
     setLoginStatus(InMemoryJwt.getToken()!=null);
@@ -104,13 +123,32 @@ const Home = () => {
   
   if (!loginStatus) {
     Modal.defaultStyles.overlay.backgroundColor = '#2B3139';
-    return <LoginModal decline={showModalHandler}/>
+    return <LoginModal decline={showModalLoginHandler}/>
   }
   return (
     <div className="home-container">
       <div className="machine-tiles-container">{getMachines()}</div>
-      <Logs/>
-      <EventPushModal status="running" agent="testdf" service="usluga"/>
+      <DashboardTable tableData={serviceEvents}/>
+      <Modal 
+        isOpen={showEventModal} 
+        overlayClassName="event-modal-overlay"
+        closeTimeoutMS={2000}
+        onAfterOpen={onAfterModalOpenHandler}
+        style={{
+          overlay:{
+            backgroundColor: 'rgba(0,100,0,0)',
+            inset:"60vh 75vw", 
+            position:'fixed',
+          }, 
+          content:{
+                  border:"0px",
+                  background:'rgba(0,0,100,0)',
+                  height:200,
+                  width:400
+                  }}}
+      >
+        <EventPushModal event={serviceEvents[serviceEvents.length-1]} />
+      </Modal>
     </div>
   );
 };

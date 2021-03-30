@@ -157,7 +157,7 @@ return (
               </NotificationSettings>
 </div> 
           
-          <DashboardTable tableData={serviceEvents} ></DashboardTable>
+          <DashboardTable tableData={serviceEvents}/>
           <DatePicker selected={new Date("2021-02-19")} onChange={date => console.log(date)} />
 </div>    
   )

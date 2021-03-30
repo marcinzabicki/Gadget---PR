@@ -274,8 +274,22 @@ color:black;
     align-items: center;
     padding: 10px;
     margin:5px;
-    max-width: fit-content;
+    /* max-width: fit-content; */
+    max-width: 200px;
     min-width: 150px;
+}
+
+.event-modal-overlay {
+    opacity: 1;
+    transition: opacity 2000ms ease-in-out;
+}
+
+.event-modal-overlay--after-open{
+    opacity: 1;
+}
+
+.event-modal-overlay--before-close{
+    opacity: 0;
 }
 
 .push-event-column{

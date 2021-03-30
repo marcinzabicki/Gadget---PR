@@ -16,6 +16,7 @@ import ResponseParser from '../../utils/ResponseParser'
 import InMemoryJwt from '../../utils/Authentication/InMemoryJwt'
 import LoginModal from '../Common/Modals/LoginModal'
 import Modal from "react-modal";
+import EventPushModal from '../Common/Modals/EventPushModal'
 
 const ServiceDetails = ()=>{
 
@@ -31,6 +32,12 @@ const ServiceDetails = ()=>{
   const windowSize = useWindowSize();
   const [loginStatus, setLoginStatus] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [showEventModal, setShowEventModal] = useState(false);
+  const [lastEvent, setLastEvent] = useState(null);
+ 
+  const onAfterModalOpenHandler = ()=>{
+    setTimeout(function(){setShowEventModal(false)}, 5000);
+  }
 
 
   useEffect(()=>{
@@ -102,8 +109,12 @@ const ServiceDetails = ()=>{
               setServiceStatus(update);
               let val = 0;
               response.status.toLowerCase(response.status) === 'running' ? val = 1 : val = 0.3
-              let newPoint = {time:Date.now(), value: val}
+              let newPoint = {time:Date.now(), value: val};
+              let newEvent = {agent:response.agent, service:response.name, time:Helpers.formatDate(Date.now()), status:response.status}
               setChartData(prevState=>[...prevState, newPoint]);
+              setLastEvent(newEvent);
+              setShowEventModal(true);
+
             }
           });
         }
@@ -158,6 +169,26 @@ return (
 </div> 
           
           <DashboardTable tableData={serviceEvents}/>
+          <Modal 
+          isOpen={showEventModal} 
+          overlayClassName="event-modal-overlay"
+          closeTimeoutMS={2000}
+          onAfterOpen={onAfterModalOpenHandler}
+          style={{
+            overlay:{
+              backgroundColor: 'rgba(0,100,0,0)',
+              inset:"60vh 75vw", 
+              position:'fixed',
+            }, 
+            content:{
+                    border:"0px",
+                    background:'rgba(0,0,100,0)',
+                    height:200,
+                    width:400
+                    }}}
+      >
+        <EventPushModal event={lastEvent} />
+      </Modal>
           <DatePicker selected={new Date("2021-02-19")} onChange={date => console.log(date)} />
 </div>    
   )

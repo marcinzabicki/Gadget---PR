@@ -23,13 +23,15 @@ const Home = () => {
   const [showEventModal, setShowEventModal] = useState(false);
   const [serviceEvents, setServiceEvents] = useState([]);
  
+  const onAfterModalOpenHandler = ()=>{
+    setTimeout(function(){setShowEventModal(false)}, 5000);
+  }
+
   const showModalLoginHandler = () => {
     let isShowing = showLoginModal;
     setShowLoginModal(!isShowing);
   };
-  const onAfterModalOpenHandler = ()=>{
-    setTimeout(function(){setShowEventModal(false)}, 5000);
-  }
+  
 
   function calculateMachineStatus(machine) {
     if (

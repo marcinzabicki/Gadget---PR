@@ -74,7 +74,7 @@ const Home = () => {
           });
       });
       connection.on("ServiceStatusChanged", (response) => {
-        let newRecord = {agent:response.agent, service:response.service, time:Helpers.formatDate(Date.now()), status:response.status}
+        let newRecord = {agent:response.agent, service:response.name, time:Helpers.formatDate(Date.now()), status:response.status}
         setServiceEvents(prev=>[...prev, newRecord]);
         setShowEventModal(true);
       });

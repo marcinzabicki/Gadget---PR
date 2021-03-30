@@ -14,7 +14,10 @@ import { SignalRContext } from "../../utils/signalr-context";
 import ServiceHeaderMobile from "./ServiceHeaderMobile";
 import ResponseParser from '../../utils/ResponseParser'
 import LoginModal from "../Common/Modals/LoginModal";
+import EventPushModal from '../Common/Modals/EventPushModal'
 import InMemoryJwt from '../../utils/Authentication/InMemoryJwt'
+import Helpers from '../../utils/Helpers'
+
 
 const Dashboards = () => {
   const windowSize = useWindowSize();
@@ -30,6 +33,12 @@ const Dashboards = () => {
   const [machineAddress, setMachineAddress] = useState("");
   const connection = useContext(SignalRContext);
   const [loginStatus, setLoginStatus] = useState(false);
+  const [showEventModal, setShowEventModal] = useState(false);
+  const [serviceEvents, setServiceEvents] = useState([]);
+
+  const onAfterModalOpenHandler = ()=>{
+    setTimeout(function(){setShowEventModal(false)}, 5000);
+  }
 
   useEffect(()=>{
     setLoginStatus(InMemoryJwt.getToken()!=null);
@@ -48,6 +57,13 @@ useEffect(() => {
         )[0];
         setMachineAddress(ipAddress?.address);
       }),
+      API.fetchLastEvents(10).then((response) => {
+        const td = [];
+        response?.data.map((e, i)=>{
+          td.push({agent:e.agent,service:e.service,time:Helpers.formatDate(e.createdAt), status:e.status});
+        })
+        setServiceEvents(td);
+      })
     ]);
   };
   init();
@@ -70,6 +86,9 @@ useEffect(() => {
           );
           updated[indexOfChangedService].status = response.status;
           setServices(updated);
+          let newRecord = {agent:response.agent, service:response.name, time:Helpers.formatDate(Date.now()), status:response.status}
+        setServiceEvents(prev=>[...prev, newRecord]);
+        setShowEventModal(true);
         }
       });
     }
@@ -234,6 +253,26 @@ const servicesPerPage = 10;
           lastPageText=".."
         />
       )}
+      <Modal 
+        isOpen={showEventModal} 
+        overlayClassName="event-modal-overlay"
+        closeTimeoutMS={2000}
+        onAfterOpen={onAfterModalOpenHandler}
+        style={{
+          overlay:{
+            backgroundColor: 'rgba(0,100,0,0)',
+            inset:"60vh 75vw", 
+            position:'fixed',
+          }, 
+          content:{
+                  border:"0px",
+                  background:'rgba(0,0,100,0)',
+                  height:200,
+                  width:400
+                  }}}
+      >
+        <EventPushModal event={serviceEvents[serviceEvents.length-1]} />
+      </Modal>
     </div>
   );
 };

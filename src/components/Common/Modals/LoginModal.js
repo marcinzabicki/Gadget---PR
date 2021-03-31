@@ -12,18 +12,14 @@ const [loginFailed, setLoginFailed] = useState(false);
   const  loginClickHandle = ()=>{
         let user  =loginInput.current.value;
         let pass = passwordInput.current.value;
-        if (user!=='' && pass!=='') {
-            API.login(user, pass).then((response)=>{
-                
-                if (response.status ===200) {
-                    InMemoryJwt.setToken(response.data);
-                    props.decline();
-
-                }
-            }).catch((error)=>{
+          const response = API.login(user, pass)
+            .catch(()=>{
                setLoginFailed(true);
             });
-        }
+            if (response?.status ===200) {
+                InMemoryJwt.setToken(response.data);
+                props.decline();
+            }
     }
     return (
             <div className="login-modal">
@@ -34,10 +30,11 @@ const [loginFailed, setLoginFailed] = useState(false);
                     {
                         loginFailed? (<p className="login-wrong-trial">Wrong user name or password</p>) :null
                     }
+                    
                     <input type="text" ref={loginInput} className="login-input" placeholder="login"></input>
                     <input type="password" ref={passwordInput} className="login-input" placeholder="password"></input>
                     <div className="log-modal-button">
-                    <p onClick={loginClickHandle}>Log in</p>
+                    <p onClick={()=>loginClickHandle()}>Log in</p>
                     </div>
                 </div>
             </div>    

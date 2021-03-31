@@ -5,17 +5,13 @@ import InMemoryJwt from '../utils/Authentication/InMemoryJwt'
 const Header = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     useEffect(()=>{
-        setIsLoggedIn(InMemoryJwt.getToken()!=null)
+        setIsLoggedIn(localStorage.getItem('userLogged').toString()==='true')
     })
 
-    const testClick = ()=>{
-        API.refreshToken().then((response)=>{
-            console.log(response);
-        })
-    }
     const logout = ()=>{
         InMemoryJwt.ereaseToken();
-       
+        setIsLoggedIn(false);
+        API.logout();
     }
 
     return (
@@ -25,14 +21,9 @@ const Header = () => {
                     <img src={'/assets/logo.png'} />
                     <h1>Gadget - PR</h1>
                 </div>
-           
-            {/* <div className="log-button">
-                <p onClick={testClick}>Test</p>
-            </div> */}
-            <div className="log-button">
-                   <p onClick={logout}>Log out</p>
-            </div>
-    
+            {
+                isLoggedIn? (<div className="log-button"><p onClick={logout}>Log out</p></div>): null
+            }
         </header>
     );
 }

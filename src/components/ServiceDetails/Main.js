@@ -35,13 +35,8 @@ const ServiceDetails = ()=>{
   const [showEventModal, setShowEventModal] = useState(false);
   const [lastEvent, setLastEvent] = useState(null);
  
-  const onAfterModalOpenHandler = ()=>{
-    setTimeout(function(){setShowEventModal(false)}, 5000);
-  }
-
-
   useEffect(()=>{
-    setLoginStatus(InMemoryJwt.getToken()!=null);
+    setLoginStatus(InMemoryJwt.getTokenRefreshed()!=null);
   });
 
     useEffect(() => {
@@ -103,19 +98,23 @@ const ServiceDetails = ()=>{
             }
           });
           connection.on("ServiceStatusChanged", (response) => {
-            if (response?.agent === machineName) {
+            if (response?.agent === machineName && response?.name ===serviceName) {
               let update = Object.assign({}, serviceStatus);
               update.status = response.status;
               setServiceStatus(update);
               let val = 0;
               response.status.toLowerCase(response.status) === 'running' ? val = 1 : val = 0.3
               let newPoint = {time:Date.now(), value: val};
-              let newEvent = {agent:response.agent, service:response.name, time:Helpers.formatDate(Date.now()), status:response.status}
               setChartData(prevState=>[...prevState, newPoint]);
-              setLastEvent(newEvent);
-              setShowEventModal(true);
-
             }
+            let newEvent = {
+                              agent:response.agent, 
+                              service:response.name, 
+                              time:Helpers.formatDate(Date.now()), 
+                              status:response.status};
+
+            setLastEvent(newEvent);
+            setShowEventModal(true);
           });
         }
       };
@@ -150,47 +149,28 @@ return (
       }
        
 <div className="label-settings-container">
-            <div className="label-chart-container">
-                <ServiceBasicInfo serviceInfo={serviceStatus}></ServiceBasicInfo>
-                <ManageServiceTile
-                agent={machineName}
-                serviceName={serviceName}
-                status={serviceStatus.status}>
-                </ManageServiceTile>
-                <NotificationCharts data={chartData}></NotificationCharts>
-            </div>
-              <NotificationSettings
-              types={notifierTypes}
-              notifiers={notifiers}
-              agent={machineName}
-              service={serviceName}
-              >
-              </NotificationSettings>
-</div> 
-          
-          <DashboardTable tableData={serviceEvents}/>
-          <Modal 
-          isOpen={showEventModal} 
-          overlayClassName="event-modal-overlay"
-          closeTimeoutMS={2000}
-          onAfterOpen={onAfterModalOpenHandler}
-          style={{
-            overlay:{
-              backgroundColor: 'rgba(0,100,0,0)',
-              inset:"60vh 75vw", 
-              position:'fixed',
-            }, 
-            content:{
-                    border:"0px",
-                    background:'rgba(0,0,100,0)',
-                    height:200,
-                    width:400
-                    }}}
-      >
-        <EventPushModal event={lastEvent} />
-      </Modal>
-          <DatePicker selected={new Date("2021-02-19")} onChange={date => console.log(date)} />
-</div>    
+   <div className="label-chart-container">
+       <ServiceBasicInfo serviceInfo={serviceStatus}/>
+       <ManageServiceTile
+        agent={machineName}
+        serviceName={serviceName}
+        status={serviceStatus.status}/>
+       <NotificationCharts data={chartData}/>
+   </div>
+     <NotificationSettings
+      types={notifierTypes}   
+      notifiers={notifiers}
+      agent={machineName}
+      service={serviceName}/>
+    </div> 
+      <DashboardTable tableData={serviceEvents}/>
+        <EventPushModal 
+        isOpen={showEventModal} 
+        event={lastEvent}
+        closeAction = {setShowEventModal}
+        isOpen={showEventModal}/>
+      <DatePicker selected={new Date("2021-02-19")} onChange={date => console.log(date)} />
+  </div>    
   )
 }
 

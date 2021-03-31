@@ -22,16 +22,16 @@ const Home = () => {
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showEventModal, setShowEventModal] = useState(false);
   const [serviceEvents, setServiceEvents] = useState([]);
- 
-  const onAfterModalOpenHandler = ()=>{
-    setTimeout(function(){setShowEventModal(false)}, 5000);
-  }
 
   const showModalLoginHandler = () => {
     let isShowing = showLoginModal;
     setShowLoginModal(!isShowing);
   };
-  
+
+  useEffect(()=>{
+    setLoginStatus(InMemoryJwt.getTokenRefreshed()!=null);
+  });
+
 
   function calculateMachineStatus(machine) {
     if (
@@ -90,10 +90,7 @@ const Home = () => {
   }, [connection]);
 
 
-  useEffect(()=>{
-    setLoginStatus(InMemoryJwt.getToken()!=null);
-  });
-
+ 
   const getMachines = () => {
     if (windowSize <= 768) {
       return Object.keys(machineList).map((m, i) => {
@@ -131,26 +128,12 @@ const Home = () => {
     <div className="home-container">
       <div className="machine-tiles-container">{getMachines()}</div>
       <DashboardTable tableData={serviceEvents}/>
-      <Modal 
-        isOpen={showEventModal} 
-        overlayClassName="event-modal-overlay"
-        closeTimeoutMS={2000}
-        onAfterOpen={onAfterModalOpenHandler}
-        style={{
-          overlay:{
-            backgroundColor: 'rgba(0,100,0,0)',
-            inset:"60vh 75vw", 
-            position:'fixed',
-          }, 
-          content:{
-                  border:"0px",
-                  background:'rgba(0,0,100,0)',
-                  height:200,
-                  width:400
-                  }}}
-      >
-        <EventPushModal event={serviceEvents[serviceEvents.length-1]} />
-      </Modal>
+        <EventPushModal 
+          isOpen={showEventModal} 
+          event={serviceEvents[serviceEvents.length-1]}
+          closeAction = {setShowEventModal}
+          isOpen={showEventModal}
+        />
     </div>
   );
 };

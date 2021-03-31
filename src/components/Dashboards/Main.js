@@ -37,12 +37,8 @@ const Dashboards = () => {
   const [showEventModal, setShowEventModal] = useState(false);
   const [serviceEvents, setServiceEvents] = useState([]);
 
-  const onAfterModalOpenHandler = ()=>{
-    setTimeout(function(){setShowEventModal(false)}, 5000);
-  }
-
   useEffect(()=>{
-    setLoginStatus(InMemoryJwt.getToken()!=null);
+    setLoginStatus(InMemoryJwt.getTokenRefreshed()!=null);
   });
 
 //#region fetch data effects
@@ -254,26 +250,12 @@ const servicesPerPage = 10;
           lastPageText=".."
         />
       )}
-      <Modal 
-        isOpen={showEventModal} 
-        overlayClassName="event-modal-overlay"
-        closeTimeoutMS={2000}
-        onAfterOpen={onAfterModalOpenHandler}
-        style={{
-          overlay:{
-            backgroundColor: 'rgba(0,100,0,0)',
-            inset:"60vh 75vw", 
-            position:'fixed',
-          }, 
-          content:{
-                  border:"0px",
-                  background:'rgba(0,0,100,0)',
-                  height:200,
-                  width:400
-                  }}}
-      >
-        <EventPushModal event={serviceEvents[serviceEvents.length-1]} />
-      </Modal>
+      <EventPushModal 
+          isOpen={showEventModal} 
+          event={serviceEvents[serviceEvents.length-1]}
+          closeAction = {setShowEventModal}
+          isOpen={showEventModal}
+        />
       <DashboardTable tableData={serviceEvents}/>
     </div>
   );

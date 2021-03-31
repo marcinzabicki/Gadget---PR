@@ -3,10 +3,15 @@ import {API} from '../API'
 const InMemoryJwt = () => {
     let inMemoryJWT = null;
     const getToken = () => {
+       return inMemoryJWT;
+    }
+
+    const getTokenRefreshed = ()=>{
         if (inMemoryJWT===null) {
             API.refreshToken().then((response)=>{
                 if (response && response.status ===200) {
                     setToken(response.data);
+                    localStorage.setItem('userLogged', true);
                     return response.data;
                 }
                 return null;
@@ -17,12 +22,13 @@ const InMemoryJwt = () => {
             API.refreshToken().then((response)=>{
                 if (response && response.status ===200) {
                     setToken(response.data);
+                    localStorage.setItem('userLogged', true);
                     return response.data;
                 }
                 return null;
             })
         }
-       return inMemoryJWT
+       return inMemoryJWT;
     }
     
     const setToken = (token) => {
@@ -61,6 +67,7 @@ function IsExpired(token){
         ereaseToken,
         getToken,
         setToken,
+        getTokenRefreshed,
     }
 };
 

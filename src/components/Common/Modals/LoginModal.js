@@ -16,6 +16,7 @@ const [loginFailed, setLoginFailed] = useState(false);
             .catch(()=>{
                setLoginFailed(true);
             });
+            console.log(response);
             if (response?.status ===200) {
                 InMemoryJwt.setToken(response.data);
                 props.decline();

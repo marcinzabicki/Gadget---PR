@@ -1,7 +1,7 @@
 import { API } from '../../utils/API'
 import React, { useState } from 'react';
 import Modal from 'react-modal';
-import ApprovalModal from '../Common/ApprovalModal'
+import ApprovalModal from '../Common/Modals/ApprovalModal'
 import { Link } from "react-router-dom";
 
 const ServiceMobile = ({ agent, service, index }) => {

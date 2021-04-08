@@ -1,12 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {API} from '../../../utils/API'
+import {UserPreferencesManager} from '../../../utils/UserPreferencesManager'
 import Modal from 'react-modal';
-import ApprovalModal from '../../Common/ApprovalModal'
+import ApprovalModal from '../../Common/Modals/ApprovalModal'
 
     const ManageServiceTile = (props)=>{
     const [showRestartModal, setShowRestartModal] = useState(false);
     const [showStartModal, setShowStartModal] = useState(false);
     const [showStopModal, setShowStopModal] = useState(false);
+    const [isFavourite, setIsFavourite] = useState(false);
     Modal.defaultStyles.overlay.backgroundColor = 'transparent';
 
         const hideModal = (name)=>{
@@ -18,7 +20,25 @@ import ApprovalModal from '../../Common/ApprovalModal'
                case'stop':setShowStopModal(false);
                break;
             }
-        }
+        };
+
+        useEffect(() => {
+            let isFav = UserPreferencesManager.isServiceFavourite(props.agent, props.serviceName);
+            setIsFavourite(isFav);
+            console.log(isFav);
+          }, []);
+
+        
+
+        const addToVavourites = ()=>{
+            UserPreferencesManager.addServiceToFavourites(props.agent, props.serviceName);
+            setIsFavourite(true);
+        };
+
+        const removeFromFavourites = ()=>{
+            UserPreferencesManager.removeServiceFromFavourites(props.agent, props.serviceName);
+            setIsFavourite(false);
+        };
     
         const restartServiceHandler = ()=>{
             API.restartService(props.agent, props.serviceName);
@@ -34,7 +54,6 @@ import ApprovalModal from '../../Common/ApprovalModal'
             API.stopService(props.agent, props.serviceName);
             setShowStopModal(false);
         }
-    
    
     return (
         <div className="tile">
@@ -45,6 +64,10 @@ import ApprovalModal from '../../Common/ApprovalModal'
                         <button className="manage-btn" onClick={()=>setShowStartModal(true)} >Start</button>
                     )}
                 <button className="manage-btn" onClick={()=>setShowRestartModal(true)} >Restart</button>
+                {
+                    isFavourite?    <button className="manage-btn manage-btn-pushed" onClick={()=>removeFromFavourites()} >Favourites</button>:
+                                    <button className="manage-btn" onClick={()=>addToVavourites()} >Favourites</button>
+                }
             </div>
             <Modal
                 isOpen={showRestartModal}

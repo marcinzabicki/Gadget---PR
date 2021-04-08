@@ -196,6 +196,11 @@ select{
     cursor: pointer;
 }
 
+.manage-btn-pushed{
+    background-color: #38E18D;
+    border:none
+}
+
 .button-wrapper{
     padding: 5px;
     display: flex;

@@ -2,27 +2,23 @@ import React, { useState, useEffect, useContext } from "react";
 import MachineTile from "./MachineTile/MachineTile";
 import MachineTileMobile from "./MachineTile/MachineTileMobile";
 import "../Common/MetricsComponents/MachineDetails.css";
-import Logs from "../Common/Tables/Logs";
 import { API } from "../../utils/API";
 import { SignalRContext } from "../../utils/signalr-context";
 import { useWindowSize } from "../../Hooks";
-import Modal from 'react-modal';
-import LoginModal from '../LoginModal';
-import ResponseParser from '../../utils/ResponseParser'
+import DashboardTable from '../Common/Tables/DashboardTable'
+import EventPushModal from '../Common/Modals/EventPushModal'
+import ResponseParser from '../../utils/ResponseParser';
+import Helpers from '../../utils/Helpers'
+
+
 
 const Home = () => {
   const [machineList, setMachineList] = useState({});
   const connection = useContext(SignalRContext);
   const windowSize = useWindowSize();
-  const [loginStatus, setLoginStatus] = useState(false);
+  const [showEventModal, setShowEventModal] = useState(false);
+  const [serviceEvents, setServiceEvents] = useState([]);
 
-  Modal.defaultStyles.overlay.backgroundColor = '#2B3139';
-
-  const [showModal, setShowModal] = useState(false);
-  const showModalHandler = () => {
-    let isShowing = showModal;
-    setShowModal(!isShowing);
-  };
 
   function calculateMachineStatus(machine) {
     if (
@@ -50,6 +46,13 @@ const Home = () => {
         setMachineList(machines);
         receivedInitialAPIdata = true;
       };
+      API.fetchLastEvents(10).then((response) => {
+        const td = [];
+        response?.data.map((e, i)=>{
+          td.push({agent:e.agent,service:e.service,time:Helpers.formatDate(e.createdAt), status:e.status});
+        })
+        setServiceEvents(td);
+      });
       connection.on("MachineHealthReceived", (response) => {
         if (receivedInitialAPIdata)
           setMachineList((prevState) => {
@@ -59,14 +62,22 @@ const Home = () => {
             };
           });
       });
+      connection.on("ServiceStatusChanged", (response) => {
+        let newRecord = {agent:response.agent, service:response.name, time:Helpers.formatDate(Date.now()), status:response.status}
+        setServiceEvents(prev=>[...prev, newRecord]);
+        setShowEventModal(true);
+      });
       init();
     }
 
     return () => {
       connection?.off("MachineHealthReceived");
+      connection?.off("ServiceStatusChanged");
     };
   }, [connection]);
 
+
+ 
   const getMachines = () => {
     if (windowSize <= 768) {
       return Object.keys(machineList).map((m, i) => {
@@ -95,18 +106,17 @@ const Home = () => {
       );
     });
   };
-  API.test().then((response) => {
-    if (response?.status == "200") {
-      setLoginStatus(true)
-    }
-  })
-  if (!loginStatus) {
-    return <LoginModal decline={showModalHandler}></LoginModal>
-  }
+  
   return (
     <div className="home-container">
       <div className="machine-tiles-container">{getMachines()}</div>
-      <Logs></Logs>
+      <DashboardTable tableData={serviceEvents}/>
+        <EventPushModal 
+          isOpen={showEventModal} 
+          event={serviceEvents[serviceEvents.length-1]}
+          closeAction = {setShowEventModal}
+          isOpen={showEventModal}
+        />
     </div>
   );
 };

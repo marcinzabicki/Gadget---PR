@@ -29,4 +29,5 @@ export default class Helpers{
         secondPart = ("000" + secondPart.toString(36)).slice(-3);
         return firstPart + secondPart;
     }
+
 }

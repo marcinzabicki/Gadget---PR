@@ -13,6 +13,7 @@ import './components/ServiceDetails.css';
 import { API } from "../../utils/API";
 import Helpers from "../../utils/Helpers"
 import ResponseParser from '../../utils/ResponseParser'
+import EventPushModal from '../Common/Modals/EventPushModal'
 
 const ServiceDetails = ()=>{
 
@@ -22,12 +23,13 @@ const ServiceDetails = ()=>{
   const [machineAddress, setMachineAddress] = useState("");
   const [serviceStatus, setServiceStatus] = useState({});
   const [serviceEvents, setServiceEvents] = useState([]);
-  const [chartData, setChartDat] = useState([]);
+  const [chartData, setChartData] = useState([]);
   const [notifierTypes, setNotifierTypes] = useState([]);
   const [notifiers, setNotifiers] = useState([]);
   const windowSize = useWindowSize();
-  
-  
+  const [showEventModal, setShowEventModal] = useState(false);
+  const [lastEvent, setLastEvent] = useState(null);
+ 
 
     useEffect(() => {
       const init = async () => {
@@ -38,10 +40,10 @@ const ServiceDetails = ()=>{
               response?.data.map((e, i)=>{
                 let val = 0;
                 e.status.toLowerCase(e.status) === 'running' ? val = 1 : val = 0.3
-                cd.push({time:Helpers.formatDate(e.createdAt), value:val});
+                cd.push({time:Date.parse(e.createdAt), value:val});
                 td.push({agent:e.agent,time:Helpers.formatDate(e.createdAt), status:e.status});
               })
-              setChartDat(cd);
+              setChartData(cd);
               setServiceEvents(td);
             }),
             API.fetchMachineList().then((response) => {
@@ -61,6 +63,10 @@ const ServiceDetails = ()=>{
                 status:service.status
               };
               setServiceStatus(newServiceState);
+              let currentStatus = 0;
+              newServiceState.status.toLowerCase()==='running' ? currentStatus = 1: currentStatus = 0.3
+              let newPoint = {time:Date.now(), value: currentStatus}
+              setChartData(prevState=>[...prevState, newPoint]);
             }),
             API.getNotifierTypes().then((response) => {
               setNotifierTypes(response?.data);
@@ -84,11 +90,23 @@ const ServiceDetails = ()=>{
             }
           });
           connection.on("ServiceStatusChanged", (response) => {
-            if (response?.agent === machineName) {
+            if (response?.agent === machineName && response?.name ===serviceName) {
               let update = Object.assign({}, serviceStatus);
               update.status = response.status;
               setServiceStatus(update);
+              let val = 0;
+              response.status.toLowerCase(response.status) === 'running' ? val = 1 : val = 0.3
+              let newPoint = {time:Date.now(), value: val};
+              setChartData(prevState=>[...prevState, newPoint]);
             }
+            let newEvent = {
+                              agent:response.agent, 
+                              service:response.name, 
+                              time:Helpers.formatDate(Date.now()), 
+                              status:response.status};
+
+            setLastEvent(newEvent);
+            setShowEventModal(true);
           });
         }
       };
@@ -99,7 +117,6 @@ const ServiceDetails = ()=>{
         connection?.off("ServiceStatusChanged");
       };
     }, [connection, machineName]);
-
   
 return (
     <div>
@@ -115,27 +132,28 @@ return (
       }
        
 <div className="label-settings-container">
-            <div className="label-chart-container">
-                <ServiceBasicInfo serviceInfo={serviceStatus}></ServiceBasicInfo>
-                <ManageServiceTile
-                agent={machineName}
-                serviceName={serviceName}
-                status={serviceStatus.status}>
-                </ManageServiceTile>
-                <NotificationCharts data={chartData}></NotificationCharts>
-            </div>
-              <NotificationSettings
-              types={notifierTypes}
-              notifiers={notifiers}
-              agent={machineName}
-              service={serviceName}
-              >
-              </NotificationSettings>
-</div> 
-          
-          <DashboardTable tableData={serviceEvents} ></DashboardTable>
-          <DatePicker selected={new Date("2021-02-19")} onChange={date => console.log(date)} />
-</div>    
+   <div className="label-chart-container">
+       <ServiceBasicInfo serviceInfo={serviceStatus}/>
+       <ManageServiceTile
+        agent={machineName}
+        serviceName={serviceName}
+        status={serviceStatus.status}/>
+       <NotificationCharts data={chartData}/>
+   </div>
+     <NotificationSettings
+      types={notifierTypes}   
+      notifiers={notifiers}
+      agent={machineName}
+      service={serviceName}/>
+    </div> 
+      <DashboardTable tableData={serviceEvents}/>
+        <EventPushModal 
+        isOpen={showEventModal} 
+        event={lastEvent}
+        closeAction = {setShowEventModal}
+        isOpen={showEventModal}/>
+      <DatePicker selected={new Date("2021-02-19")} onChange={date => console.log(date)} />
+  </div>    
   )
 }
 

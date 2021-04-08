@@ -217,9 +217,8 @@ color:black;
 }
 /* =========================Login modal================= */
 .login-modal{
-    width: 300px;
-    height: 400px;
     background-color: #313843;
+    height: 100%;
     padding-top:150px;
     margin: 0 auto;
     color: white;
@@ -263,6 +262,44 @@ color:black;
     cursor: pointer;
  }
 
+ /* ===================== notifications bells */
+
+ .push-event-modal{
+    height: 150px;
+    border-radius: 4px;
+    background-color: #313843;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+    margin:5px;
+    /* max-width: fit-content; */
+    max-width: 200px;
+    min-width: 150px;
+}
+
+.event-modal-overlay {
+    opacity: 1;
+    transition: opacity 2000ms ease-in-out;
+}
+
+.event-modal-overlay--after-open{
+    opacity: 1;
+}
+
+.event-modal-overlay--before-close{
+    opacity: 0;
+}
+
+.push-event-column{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.push-event-modal span{
+    margin:5px;
+}
 
 /* ======================home mobile */
     .label-mobile{

@@ -30,7 +30,7 @@ const Home = () => {
 
   useEffect(()=>{
     setLoginStatus(InMemoryJwt.getTokenRefreshed()!=null);
-  });
+  },[loginStatus]);
 
 
   function calculateMachineStatus(machine) {

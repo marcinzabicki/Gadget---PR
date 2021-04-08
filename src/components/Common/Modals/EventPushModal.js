@@ -12,6 +12,7 @@ const EventPushModal = (props)=>{
 
     return (
         <Modal 
+        ariaHideApp={false}
         isOpen={props.isOpen} 
         overlayClassName="event-modal-overlay"
         closeTimeoutMS={2000}

@@ -9,10 +9,10 @@ let passwordInput = React.createRef();
  
 const LoginModal = (props)=>{
 const [loginFailed, setLoginFailed] = useState(false);
-  const  loginClickHandle = ()=>{
+  const  loginClickHandle = async ()=>{
         let user  =loginInput.current.value;
         let pass = passwordInput.current.value;
-          const response = API.login(user, pass)
+          const response = await API.login(user, pass)
             .catch(()=>{
                setLoginFailed(true);
             });

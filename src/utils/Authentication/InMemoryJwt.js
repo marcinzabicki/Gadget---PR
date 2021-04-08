@@ -15,7 +15,7 @@ const InMemoryJwt = () => {
                 return response.data;
             }
             if (response && response.status ===401) {
-                return null;
+                await API.logout();
             }
         }
        return inMemoryJWT;

@@ -217,9 +217,8 @@ color:black;
 }
 /* =========================Login modal================= */
 .login-modal{
-    width: 300px;
-    height: 400px;
     background-color: #313843;
+    height: 100%;
     padding-top:150px;
     margin: 0 auto;
     color: white;

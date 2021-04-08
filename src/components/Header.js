@@ -1,17 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import {API} from '../utils/API'
 import InMemoryJwt from '../utils/Authentication/InMemoryJwt'
 
-const Header = () => {
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
-    useEffect(()=>{
-        setIsLoggedIn(localStorage.getItem('userLogged').toString()==='true')
-    })
+const Header = (props) => {
 
-    const logout = ()=>{
+    const logout = async ()=>{
         InMemoryJwt.ereaseToken();
-        setIsLoggedIn(false);
-        API.logout();
+        const response = await API.logout();
+        if (response?.status ===200) {
+            props.setDisplayLogin(true);
+       }
     }
 
     return (
@@ -22,7 +20,7 @@ const Header = () => {
                     <h1>Gadget - PR</h1>
                 </div>
             {
-                isLoggedIn? (<div className="log-button"><p onClick={logout}>Log out</p></div>): null
+                <div className="log-button"><p onClick={logout}>Log out</p></div>
             }
         </header>
     );

@@ -109,8 +109,6 @@ export class API {
         url: `${BASE_URL}/auth/login`,
         data: { userName: userName, password: password },
         withCredentials: true
-      }).then(()=>{
-        localStorage.setItem("userLogged", true);
       });
     } catch (e) {
       console.log(e);
@@ -119,13 +117,13 @@ export class API {
 
   static async logout() {
     try {
-      return await axios({
+      const response = await axios({
         method: "POST",
         url: `${BASE_URL}/auth/logout`,
         withCredentials: true
-      }).then(()=>{
-        localStorage.setItem('userLogged', false);
       });
+
+      return response;
     } catch (e) {
       console.log(e);
     }
@@ -133,12 +131,13 @@ export class API {
 
   static async refreshToken(){
     try {
-      console.log("123FFF123");
-      return await axios({
+      const response =  await axios({
         method: "POST",
         url: `${BASE_URL}/auth/refresh`,
         withCredentials: true
       });
+      return response;
+
     } catch (e) {
       console.log(e);
     }

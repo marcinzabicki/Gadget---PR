@@ -6,27 +6,17 @@ const InMemoryJwt = () => {
        return inMemoryJWT;
     }
 
-    const getTokenRefreshed = ()=>{
-        if (inMemoryJWT===null) {
-            API.refreshToken().then((response)=>{
-                if (response && response.status ===200) {
-                    setToken(response.data);
-                    localStorage.setItem('userLogged', true);
-                    return response.data;
-                }
+    const getTokenRefreshed = async ()=>{
+
+        if (inMemoryJWT===null || IsExpired(inMemoryJWT)) {
+           const response = await API.refreshToken();
+           if (response && response.status ===200) {
+                setToken(response.data);
+                return response.data;
+            }
+            if (response && response.status ===401) {
                 return null;
-            })
-        }
-        
-        if (IsExpired(inMemoryJWT)) {
-            API.refreshToken().then((response)=>{
-                if (response && response.status ===200) {
-                    setToken(response.data);
-                    localStorage.setItem('userLogged', true);
-                    return response.data;
-                }
-                return null;
-            })
+            }
         }
        return inMemoryJWT;
     }

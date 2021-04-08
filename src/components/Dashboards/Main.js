@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useParams } from "react-router-dom";
 import { useWindowSize } from "../../Hooks";
-import Modal from "react-modal";
 import Pagination from "react-js-pagination";
 import Service from "./Service";
 import ServiceMobile from "./ServiceMobile";
@@ -13,9 +12,7 @@ import {UserPreferencesManager} from '../../utils/UserPreferencesManager'
 import { SignalRContext } from "../../utils/signalr-context";
 import ServiceHeaderMobile from "./ServiceHeaderMobile";
 import ResponseParser from '../../utils/ResponseParser'
-import LoginModal from "../Common/Modals/LoginModal";
 import EventPushModal from '../Common/Modals/EventPushModal'
-import InMemoryJwt from '../../utils/Authentication/InMemoryJwt'
 import Helpers from '../../utils/Helpers'
 import DashboardTable from '../Common/Tables/DashboardTable'
 
@@ -24,22 +21,17 @@ const Dashboards = () => {
   const windowSize = useWindowSize();
   const { machineName } = useParams();
   const [machineState, setMachineState] = useState({});
-
   const [services, setServices] = useState([]);
   const [favouriteServices,setFavouriteServices] = useState([]);
   const [displayedServices, setDisplayedServices] = useState([]);
   const [showFavourites, setShowFavourites] = useState(false);
-
   const [connectionState] = useState("");
   const [machineAddress, setMachineAddress] = useState("");
   const connection = useContext(SignalRContext);
-  const [loginStatus, setLoginStatus] = useState(false);
   const [showEventModal, setShowEventModal] = useState(false);
   const [serviceEvents, setServiceEvents] = useState([]);
 
-  useEffect(()=>{
-    setLoginStatus(InMemoryJwt.getTokenRefreshed()!=null);
-  });
+
 
 //#region fetch data effects
 useEffect(() => {
@@ -118,14 +110,6 @@ const servicesPerPage = 10;
   const handlePageChange = (pageNumber) => {
     setActivePage(pageNumber);
   };
-
-  Modal.defaultStyles.overlay.backgroundColor = "#2B3139";
-  const [showModal, setShowModal] = useState(false);
-  const showModalHandler = () => {
-    let isShowing = showModal;
-    setShowModal(!isShowing);
-  };
-
   // search bar
 
   const [searchTerm, setSearchTerm] = useState("");
@@ -149,12 +133,6 @@ const servicesPerPage = 10;
 
 //#endregion
  
-
-  if (!loginStatus) {
-    return <LoginModal decline={showModalHandler}></LoginModal>;
-  }
-
-
   if (windowSize <= 768) {
     return (
       <>
@@ -254,7 +232,6 @@ const servicesPerPage = 10;
           isOpen={showEventModal} 
           event={serviceEvents[serviceEvents.length-1]}
           closeAction = {setShowEventModal}
-          isOpen={showEventModal}
         />
       <DashboardTable tableData={serviceEvents}/>
     </div>

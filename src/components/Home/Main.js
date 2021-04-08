@@ -5,32 +5,19 @@ import "../Common/MetricsComponents/MachineDetails.css";
 import { API } from "../../utils/API";
 import { SignalRContext } from "../../utils/signalr-context";
 import { useWindowSize } from "../../Hooks";
-import Modal from 'react-modal';
-import LoginModal from '../Common/Modals/LoginModal';
 import DashboardTable from '../Common/Tables/DashboardTable'
 import EventPushModal from '../Common/Modals/EventPushModal'
 import ResponseParser from '../../utils/ResponseParser';
 import Helpers from '../../utils/Helpers'
-import InMemoryJwt from '../../utils/Authentication/InMemoryJwt'
+
 
 
 const Home = () => {
   const [machineList, setMachineList] = useState({});
   const connection = useContext(SignalRContext);
   const windowSize = useWindowSize();
-  const [loginStatus, setLoginStatus] = useState(true);
-  const [showLoginModal, setShowLoginModal] = useState(false);
   const [showEventModal, setShowEventModal] = useState(false);
   const [serviceEvents, setServiceEvents] = useState([]);
-
-  const showModalLoginHandler = () => {
-    let isShowing = showLoginModal;
-    setShowLoginModal(!isShowing);
-  };
-
-  useEffect(()=>{
-    setLoginStatus(InMemoryJwt.getTokenRefreshed()!=null);
-  },[loginStatus]);
 
 
   function calculateMachineStatus(machine) {
@@ -120,10 +107,6 @@ const Home = () => {
     });
   };
   
-  if (!loginStatus) {
-    Modal.defaultStyles.overlay.backgroundColor = '#2B3139';
-    return <LoginModal decline={showModalLoginHandler}/>
-  }
   return (
     <div className="home-container">
       <div className="machine-tiles-container">{getMachines()}</div>

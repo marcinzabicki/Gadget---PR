@@ -22,7 +22,7 @@ const handleSubmit = async () => {
     }
 
     return (
-           <div className="login-modal-content-wrapper login-modal">
+           <div className="login-modal-content-wrapper">
                {
                    loginFailed? (<p className="login-wrong-trial">Wrong user name or password</p>) :null
                }

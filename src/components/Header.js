@@ -20,7 +20,7 @@ const Header = (props) => {
                     <h1>Gadget - PR</h1>
                 </div>
             {
-                <div className="log-button"><p onClick={logout}>Log out</p></div>
+               props.isLoggedIn?  <div className="log-button"><p onClick={logout}>Log out</p></div> : null
             }
         </header>
     );

@@ -16,13 +16,24 @@ const App = () => {
   },[]);
 
   if(displayLogin){
-    return <LoginModal
-    setDisplayLogin={setDisplayLogin}
+  
+    return (
+    <div>
+        <Header setDisplayLogin={setDisplayLogin} isLoggedIn={false} />
+        <div className="content-wrapper">
+          <section >
+          <LoginModal
+                setDisplayLogin={setDisplayLogin}
             />
+          </section>
+        </div>
+    </div>
+    
+    )
   }
   return (
     <SignalRProvider>
-      <Header setDisplayLogin={setDisplayLogin} />
+      <Header setDisplayLogin={setDisplayLogin} isLoggedIn={true} />
       <BrowserRouter>
         <div className="content-wrapper">
           <section className="content">

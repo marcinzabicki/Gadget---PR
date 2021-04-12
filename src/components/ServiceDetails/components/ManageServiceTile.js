@@ -25,7 +25,6 @@ import ApprovalModal from '../../Common/Modals/ApprovalModal'
         useEffect(() => {
             let isFav = UserPreferencesManager.isServiceFavourite(props.agent, props.serviceName);
             setIsFavourite(isFav);
-            console.log(isFav);
           }, []);
 
         

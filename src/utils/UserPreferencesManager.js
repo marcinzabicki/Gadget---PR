@@ -54,7 +54,6 @@ static removeServiceFromFavourites(agent, service){
     }
     let updated = favs.filter(function(x) { return !(x.agent===agent && x.service===service) }); 
     settings.favourites =updated;
-    console.log(updated);
     this.updateUserSettings(settings);
 };
 

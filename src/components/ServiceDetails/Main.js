@@ -54,7 +54,6 @@ const ServiceDetails = ()=>{
             }),
             API.fetchServicesList(machineName).then((response) => {
               let service = response.data.filter(x=>{ return x.name === serviceName})[0];
-              console.log(service);
               let newServiceState = {
                 machineName:machineName,
                 serviceName:serviceName,

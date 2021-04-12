@@ -13,7 +13,6 @@ import { API } from "../../../utils/API";
         }
 
         useEffect(() => {
-            console.log(webhook);
          }, [webhook]);
 
         const createNotifierHandler = ()=>{

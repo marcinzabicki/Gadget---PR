@@ -13,7 +13,6 @@ const WebhookItem = (props)=>{
         
         API.deleteNotifier(props.agent, props.service, props.receiver)
         .then(response=>{
-            console.log(response);
             if(response.status >= 200 & response.status<300){
                 setDispalyItem(false);
                 setShowModal(false);

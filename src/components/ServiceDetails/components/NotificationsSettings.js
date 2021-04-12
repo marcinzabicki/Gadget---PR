@@ -17,8 +17,6 @@ import Helpers from "../../../utils/Helpers";
 
     function deleteNewNotifierHandler(k){
         let update = [...newNotifers];
-        console.log(k);
-        console.log(update);
         let deleted = update.filter(function(o) {
             return o.index !== k;
           });

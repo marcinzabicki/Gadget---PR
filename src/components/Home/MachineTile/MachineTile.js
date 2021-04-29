@@ -51,10 +51,12 @@ const MachineTile = (props) => {
   }
   return (
     <div className="machine-tile">
-      <Label
-        machineName={props.machine}
-        machineAddress={props.machineAddress}
-      ></Label>
+     <Link to={`/${props.machine}`}>
+          <Label
+            machineName={props.machine}
+            machineAddress={props.machineAddress}
+          ></Label>
+      </Link>
       <div className="dead-machine-tile">
         <img src={deadIcon} height={150} />
       </div>

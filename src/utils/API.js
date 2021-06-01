@@ -52,10 +52,13 @@ export class API {
   }
 
   static async fetchServiceEvents(agent, service, queryString) {
+    let token = InMemoryJwt.getToken();
     try {
       return await axios({
         method: "GET",
         url: `${BASE_URL}/agents/${agent}/${service}/events?count=100&${queryString}`,
+        headers: {
+          Authorization: `Bearer ${token}`}
       });
     } catch (e) {
       console.log(e);
@@ -67,10 +70,13 @@ export class API {
 //#region manageServices
 
   static async stopService(agent, service) {
+    let token = InMemoryJwt.getToken();
     try {
       return await axios({
         method: "POST",
         url: `${BASE_URL}/agents/${agent}/${service}/stop`,
+        headers: {
+          Authorization: `Bearer ${token}`}
       });
     } catch (e) {
       console.log(e);
@@ -78,10 +84,13 @@ export class API {
   }
 
   static async startService(agent, service) {
+    let token = InMemoryJwt.getToken();
     try {
       return await axios({
         method: "POST",
         url: `${BASE_URL}/agents/${agent}/${service}/start`,
+        headers: {
+          Authorization: `Bearer ${token}`}
       });
     } catch (e) {
       console.log(e);
@@ -89,10 +98,13 @@ export class API {
   }
 
   static async restartService(agent, service) {
+    let token = InMemoryJwt.getToken();
     try {
       return await axios({
         method: "POST",
         url: `${BASE_URL}/agents/${agent}/${service}/restart`,
+        headers: {
+          Authorization: `Bearer ${token}`}
       });
     } catch (e) {
       console.log(e);
